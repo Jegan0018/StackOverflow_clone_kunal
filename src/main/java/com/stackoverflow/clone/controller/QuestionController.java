@@ -13,7 +13,7 @@ public class QuestionController {
     @PostMapping("/new-question")
     public String newQuestion(Model model){
         Question question = new Question();
-        model.addAttribute(question);
+        model.addAttribute("question",question);
         return "new-question";
     }
 }
