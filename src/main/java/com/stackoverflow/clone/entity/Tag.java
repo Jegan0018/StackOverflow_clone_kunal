@@ -2,6 +2,7 @@ package com.stackoverflow.clone.entity;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,24 +18,24 @@ public class Tag {
     private String name;
 
     @Column(name = "created_at",updatable = false)
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
 
     @ManyToMany(mappedBy = "tags")
     private Set<Question> questions = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        createdAt = Timestamp.valueOf(LocalDateTime.now());
+        updatedAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
     public Tag() {
     }
 
-    public Tag(String name, LocalDateTime createdAt, LocalDateTime updatedAt, Set<Question> questions) {
+    public Tag(String name, Timestamp createdAt, Timestamp updatedAt, Set<Question> questions) {
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -57,19 +58,19 @@ public class Tag {
         this.name = name;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 
