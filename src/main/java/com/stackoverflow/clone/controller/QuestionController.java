@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -24,7 +25,9 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String home(){
+    public String home(Model model){
+        List<Question> questions = questionService.findAll();
+        model.addAttribute("questions",questions);
         return "Home";
     }
     @GetMapping("/new-question")
@@ -50,4 +53,5 @@ public class QuestionController {
         model.addAttribute("question",question);
         return "question/view-question";
     }
+
 }

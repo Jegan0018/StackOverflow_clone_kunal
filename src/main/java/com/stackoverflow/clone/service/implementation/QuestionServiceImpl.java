@@ -5,6 +5,8 @@ import com.stackoverflow.clone.repository.QuestionRepository;
 import com.stackoverflow.clone.service.QuestionService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
@@ -22,6 +24,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question findById(Long questionId) {
         return questionRepository.findById(questionId).get();
+    }
+
+    @Override
+    public List<Question> findAll() {
+        return questionRepository.findAll();
     }
 
 
