@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>View Question</title>
 </head>
 <body>
-posts
+<div>
+    <h3>View Question</h3>
+    <p><strong>Title:</strong> <span th:text="${question.title}"></span></p>
+    <p><strong>Problem:</strong> <span th:text="${question.problem}"></span></p>
+    <p><strong>ExceptedSolution:</strong></p>
+    <div th:text="${question.exceptedSolution}"></div>
+    <p><strong>Tags:</strong></p>
+    <ul>
+        <li th:each="tag : ${question.tags}" th:text="${tag.name}"></li>
+    </ul>
+    <form th:action="@{/}">
+        <button type="submit">BACK TO QUESTIONS</button>
+    </form>
+</div>
 </body>
 </html>
