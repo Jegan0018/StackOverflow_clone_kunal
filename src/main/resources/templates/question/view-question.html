@@ -5,9 +5,64 @@
 <head>
     <meta charset="UTF-8">
     <title>View Question</title>
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            color: #333;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<div>
+<div class="container">
     <h3>View Question</h3>
     <p><strong>Title:</strong> <span th:text="${question.title}"></span></p>
     <p><strong>Problem:</strong> <span th:text="${question.problem}"></span></p>
@@ -17,11 +72,18 @@
     <ul>
         <li th:each="tag : ${question.tags}" th:text="${tag.name}"></li>
     </ul>
-    <form th:action="@{/}">
-        <button type="submit">BACK TO QUESTIONS</button>
+
+    <form action="#" th:action="@{'/question/editQuestion/' + ${question.id}}" method="post">
+        <button type="submit">Edit</button>
     </form>
-    <a th:href="@{'/question/showFormForEditQuestion/' + ${question.id}}">edit</a>
-    <a th:href="@{'/question/delete/' + ${question.id}}">delete</a>
+
+    <br>
+
+    <form action="#" th:action="@{'/question/delete/' + ${question.id}}" method="post">
+        <button type="submit">Delete</button>
+    </form>
+    <br>
+    <a th:href="@{/}">BACK TO QUESTIONS</a>
 </div>
 </body>
 </html>

@@ -55,7 +55,7 @@ public class QuestionController {
         return "question/view-question";
     }
 
-    @GetMapping("/question/showFormForEditQuestion/{questionId}")
+    @PostMapping("/question/editQuestion/{questionId}")
     public String editPost(@PathVariable("questionId") Long questionId,
                            Model model) {
         Question question = questionService.findById(questionId);
@@ -70,24 +70,21 @@ public class QuestionController {
         return "question/edit-question";
     }
 
-    @PostMapping("/question/update")
-    public String updatePost(@ModelAttribute("question") Question question,
-                             @RequestParam("tagInput") String tagInput,
-                             @RequestParam("questionId") Long questionId) {
-        Set<Tag> tags = tagService.findOrCreateTag(tagInput);
-        question.setId(questionId);
-        question.setTags(tags);
-        questionService.save(question);
-        return "redirect:/question/"+question.getId();
-    }
+//    @PostMapping("/question/update")
+//    public String updatePost(@ModelAttribute("question") Question question,
+//                             @RequestParam("tagInput") String tagInput,
+//                             @RequestParam("questionId") Long questionId) {
+//        Set<Tag> tags = tagService.findOrCreateTag(tagInput);
+//        question.setId(questionId);
+//        question.setTags(tags);
+//        questionService.save(question);
+//        return "redirect:/question/"+question.getId();
+//    }
 
-    @GetMapping("question/delete/{deleteId}")
+    @PostMapping("question/delete/{deleteId}")
     public String delete(@PathVariable("deleteId") Long deleteId) {
-        Question question = questionService.deleteById(deleteId);
-        for (Tag tag : question.getTags()) {
-            tagService.deleteTagIfNotUsed(tag);
-        }
-        return "/";
+        questionService.deleteById(deleteId);
+        return "redirect:/";
     }
 
 }
