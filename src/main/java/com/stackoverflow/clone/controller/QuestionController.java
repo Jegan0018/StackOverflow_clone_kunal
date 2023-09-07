@@ -1,19 +1,53 @@
 package com.stackoverflow.clone.controller;
 
 import com.stackoverflow.clone.entity.Question;
+import com.stackoverflow.clone.entity.Tag;
+import com.stackoverflow.clone.service.QuestionService;
+import com.stackoverflow.clone.service.TagService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
 public class QuestionController {
 
-    @PostMapping("/new-question")
+    private QuestionService questionService;
+
+    private TagService tagService;
+
+    public QuestionController(QuestionService questionService,TagService tagService) {
+        this.questionService=questionService;
+        this.tagService=tagService;
+    }
+
+    @GetMapping("/")
+    public String home(){
+        return "Home";
+    }
+    @GetMapping("/new-question")
     public String newQuestion(Model model){
         Question question = new Question();
         model.addAttribute("question",question);
-        return "new-question";
+        return "question/new-question";
+    }
+
+    @PostMapping("/save")
+    public String saveQuestion(@ModelAttribute("question") Question question,
+                               @RequestParam(value = "tagInput", required = false) String tagInput) {
+        Set<Tag> tags = tagService.findOrCreateTag(tagInput);
+        question.setTags(tags);
+        questionService.save(question);
+        return "redirect:/question/"+question.getId();
+    }
+
+    @GetMapping("/question/{questionId}")
+    public String viewQuestion(@PathVariable("questionId") Long questionId,
+                               Model model){
+        Question question = questionService.findById(questionId);
+        model.addAttribute("question",question);
+        return "question/view-question";
     }
 }
