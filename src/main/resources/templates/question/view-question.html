@@ -8,7 +8,7 @@
 </head>
 <body>
 <div>
-    <h3>Question</h3>
+    <h3>View Question</h3>
     <p><strong>Title:</strong> <span th:text="${question.title}"></span></p>
     <p><strong>Problem:</strong> <span th:text="${question.problem}"></span></p>
     <p><strong>ExceptedSolution:</strong></p>
@@ -17,13 +17,11 @@
     <ul>
         <li th:each="tag : ${question.tags}" th:text="${tag.name}"></li>
     </ul>
-    <form action="#" th:action="@{/delete}" method="post">
-        <button type="submit">Delete</button>
+    <form th:action="@{/}">
+        <button type="submit">BACK TO QUESTIONS</button>
     </form>
-<!--    <form th:action="@{/}">-->
-<!--        <button type="submit">BACK TO QUESTIONS</button>-->
-<!--    </form>-->
-    <a th:href="@{/}">BACK TO QUESTIONS</a>
+    <a th:href="@{'/question/showFormForEditQuestion/' + ${question.id}}">edit</a>
+    <a th:href="@{'/question/delete/' + ${question.id}}">delete</a>
 </div>
 </body>
 </html>

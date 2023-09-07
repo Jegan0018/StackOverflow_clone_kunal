@@ -6,4 +6,6 @@ import java.util.Set;
 
 public interface TagService {
     Set<Tag> findOrCreateTag(String tagInput);
+
+    void deleteTagIfNotUsed(Tag tag);
 }

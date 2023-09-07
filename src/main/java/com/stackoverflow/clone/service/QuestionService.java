@@ -9,4 +9,6 @@ public interface QuestionService {
     Question findById(Long questionId);
 
     List<Question> findAll();
+
+    Question deleteById(Long deleteId);
 }

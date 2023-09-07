@@ -4,7 +4,6 @@ import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.repository.TagRepository;
 import com.stackoverflow.clone.service.TagService;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -38,5 +37,13 @@ public class TagServiceImpl implements TagService {
             }
         }
         return tags;
+    }
+
+    @Override
+    public void deleteTagIfNotUsed(Tag tag) {
+        if (!tag.getPosts().isEmpty()) {
+            return;
+        }
+        tagRepository.delete(tag);
     }
 }

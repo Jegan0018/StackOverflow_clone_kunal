@@ -13,7 +13,6 @@
     <ul>
         <li th:each="tag : ${tempQuestion.tags}" th:text="${tag.name}"></li>
     </ul>
-
     <a th:href="@{'/question/' + ${tempQuestion.id}}">read more</a>
 <!--      <a th:href="@{/blog/full_post(postId=${tempBlog.id})}">Read More</a>-->
 </span>
