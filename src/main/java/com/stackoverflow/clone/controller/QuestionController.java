@@ -42,11 +42,11 @@ public class QuestionController {
 
     @PostMapping("/save")
     public String saveQuestion(@ModelAttribute("question") Question question,
-                               @RequestParam(value = "tagInput", required = false) String tagInput) {
+                               @RequestParam(value = "tagNames", required = false) String tagNames) {
         if (question.getId()!=null){
             question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         }
-        Set<Tag> tags = tagService.findOrCreateTag(tagInput);
+        Set<Tag> tags = tagService.findOrCreateTag(tagNames);
         question.setTags(tags);
         questionService.save(question);
         return "redirect:/question/"+question.getId();
@@ -74,17 +74,6 @@ public class QuestionController {
         model.addAttribute("tagNames", tagNames);
         return "question/edit-question";
     }
-
-//    @PostMapping("/question/update")
-//    public String updatePost(@ModelAttribute("question") Question question,
-//                             @RequestParam("tagInput") String tagInput,
-//                             @RequestParam("questionId") Long questionId) {
-//        Set<Tag> tags = tagService.findOrCreateTag(tagInput);
-//        question.setId(questionId);
-//        question.setTags(tags);
-//        questionService.save(question);
-//        return "redirect:/question/"+question.getId();
-//    }
 
     @PostMapping("question/delete/{deleteId}")
     public String delete(@PathVariable("deleteId") Long deleteId) {

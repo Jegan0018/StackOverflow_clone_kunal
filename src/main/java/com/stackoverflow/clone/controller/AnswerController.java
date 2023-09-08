@@ -1,0 +1,13 @@
+package com.stackoverflow.clone.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/answer")
+public class AnswerController {
+
+//    @PostMapping("/save")
+//    public String save
+}
