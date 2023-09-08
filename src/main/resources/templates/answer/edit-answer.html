@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Answer</title>
+</head>
+<body>
+<form action="#" th:action="@{/answer/save}"method="post">
+    <input type="hidden" name="id" th:value="${tempAnswer.id}">
+    <input type="hidden" name="questionId" th:value="${question.id}">
+    <b>Question Info :</b><br><br>
+    <b><label for="title">Title:</label></b>
+    <span id="title" name="title" th:text="${question.title}" readonly></span><br><br>
+
+    <b><label for="problem">Problem:</label></b>
+    <span id="problem" name="problem" th:text="${question.problem}" readonly></span><br>
+
+    <br>
+    <label for="name">Name :</label>
+    <span id="name" name="name" th:text="${tempAnswer.name}"></span><br>
+    <label for="theAnswer">Answer :</label>
+    <textarea id="theAnswer" name="theAnswer" th:text="${tempAnswer.theAnswer}" required></textarea><br>
+    <br>
+    <input type="submit" value="save changes">
+</form>
+</body>
+</html>
