@@ -5,6 +5,9 @@
     <title>Home</title>
 </head>
 <body>
+<h1 th:if="${tagName != null}">
+    Questions tagged <span th:text="${tagName}"></span>
+</h1>
 <a th:href="@{/new-question}">Ask Question</a>
 <span th:each="tempQuestion : ${questions}">
     <p><strong>Title:</strong> <span th:text="${tempQuestion.title}"></span></p>
@@ -16,7 +19,8 @@
     <a th:href="@{'/question/' + ${tempQuestion.id}}">read more</a>
 <!--      <a th:href="@{/blog/full_post(postId=${tempBlog.id})}">Read More</a>-->
 </span>
-
+<br>
+<a th:href="@{/question/tags}">Tags</a>
 </span>
 </body>
 </html>

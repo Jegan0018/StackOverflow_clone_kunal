@@ -92,14 +92,8 @@
         <label for="exceptedSolution">Expected Solution:</label>
         <textarea id="exceptedSolution" name="exceptedSolution" th:text="${question.exceptedSolution}" required></textarea><br>
 
-        <div class="mb-3">
-            <label for="tagNames" class="form-label">Tags</label>
-            <input type="text" class="form-control" id="tagNames" name="tagNames" th:value="${tagNames}">
-            <small class="form-text">Enter space-separated tags for the post.</small>
-        </div>
-<!--        <label>Tags (space-separated):</label>-->
-<!--        <input type="text" name="tagInput" th:text="${tagNames}" class="form-control mb-4"><br>-->
-
+        <label>Tags (space-separated):</label>
+        <input type="text" id="tagNames" name="tagNames" th:value="${tagNames}" class="form-control mb-4"></input><br>
         <button type="submit" class="common-button">Update</button>
         <a href="javascript:history.back()">Cancel</a>
     </form>
