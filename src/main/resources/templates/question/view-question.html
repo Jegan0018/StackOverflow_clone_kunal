@@ -91,10 +91,11 @@
     <a th:href="@{/}">BACK TO QUESTIONS</a>
 </div>
 <form th:action="@{/answer/save}" method="post">
+    <input type="hidden" name="questionId" th:value="${question.id}">
     <h3>Answer the Question</h3>
     <div class="form-group">
         <label for="name">Your Name:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" th:value required>
     </div>
     <div class="form-group">
         <label for="email">Your Email:</label>

@@ -1,5 +1,6 @@
 package com.stackoverflow.clone.controller;
 
+import com.stackoverflow.clone.entity.Answer;
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.service.QuestionService;
@@ -56,6 +57,8 @@ public class QuestionController {
     public String viewQuestion(@PathVariable("questionId") Long questionId,
                                Model model){
         Question question = questionService.findById(questionId);
+        Answer answer = new Answer();
+        model.addAttribute("answer", answer);
         model.addAttribute("question",question);
         return "question/view-question";
     }
