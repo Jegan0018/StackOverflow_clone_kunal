@@ -1,10 +1,12 @@
 package com.stackoverflow.clone.service.implementation;
 
+import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.repository.TagRepository;
 import com.stackoverflow.clone.service.TagService;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,7 +32,7 @@ public class TagServiceImpl implements TagService {
                     tag = existingTag.get();
                 } else {
                     tag = new Tag();
-                    tag.setName(tagName);
+                    tag.setName(tagName.toLowerCase());
                     tagRepository.save(tag);
                 }
                 tags.add(tag);
@@ -46,4 +48,20 @@ public class TagServiceImpl implements TagService {
         }
         tagRepository.delete(tag);
     }
+
+    @Override
+    public List<Question> findQuestionsByTagName(String tagName) {
+        return tagRepository.findQuestionsByTagId(tagName);
+    }
+
+    @Override
+    public List<Tag> findAll() {
+        return tagRepository.findAll();
+    }
+
+    @Override
+    public List<Tag> findAllByCreatedAtDesc() {
+        return tagRepository.findAllTagsByCreatedAtDesc();
+    }
+
 }

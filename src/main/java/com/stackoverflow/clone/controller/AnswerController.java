@@ -25,8 +25,7 @@ public class AnswerController {
     }
     @PostMapping("/save")
     public String saveAnswer(@RequestParam("questionId") Long questionId,
-                             @ModelAttribute("answer")Answer answer){
-
+                             @ModelAttribute("answer")Answer answer) {
         Question question = questionService.findById(questionId);
         if (answer.getId() != null){
             question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List Tags</title>
+</head>
+<body>
+<form th:action="@{/question/tags}" method="get">
+    <h3>Filters</h3>
+    <input type="text" name="search" class="form-control" placeholder="Search..." th:value="${search}">
+    <button type="submit">SEARCH</button>
+</form>
+<!--<a th:href="@{'/questions/tag}">SORT DESC</a>-->
+<a th:href="@{/questions/tagged?tab=new}">Newest</a><br>
+<span th:each="tag : ${tags}">
+    <a th:href="@{'/questions/tagged/' + ${tag.name}}"> <span th:text="${tag.name}"></span><br>
+    </a>
+</span>
+</body>
+</html>
