@@ -3,6 +3,7 @@ package com.stackoverflow.clone.controller;
 import com.stackoverflow.clone.entity.Answer;
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
+import com.stackoverflow.clone.service.AnswerService;
 import com.stackoverflow.clone.service.QuestionService;
 import com.stackoverflow.clone.service.TagService;
 import org.springframework.stereotype.Controller;
@@ -18,13 +19,14 @@ import java.util.Set;
 @RequestMapping("/")
 public class QuestionController {
 
-    private QuestionService questionService;
-
+    private final QuestionService questionService;
+    private final AnswerService answerService;
     private TagService tagService;
 
-    public QuestionController(QuestionService questionService,TagService tagService) {
+    public QuestionController(QuestionService questionService,TagService tagService, AnswerService answerService) {
         this.questionService=questionService;
         this.tagService=tagService;
+        this.answerService = answerService;
     }
 
     @GetMapping("/")
@@ -57,7 +59,10 @@ public class QuestionController {
     public String viewQuestion(@PathVariable("questionId") Long questionId,
                                Model model){
         Question question = questionService.findById(questionId);
+        List<Answer> answers = answerService.findByQuestionId(questionId);
         Answer answer = new Answer();
+
+        model.addAttribute("answers", answers);
         model.addAttribute("answer", answer);
         model.addAttribute("question",question);
         return "question/view-question";

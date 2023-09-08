@@ -107,5 +107,26 @@
     </div>
     <button type="submit">Submit Answer</button>
 </form>
+<!--<span th:each="tempAnswer : ${answers}">-->
+<!--    <div th:replace="answer-fragment :: answer-fragment"></div>-->
+<!--</span>-->
+<!--<p><strong>Name:</strong> <span th:text="${tempAnswer.name}"></span></p>-->
+<!--<p><strong>Answer:</strong> <span th:text="${tempAnswer.theAnswer}"></span></p>-->
+
+<span th:each="tempAnswer : ${answers}">
+     <p><strong>Name:</strong> <span th:text="${tempAnswer.name}"></span></p>
+    <p><strong>Answer:</strong> <span th:text="${tempAnswer.theAnswer}"></span></p>
+    <div>
+    <form action="#" th:action="@{/answer/updateAnswer}" method="post">
+        <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+        <button type="submit">Edit</button>
+    </form>
+    <form action="#" th:action="@{/answer/delete}" method="post">
+        <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+        <input type="hidden" name="questionId" th:value="${question.id}">
+        <button type="submit">Delete</button>
+    </form>
+</div>
+</span>
 </body>
 </html>
