@@ -95,15 +95,15 @@
     <h3>Answer the Question</h3>
     <div class="form-group">
         <label for="name">Your Name:</label>
-        <input type="text" id="name" name="name" th:value required>
+        <input type="text" id="name" name="name" th:value="${answer.name}" required>
     </div>
     <div class="form-group">
         <label for="email">Your Email:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" th:value="${answer.email}" required>
     </div>
     <div class="form-group">
         <label for="theAnswer">Your Answer:</label>
-        <textarea id="theAnswer" name="theAnswer" rows="4" required></textarea>
+        <textarea id="theAnswer" name="theAnswer" rows="4" th:value="${answer.theAnswer}" required></textarea>
     </div>
     <button type="submit">Submit Answer</button>
 </form>
