@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +43,9 @@ public class QuestionController {
     @PostMapping("/save")
     public String saveQuestion(@ModelAttribute("question") Question question,
                                @RequestParam(value = "tagInput", required = false) String tagInput) {
+        if (question.getId()!=null){
+            question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        }
         Set<Tag> tags = tagService.findOrCreateTag(tagInput);
         question.setTags(tags);
         questionService.save(question);

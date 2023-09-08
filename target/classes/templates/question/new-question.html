@@ -5,22 +5,99 @@
 <head>
     <meta charset="UTF-8">
     <title>NEW QUESTION</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            padding: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"]{
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        input[type="submit"],
+        a {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            display: inline-block;
+            background-color: grey;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        button:hover,
+        a:hover {
+            border: 1px solid;
+            color: black;
+            background-color: white;
+        }
+
+        .form-text {
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
 </head>
+
 <body>
-<form action="#" th:action="@{/save}" method="post">
-    Title : <br>
-    <input type="text" name="title" th:value="${question.title}"><br>
-    Problem : <br>
-    <textarea name="problem" th:value="${question.problem}"></textarea><br>
-    Excepted Solution :<br>
-    <textarea name="exceptedSolution" th:value="${question.exceptedSolution}"></textarea>
-    <br>
-    Tags :<br>
-    <input name="tagInput" th:value="${tagInput}"><br>
-    <small class="form-text">Enter space-separated tags for the post.</small>
-    <br>
-    <input type="submit" value="Ask Question">
-    <a href="javascript:history.back()">Cancel</a>
-</form>
+<div class="container">
+    <h3>NEW QUESTION</h3>
+    <form action="#" th:action="@{/save}" method="post">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" th:value="${question.title}" required><br>
+
+        <label for="problem">Problem:</label><br>
+        <textarea id="problem" name="problem" th:value="${question.problem}" required rows="6"></textarea><br>
+
+        <label for="exceptedSolution">Expected Solution:</label><br>
+        <textarea id="exceptedSolution" name="exceptedSolution" th:value="${question.exceptedSolution}" required rows="8"></textarea><br>
+
+        <label for="tagInput">Tags:</label><br>
+        <input type="text" id="tagInput" name="tagInput" th:value="${tagInput}" required><br>
+        <small class="form-text">Enter space-separated tags for the post.</small><br>
+        <br>
+        <input type="submit" value="Ask Question">
+        <a href="javascript:history.back()">Cancel</a>
+    </form>
+</div>
 </body>
+
 </html>
