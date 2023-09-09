@@ -27,7 +27,7 @@ public class TagController {
         this.questionService=questionService;
     }
 
-    @GetMapping("/question/tags")
+    @GetMapping("/tags")
     public String listTags(Model model,
                            @RequestParam(value = "search", required = false) String search,
                            @RequestParam(value = "tab",defaultValue = "popular") String tab) {
