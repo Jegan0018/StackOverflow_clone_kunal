@@ -30,10 +30,14 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String home(Model model){
+    public String home(){
+        return "Home-Page";
+    }
+    @GetMapping("/questions")
+    public String questions(Model model){
         List<Question> questions = questionService.findAll();
         model.addAttribute("questions",questions);
-        return "Home";
+        return "all-question";
     }
 
     @GetMapping("/new-question")
