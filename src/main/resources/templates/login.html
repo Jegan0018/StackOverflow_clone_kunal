@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Login Page</title>
+  <style>
+        body {
+            font-family: Arial;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f8f8;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            text-decoration: none;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .menu-container {
+            position: relative;
+            margin-right: 10px;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            flex-direction: column;
+        }
+
+       .menu-button,
+       .About-button,
+       .login-button,
+       .signup-button {
+           background-color: #e0e0e0;
+           color: #333;
+           border: none;
+           border-radius: 8px;
+           cursor: pointer;
+           margin: 0 8px;
+           padding: 10px 20px;
+       }
+
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu ul li {
+            display: block;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .menu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex-grow: 1;
+            margin-left: 10px;
+            min-width: 500px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 80px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-form label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 7.5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .login-form button:hover {
+            background-color: #f33;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header-container">
+  <a href="answer.html" class="logo">StackflowOver</a>
+  <div class="menu-container">
+    <button class="menu-button" onclick="toggleMenu()">Menu</button>
+    <div class="menu" id="menu">
+      <ul>
+        <li onclick="redirectToOption('/option1')">Questions</li>
+        <li onclick="redirectToOption('/option2')">Tags</li>
+        <li onclick="redirectToOption('/option3')">Users</li>
+      </ul>
+    </div>
+  </div>
+  <button class="About-button">About</button>
+  <form action="/search" method="get" class="search-form">
+    <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
+  </form>
+  <button class="login-button">Login</button>
+  <button class="signup-button">Sign Up</button>
+</div>
+
+<div class="login-container">
+  <div class="login-header">
+    <h2>Login</h2>
+  </div>
+  <form th:action="@{/login}" method="post" class="login-form">
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">Login</button>
+  </form>
+  <div class="register-link">
+    <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+  </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        var menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    function redirectToOption(option) {
+        window.location.href = option;
+    }
+</script>
+
+</body>
+</html>
