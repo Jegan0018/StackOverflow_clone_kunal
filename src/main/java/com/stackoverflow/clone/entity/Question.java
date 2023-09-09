@@ -30,6 +30,8 @@ public class Question {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    @Column(name = "u")
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private Collection<Answer> answers;
 

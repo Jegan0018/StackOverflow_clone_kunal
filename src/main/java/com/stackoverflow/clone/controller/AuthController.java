@@ -2,7 +2,6 @@ package com.stackoverflow.clone.controller;
 
 
 import com.stackoverflow.clone.entity.User;
-import com.stackoverflow.clone.entity.UserRole;
 import com.stackoverflow.clone.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        user.setRole(UserRole.USER);
+        user.setRole("ROLE_USER");
 
         userRepository.save(user);
 

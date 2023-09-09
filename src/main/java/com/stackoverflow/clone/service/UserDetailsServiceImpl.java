@@ -1,7 +1,6 @@
 package com.stackoverflow.clone.service;
 
 import com.stackoverflow.clone.entity.User;
-import com.stackoverflow.clone.entity.UserRole;
 import com.stackoverflow.clone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,8 +34,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         );
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(UserRole role) {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 
 }

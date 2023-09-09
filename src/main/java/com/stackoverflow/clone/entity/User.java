@@ -16,24 +16,16 @@ public class User {
     @Column(name = "username", unique = true)
     private String username;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @Column(name = "role")
+    private String role;
 
 
 
-    public UserRole getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(UserRole role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -108,5 +100,13 @@ public class User {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
