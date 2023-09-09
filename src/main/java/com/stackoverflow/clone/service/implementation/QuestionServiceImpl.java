@@ -1,6 +1,7 @@
 package com.stackoverflow.clone.service.implementation;
 
 import com.stackoverflow.clone.entity.Question;
+import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.repository.QuestionRepository;
 import com.stackoverflow.clone.service.QuestionService;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,11 @@ public class QuestionServiceImpl implements QuestionService {
             questionRepository.delete(question);
         }
         return question;
+    }
+
+    @Override
+    public int countQuestionsByTag(Tag tag) {
+        return questionRepository.countQuestionsByTags(tag);
     }
 
 
