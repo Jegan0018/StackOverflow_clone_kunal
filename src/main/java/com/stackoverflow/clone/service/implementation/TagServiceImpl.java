@@ -4,6 +4,7 @@ import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.repository.TagRepository;
 import com.stackoverflow.clone.service.TagService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +63,22 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> findAllByCreatedAtDesc() {
         return tagRepository.findAllTagsByCreatedAtDesc();
+    }
+
+    @Override
+    public List<Tag> findAllByTagNameAsc() {
+        return tagRepository.findAllByOrderByNameAsc();
+    }
+
+    @Override
+    public List<Tag> search(String search, String tab) {
+        if (tab != null && !tab.equals("popular")) {
+            int sortBy = tab.equals("name") ? 1 : 0;
+            Sort sort = sortBy == 1 ? Sort.by(Sort.Order.asc("name")) : Sort.by(Sort.Order.desc("createdAt"));
+
+            return tagRepository.search(search,sort);
+        }
+        return tagRepository.search(search);
     }
 
 }
