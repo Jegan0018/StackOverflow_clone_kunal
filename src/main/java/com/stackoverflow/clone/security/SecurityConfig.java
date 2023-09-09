@@ -1,43 +1,58 @@
 package com.stackoverflow.clone.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
-//    @Bean
-//    public UserDetailsService userDetailsService(DataSource dataSource) {
-//        JdbcDaoImpl jdbcUserDetailsService = new JdbcDaoImpl();
-//        jdbcUserDetailsService.setDataSource(dataSource);
-//        jdbcUserDetailsService.setUsersByUsernameQuery("SELECT name, password,active as enabled FROM users WHERE name = ?");
-//        jdbcUserDetailsService.setAuthoritiesByUsernameQuery("SELECT name, role FROM users WHERE name = ?");
-//        return jdbcUserDetailsService;
-//    }
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(configurer ->
-                        configurer
-//                                .requestMatchers("/comments/save").permitAll()
-//                                .requestMatchers("/blogs/showFormForAdd").authenticated()
-//                                .requestMatchers("/blogs/showFormForDrafts").authenticated()
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/Home-Page").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true) // Allow POST requests to /posts
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/Home-Page")
+                        .permitAll()
                 );
-//                .formLogin(form ->
-//                        form
-//                                .loginPage("/users/login")
-//                                .loginProcessingUrl("/authenticateTheUser")
-//                                .defaultSuccessUrl("/blogs/list",true)
-//                                .permitAll()
-//                )
-//                .logout(logout -> logout.permitAll()
-//                );
+
         return http.build();
     }
 }

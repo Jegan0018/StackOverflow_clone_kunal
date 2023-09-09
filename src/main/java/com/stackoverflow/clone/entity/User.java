@@ -13,8 +13,31 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name", unique = true)
-    private String userName;
+    @Column(name = "username", unique = true)
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+
 
     @Column(name = "name")
     private String name;
