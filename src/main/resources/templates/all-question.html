@@ -3,8 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <style>
+<!--      * {-->
+<!--        margin: 0;-->
+<!--        padding: 0;-->
+<!--        box-sizing: border-box;-->
+<!--      }-->
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        color: #4f4e4e;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #4f4e4e;
+        padding: 7.5px 7.5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+
+      }
+
+      .logo {
+        font-size: 24px;
+        text-decoration: none;
+        color: #fff;
+      }
+
+      .menu-container {
+        position: relative;
+      }
+
+      .menu-button,
+      .About-button,
+      .login-button,
+      .signup-button {
+        background-color: #464242;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 5px;
+        padding: 7.5px 15px;
+      }
+
+      .menu-button:hover,
+      .About-button:hover,
+      .login-button:hover,
+      .signup-button:hover {
+        background-color: rgb(231, 136, 136);
+      }
+
+      .menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
+
+      .menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .menu ul li {
+        padding: 10px 15px;
+        cursor: pointer;
+      }
+
+      .menu ul li:hover {
+        background-color: #f0f0f0;
+      }
+    </style>
 </head>
 <body>
+<div class="header-container">
+    <a th:href="@{/questions}" class="logo">StackflowOver</a>
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()">Menu</button>
+        <div class="menu" id="menu">
+            <ul>
+                <li onclick="redirectToOption('/questions')">Questions</li>
+                <li onclick="redirectToOption('/tags')">Tags</li>
+                <li onclick="redirectToOption('/users')">Users</li>
+            </ul>
+        </div>
+    </div>
+    <button class="About-button">About</button>
+    <form action="/search" method="get" class="search-form">
+        <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
+    </form>
+    <a th:href="@{/login}" class="login-button">Login</a>
+    <a th:href="@{/register}"class="signup-button">Sign Up</a>
+</div>
 <h1 th:if="${tagName != null}">
     Questions tagged <span th:text="${tagName}"></span>
 </h1>
@@ -14,13 +116,29 @@
     <p><strong>Problem:</strong> <span th:text="${tempQuestion.problem}"></span></p>
     <p><strong>Tags:</strong></p>
     <ul>
-        <li th:each="tag : ${tempQuestion.tags}" th:text="${tag.name}"></li>
+        <li th:each="tag : ${tempQuestion.tags}">
+            <a th:href="@{'/questions/tagged/' + ${tag.name}}">
+                <span th:text="${tag.name}"></span>
+            </a>
+        </li>
     </ul>
+
     <a th:href="@{'/question/' + ${tempQuestion.id}}">read more</a>
 <!--      <a th:href="@{/blog/full_post(postId=${tempBlog.id})}">Read More</a>-->
 </span>
 <br>
-<a th:href="@{/question/tags}">Tags</a>
+<a th:href="@{/tags}">Tags</a>
 </span>
+<script>
+      function toggleMenu() {
+        var menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      function redirectToOption(option) {
+        window.location.href = option;
+      }
+</script>
 </body>
+
 </html>

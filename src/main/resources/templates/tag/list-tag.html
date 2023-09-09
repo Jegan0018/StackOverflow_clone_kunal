@@ -5,25 +5,25 @@
     <title>List Tags</title>
 </head>
 <body>
-<form th:action="@{/question/tags}" method="get">
+<form th:action="@{/tags}" method="get">
     <h3>Filters</h3>
     <input type="text" name="search" class="form-control" placeholder="Search..." th:value="${search}">
     <button type="submit">SEARCH</button>
-    <a th:href="@{/question/tags}">CLEAR</a>
+    <a th:href="@{/tags}">CLEAR</a>
 </form>
-<form th:action="@{/question/tags}" method="get">
+<form th:action="@{/tags}" method="get">
     <input type="hidden" name="tab" value="popular">
     <input type="hidden" name="search" th:value="${search}">
     <button type="submit">Popular</button>
 </form>
 
-<form th:action="@{/question/tags}" method="get">
+<form th:action="@{/tags}" method="get">
     <input type="hidden" name="tab" value="name">
     <input type="hidden" name="search" th:value="${search}">
     <button type="submit">Name</button>
 </form>
 
-<form th:action="@{/question/tags}" method="get">
+<form th:action="@{/tags}" method="get">
     <input type="hidden" name="tab" value="new">
     <input type="hidden" name="search" th:value="${search}">
     <button type="submit">New</button>
@@ -38,7 +38,7 @@
 <!--</span>-->
 <span th:each="entry : ${questionsCountByTag}">
     <span th:if="${entry.value != 0}">
-        <a th:href="@{'/questions/tagged/' + ${entry.key.name}}">
+        <a th:href="@{'questions/tagged/' + ${entry.key.name}}">
             <span th:text="${entry.key.name}"></span>
         </a>
         <span th:text="${entry.value}"></span>
