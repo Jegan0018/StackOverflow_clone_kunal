@@ -3,6 +3,7 @@ package com.stackoverflow.clone.entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
@@ -12,11 +13,13 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "email")
     private String email;
 
     @Column(name = "name")
     private String name;
 
+    @Column(name = "comment")
     private String theComment;
 
     @Column(name = "created_at", updatable = false)
@@ -28,6 +31,11 @@ public class Comment {
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
     @JoinColumn(name = "answer_id", nullable = false)
     private Answer answer;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Timestamp.valueOf(LocalDateTime.now());
+    }
 
     public Comment() {
     }

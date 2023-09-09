@@ -37,11 +37,13 @@
 <!--    <br>-->
 <!--</span>-->
 <span th:each="entry : ${questionsCountByTag}">
-    <a th:href="@{'/questions/tagged/' + ${entry.key.name}}">
-        <span th:text="${entry.key.name}"></span>
-    </a>
-    <span th:text="${entry.value}"></span>
-    <span th:text="${formattedCreatedAt[entry.key]}"></span><br>
+    <span th:if="${entry.value != 0}">
+        <a th:href="@{'/questions/tagged/' + ${entry.key.name}}">
+            <span th:text="${entry.key.name}"></span>
+        </a>
+        <span th:text="${entry.value}"></span>
+        <span th:text="${formattedCreatedAt[entry.key]}"></span><br>
+    </span>
 </span>
 </body>
 </html>

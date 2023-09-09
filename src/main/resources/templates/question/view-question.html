@@ -88,7 +88,7 @@
         </form>
     </div>
     <br>
-    <a th:href="@{/}">BACK TO QUESTIONS</a>
+    <a th:href="@{/questions}">BACK TO QUESTIONS</a>
 </div>
 <form th:action="@{/answer/save}" method="post">
     <input type="hidden" name="questionId" th:value="${question.id}">
@@ -107,11 +107,6 @@
     </div>
     <button type="submit">Submit Answer</button>
 </form>
-<!--<span th:each="tempAnswer : ${answers}">-->
-<!--    <div th:replace="answer-fragment :: answer-fragment"></div>-->
-<!--</span>-->
-<!--<p><strong>Name:</strong> <span th:text="${tempAnswer.name}"></span></p>-->
-<!--<p><strong>Answer:</strong> <span th:text="${tempAnswer.theAnswer}"></span></p>-->
 
 <span th:each="tempAnswer : ${answers}">
      <p><strong>Name:</strong> <span th:text="${tempAnswer.name}"></span></p>
@@ -126,7 +121,13 @@
         <input type="hidden" name="questionId" th:value="${question.id}">
         <button type="submit">Delete</button>
     </form>
-</div>
+    </div>
+    <form th:action="@{/comment/add}" method="post">
+        <input type="text" name="theComment" required>
+        <input type="submit" value="add comment">
+    </form>
 </span>
+</span>
+
 </body>
 </html>

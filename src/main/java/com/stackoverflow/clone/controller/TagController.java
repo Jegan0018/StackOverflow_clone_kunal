@@ -90,6 +90,6 @@ public class TagController {
         List<Question> questions = tagService.findQuestionsByTagName(tagName);
         model.addAttribute("questions",questions);
         model.addAttribute("tagName",tagName);
-        return "Home";
+        return "all-question";
     }
 }
