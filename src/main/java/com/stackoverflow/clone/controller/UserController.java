@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -25,10 +25,43 @@ public class UserController {
     @GetMapping("/profile")
     public String profile(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user= userService.findByUsername(authentication.getName());
+        User user = userService.findByUsername(authentication.getName());
         List<Question> userQuestions = questionService.findByUser(user);
 
         model.addAttribute("userQuestions", userQuestions);
         return "/user/profile";
     }
+
+    @GetMapping("/users")
+    public String users(Model model){
+
+        List<User> users = userService.findAll();
+//        List<Object[]> topTagsForEachUser = userService.findTop3TagsForEachUser();
+        Map<Long, List<String>> userTopTagsMap = new HashMap<>();
+
+
+//        for (Object[] result : topTagsForEachUser) {
+//            Long userId = (Long) result[0];
+//            Object tagValue = result[2];
+//
+//            String tagName = (tagValue != null) ? tagValue.toString() : null;
+//
+//            if (!userTopTagsMap.containsKey(userId)) {
+//                userTopTagsMap.put(userId, new ArrayList<>());
+//            }
+//
+//            userTopTagsMap.get(userId).add(tagName);
+//            System.out.println(userTopTagsMap);
+//        }
+
+        for (User user : users) {
+            user.setTopTags(userService.findTop3TagsByUserId(user.getId()));
+//                List<String> topTags = userTopTagsMap.get(user.getId()).subList(0, Math.min(3, userTopTagsMap.get(user.getId()).size()));
+//                user.setTopTags(topTags);
+        }
+
+        model.addAttribute("users", users);
+        return "user/user-list";
+    }
+
 }

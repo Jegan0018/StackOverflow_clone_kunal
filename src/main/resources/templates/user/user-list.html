@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<span th:each="tempUser : ${users}">
+    <span th:if="${tempUser.role == 'ROLE_USER'}">
+    <p><strong>Name:</strong> <span th:text="${tempUser.name}"></span></p>
+    <span th:text="${tempUser.username}"></span>
+    <p><strong>Tags:</strong></p>
+    <ul th:if="${tempUser.topTags != null}">
+        <span th:each="tag : ${tempUser.topTags}">
+            <a th:href="@{'/questions/tagged/' + ${tag.name}}" class="lnk">
+                <span th:text="${tag.name}" style="margin-right: 10px;"></span>
+            </a>
+        </span>
+    </ul>
+
+    <span th:unless="${tempUser.topTags != null}">No top tags</span>
+    </span>
+</span>
+</body>
+</html>

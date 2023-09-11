@@ -1,6 +1,7 @@
 package com.stackoverflow.clone.service.implementation;
 
 import com.stackoverflow.clone.entity.Question;
+import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.repository.UserRepository;
 import com.stackoverflow.clone.service.UserService;
@@ -45,6 +46,22 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<Object[]> findTop3TagsForEachUser() {
+        return userRepository.findTop3TagsForEachUser();
+    }
+
+    @Override
+    public List<Tag> findTop3TagsByUserId(Long userId) {
+        return userRepository.findTop3TagsByUserId(userId);
+    }
+
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {
         return Collections.singletonList(new SimpleGrantedAuthority(role));
     }

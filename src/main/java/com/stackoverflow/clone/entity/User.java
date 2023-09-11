@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -34,11 +35,24 @@ public class User {
     @Column(name = "info")
     private String info;
 
+    @OneToMany(mappedBy = "user")
+    private List<Question> questions;
+
     @PrePersist
     protected void onCreate() {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
+    @Transient
+    private List<Tag> topTags;
+
+    public List<Tag> getTopTags() {
+        return topTags;
+    }
+
+    public void setTopTags(List<Tag> topTags) {
+        this.topTags = topTags;
+    }
     public User() {
     }
 
@@ -104,5 +118,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }
