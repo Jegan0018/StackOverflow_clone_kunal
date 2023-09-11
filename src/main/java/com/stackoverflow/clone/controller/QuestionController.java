@@ -88,6 +88,7 @@ public class QuestionController {
             ans.setComments(comments);
         }
 
+        model.addAttribute("commentDeleted", true);
         model.addAttribute("user", question.getUser());
         model.addAttribute("answers", answers);
         model.addAttribute("answer", answer);

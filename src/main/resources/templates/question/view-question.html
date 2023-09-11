@@ -161,8 +161,8 @@
 <!--            </li>-->
 <!--        </ul>-->
 <!--    </div>-->
-    <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" class="toggle-comments-button" onclick="toggleComments(${tempAnswer.id});">Comments</button>
-    <div th:id="'commentsContainer' + ${tempAnswer.id}" class="comments-container">
+<!--    <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" class="toggle-comments-button" onclick="toggleComments(${tempAnswer.id});">Comments</button>-->
+<!--    <div th:id="'commentsContainer' + ${tempAnswer.id}" class="comments-container">-->
         <h4>Comments:</h4>
         <ul>
             <li th:each="comment : ${tempAnswer.comments}">
@@ -179,7 +179,7 @@
                 </span>
             </li>
         </ul>
-    </div>
+<!--    </div>-->
 
     <span sec:authorize="isAuthenticated()">
         <span th:if="${#authorization.expression('hasRole(''USER'')')}">
@@ -192,7 +192,6 @@
    </span>
     <span th:if="${not #authorization.expression('isAuthenticated()')}">
         <form th:action="@{/login}">
-<!--            <input type="hidden" name="questionId" th:value="${question.id}}">-->
             <input type="submit" value="add comment">
         </form>
     </span>
