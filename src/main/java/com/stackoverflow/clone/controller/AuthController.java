@@ -29,15 +29,18 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") @Valid User user, BindingResult result) {
-        // Validate the registration form
+    public String registerUser(@ModelAttribute("user") @Valid User user,
+                               BindingResult result, Model model) {
+
         if (result.hasErrors()) {
             return "registration";
         }
 
 
         if (userRepository.existsByUsername(user.getUsername())) {
-            result.rejectValue("username", "error.username", "Username is already taken");
+//            result.rejectValue("username", "error.username", "Username is already taken");
+            model.addAttribute("user", user);
+            model.addAttribute("usernameError", "Username is already taken");
             return "registration";
         }
 
