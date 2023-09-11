@@ -149,6 +149,59 @@
         .error{
           color: red;
         }
+         #footer {
+        background-color: grey;
+        padding:5px 20px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+
+    .site-footer--container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .site-footer--row {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    a {
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+
+    #showContributors {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    #showContributors:hover {
+        color: #ff5733;
+    }
+
+    #userDetails p {
+        margin: 5px 0;
+    }
+
+
     </style>
 </head>
 
@@ -203,6 +256,29 @@
     function redirectToOption(option) {
         window.location.href = option;
     }
+</script>
+
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+  <div class="site-footer--container">
+    <div class="site-footer--row">
+      <a th:href="@{/}" class="logo">StackOverflow</a>
+      <a th:href="@{/questions}">Questions</a>
+      <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
+    </div>
+    <div class="site-footer--row">
+      <p>This is StackOverflow clone project contributed by users <a href="#" id="showContributors">(see contributors)</a></p>
+      <div id="userDetails" style="display:none;">
+        <p>Kunal Raj - kunalraj0106@gmail.com</p>
+        <p>Murthy - murthyk7592@gmail.com</p>
+        <p>Jegan - jeganpandian001@gmail.com</p>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+    document.getElementById('showContributors').addEventListener('click', function() {
+       document.getElementById('userDetails').style.display = 'block';
+    });
 </script>
 
 </body>

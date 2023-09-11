@@ -15,14 +15,15 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 1500)
     private String title;
 
-    @Column(name = "problem")
+    @Column(name = "problem", length = 1500)
     private String problem;
 
-    @Column(name = "excepted_solution")
+    @Column(name = "excepted_solution", length = 1500)
     private String exceptedSolution;
+
 
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;

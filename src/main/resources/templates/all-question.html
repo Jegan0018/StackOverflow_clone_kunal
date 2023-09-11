@@ -5,106 +5,219 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <style>
-<!--      * {-->
-<!--        margin: 0;-->
-<!--        padding: 0;-->
-<!--        box-sizing: border-box;-->
-<!--      }-->
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #fff;
-        color: black;
+      * {
         margin: 0;
-        padding: 0;
-        min-height: 100vh;
-      }
 
-      .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: white;
-        padding: 7.5px 7.5px;
-        border-radius: 5px;
-        border: 2px solid orange;
-
+        box-sizing: border-box;
       }
+       body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 40vh;
+            flex-direction: column;
+            padding-top:6%;
+        }
 
-      .logo {
-        font-size: 24px;
-        text-decoration: none;
-        color: black;
-      }
 
-      .menu-container {
-        position: relative;
-      }
+        .header-container {
+            display: flex;
+            position: fixed;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f8f8;
+            padding: 10px 20px;
+            width: 100%;
+            top: 0;
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-      .menu-button,
-      .About-button,
-      .login-button,
-      .signup-button {
-        background-color:  rgb(92, 172, 237);
-        color: black;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 0 5px;
-        padding: 7.5px 15px;
-        text-decoration: nane;
-      }
+        .logo {
+            font-size: 24px;
+            text-decoration: none;
+            color: #333;
+            margin-right: 10px;
+        }
 
-      .menu-button:hover,
-      .About-button:hover,
-      .login-button:hover,
-      .signup-button:hover {
-        background-color: white;
-        border: 1px solid;
-      }
+        .menu-container {
+            position: relative;
+            margin-right: 10px;
+        }
 
-      .menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 1;
-      }
+        .menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            flex-direction: column;
+        }
 
-      .menu ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .menu ul li {
-        padding: 10px 15px;
-        cursor: pointer;
-      }
-
-      .menu ul li:hover {
-        background-color: #f0f0f0;
-      }
-       .lnk {
-        text-decoration: none;
-        color: #007bff;
+       .menu-button,
+       .About-button,
+       .login-button,
+       .signup-button {
+           background-color: #e0e0e0;
+           color: #333;
+           border: none;
+           border-radius: 8px;
+           cursor: pointer;
+           margin: 0 8px;
+           padding: 10px 20px;
        }
 
-        .lnk:hover {
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            border: 1px solid;
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
+
+        .menu ul li {
+            display: block;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .menu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex-grow: 1;
+            margin-left: 10px;
+            min-width: 500px;
+        }
+
+        .question-container {
+           border: 1px solid #ccc;
+           border-radius: 30px 30px;
+           padding: 20px;
+           margin: 10px auto;
+           background-color: #fff;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+           width: auto;
+           padding: 20px;
+
+        }
+
+
+
+        .question-title {
+           font-size: 20px;
+           font-weight: bold;
+           color: #333;
+           margin-bottom: 10px;
+        }
+
+
+       .question-problem {
+         font-size: 16px;
+         color: #555;
+         margin-bottom: 15px;
+       }
+
+
+      .question-tags {
+         font-size: 14px;
+          margin-top: 10px;
+      }
+
+       .question-tags a {
+       text-decoration: none;
+       color: #007bff;
+       margin-right: 10px;
+
+      }
+
+
+      .read-more {
+        display: inline-block;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      .read-more:hover {
+         text-decoration: underline;
+      }
+       #footer {
+        background-color: grey;
+        padding:5px 20px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+
+    .site-footer--container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .site-footer--row {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    a {
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+
+    #showContributors {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    #showContributors:hover {
+        color: #ff5733;
+    }
+
+    #userDetails p {
+        margin: 5px 0;
+    }
+
+
+
+
     </style>
 </head>
 <body>
 
 <div class="header-container">
     <a th:href="@{/}" class="logo">
-    <img src="/logo.png" alt="logo" height="30" width="50"/>
+    <img src="/logo.png" alt="loading.." height="30" width="50"/>
     Stack overflow</a>
     <div class="menu-container">
         <button class="menu-button" onclick="toggleMenu()">Menu</button>
@@ -130,26 +243,44 @@
     </span>
 </div>
 <h1 th:if="${tagName != null}">
-    Questions tagged <span th:text="${tagName}"></span>
+    <span th:text="${tagName}"></span>
 </h1>
-<a th:href="@{/new-question}" class="lnk">Ask Question</a>
-<span th:each="tempQuestion : ${questions}">
-    <p><strong>Title:</strong> <span th:text="${tempQuestion.title}"></span></p>
-    <p><strong>Problem:</strong> <span th:text="${tempQuestion.problem}"></span></p>
-    <p><strong>Tags:</strong></p>
-    <ul>
-        <li th:each="tag, tagStat : ${tempQuestion.tags}" style="list-style: none; display: inline-block; margin-right: 10px;">
-            <a th:href="@{'/questions/tagged/' + ${tag.name}}" class="lnk">
-                <span th:text="${tag.name}"></span>
-            </a>
-        </li>
-    </ul>
 
-    <a th:href="@{'/question/' + ${tempQuestion.id}}" class="lnk">read more</a>
+<a th:href="@{/new-question}" class="lnk">Ask Question</a>
+
+<span th:each="tempQuestion : ${questions}">
+    <div class="question-container">
+        <h2 class="question-title" th:text="${tempQuestion.title}"></h2>
+        <p class="question-problem" th:text="${tempQuestion.problem}"></p>
+        <div class="question-tags">
+            <p><strong>Tags:</strong></p>
+            <ul>
+                <li th:each="tag, tagStat : ${tempQuestion.tags}">
+                    <a th:href="@{'/questions/tagged/' + ${tag.name}}" class="lnk" th:text="${tag.name}"></a>
+                </li>
+            </ul>
+        </div>
+        <a th:href="@{'/question/' + ${tempQuestion.id}}" class="read-more">Read more</a>
+    </div>
 </span>
-<br>
-<a th:href="@{/tags}" class="lnk">Tags</a>
-</span>
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+    <div class="site-footer--container">
+        <div class="site-footer--row">
+            <a th:href="@{/}" class="logo">StackOverflow</a>
+            <a th:href="@{/questions}">Questions</a>
+            <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
+        </div>
+        <div class="site-footer--row">
+            <p>This is StackOverflow clone project contributed by users <a href="#" id="showContributors">(see contributors)</a></p>
+            <div id="userDetails" style="display:none;">
+                <p>Kunal Raj - kunalraj0106@gmail.com</p>
+                <p>Murthy - murthyk7592@gmail.com</p>
+                <p>Jegan - jeganpandian001@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
 <script>
       function toggleMenu() {
         var menu = document.getElementById("menu");
@@ -159,6 +290,12 @@
       function redirectToOption(option) {
         window.location.href = option;
       }
+</script>
+
+<script>
+    document.getElementById('showContributors').addEventListener('click', function() {
+       document.getElementById('userDetails').style.display = 'block';
+    });
 </script>
 </body>
 

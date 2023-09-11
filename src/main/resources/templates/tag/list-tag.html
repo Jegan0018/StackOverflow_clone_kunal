@@ -5,89 +5,224 @@
     <meta charset="UTF-8">
     <title>List Tags</title>
     <style>
-              body {
-        font-family: Arial, sans-serif;
-        background-color: #fff;
-        color: black;
+      * {
         margin: 0;
-        padding: 0;
-        min-height: 100vh;
+        box-sizing: border-box;
       }
+       body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 40vh;
+            flex-direction: column;
+            padding-top:6%;
+        }
 
-      .header-container {
+
+        .header-container {
+            display: flex;
+            position: fixed;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f8f8;
+            padding: 10px 20px;
+            width: 100%;
+            top: 0;
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            text-decoration: none;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .menu-container {
+            position: relative;
+            margin-right: 10px;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            flex-direction: column;
+        }
+
+       .menu-button,
+       .About-button,
+       .login-button,
+       .signup-button {
+           background-color: #e0e0e0;
+           color: #333;
+           border: none;
+           border-radius: 8px;
+           cursor: pointer;
+           margin: 0 8px;
+           padding: 10px 20px;
+       }
+
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu ul li {
+            display: block;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .menu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex-grow: 1;
+            margin-left: 10px;
+            min-width: 500px;
+        }
+         #footer {
+        background-color: grey;
+        padding:5px 20px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+
+    .site-footer--container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .site-footer--row {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        background-color: white;
-        padding: 7.5px 7.5px;
-        border-radius: 5px;
-        border: 2px solid orange;
+    }
 
-      }
-
-      .logo {
+    .logo {
         font-size: 24px;
+        font-weight: bold;
+        margin-right: 20px;
         text-decoration: none;
-        color: black;
-      }
+        color: #333;
+    }
 
-      .menu-container {
-        position: relative;
-      }
+    a {
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
 
-      .menu-button,
-      .About-button,
-      .login-button,
-      .signup-button {
-        background-color:  rgb(92, 172, 237);
-        color: black;
-        border: none;
-        border-radius: 5px;
+    p {
+        margin-bottom: 10px;
+    }
+
+
+    #showContributors {
         cursor: pointer;
-        margin: 0 5px;
-        padding: 7.5px 15px;
-        text-decoration: nane;
-      }
+        text-decoration: underline;
+    }
 
-      .menu-button:hover,
-      .About-button:hover,
-      .login-button:hover,
-      .signup-button:hover {
-        background-color: white;
-        border: 1px solid;
-      }
+    #showContributors:hover {
+        color: #ff5733;
+    }
 
-      .menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 1;
-      }
+    #userDetails p {
+        margin: 5px 0;
+    }
+     /* Add this CSS to your existing styles */
 
-      .menu ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-      }
+/* Filters Section */
+.filters-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-      .menu ul li {
-        padding: 10px 15px;
-        cursor: pointer;
-      }
+.filter-search {
+    display: flex;
+    align-items: center;
+}
 
-      .menu ul li:hover {
-        background-color: #f0f0f0;
-      }
+.filter-tabs form {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.filter-tabs button, .filter-tabs a {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 8px;
+    padding: 10px 20px;
+}
+
+.filter-tabs button:hover, .filter-tabs a:hover {
+    background-color: #ccc;
+}
+
+/* Tag Boxes Section */
+.tag-boxes {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tag-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px;
+    width: 150px;
+}
+
+.tag-box a {
+    text-decoration: none;
+    color: #333;
+    text-align: center;
+}
+
+/* Clearfix for every 8th element to start a new row */
+.clearfix {
+    clear: both;
+    width: 100%;
+    content: "";
+}
+
+
+
+
+
     </style>
 </head>
 <body>
 <div class="header-container">
     <a th:href="@{/questions}" class="logo">
-        <img src="/logo.png" alt="logo" height="30" width="50"/>
+        <img src="/logo.png" alt="loading.." height="30" width="50"/>
         Stack overflow</a>
     <div class="menu-container">
         <button class="menu-button" onclick="toggleMenu()">Menu</button>
@@ -112,39 +247,56 @@
         <a th:href="@{/logout}" class="login-button">Logout</a>
     </span>
 </div>
-<form th:action="@{/tags}" method="get">
-    <h3>Filters</h3>
-    <input type="text" name="tagSearch" class="form-control" placeholder="Search..." th:value="${tagSearch}">
-    <button type="submit">SEARCH</button>
-    <a th:href="@{/tags}">CLEAR</a>
-</form>
-<form th:action="@{/tags}" method="get">
-    <input type="hidden" name="tab" value="popular">
-    <input type="hidden" name="tagSearch" th:value="${tagSearch}">
-    <button type="submit">Popular</button>
-</form>
+<!-- Filters Section -->
+<div class="filters-container">
+    <div class="filter-search">
+        <form th:action="@{/tags}" method="get">
+            <input type="text" name="tagSearch" class="form-control" placeholder="Search..." th:value="${tagSearch}">
+            <button type="submit">SEARCH</button>
+            <a th:href="@{/tags}">CLEAR</a>
+        </form>
+    </div>
 
-<form th:action="@{/tags}" method="get">
-    <input type="hidden" name="tab" value="name">
-    <input type="hidden" name="tagSearch" th:value="${tagSearch}">
-    <button type="submit">Name</button>
-</form>
+    <div class="filter-tabs">
+        <form th:action="@{/tags}" method="get">
+            <input type="hidden" name="tab" value="popular">
+            <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+            <button type="submit">Popular</button>
+        </form>
 
-<form th:action="@{/tags}" method="get">
-    <input type="hidden" name="tab" value="new">
-    <input type="hidden" name="tagSearch" th:value="${tagSearch}">
-    <button type="submit">New</button>
-</form>
+        <form th:action="@{/tags}" method="get">
+            <input type="hidden" name="tab" value="name">
+            <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+            <button type="submit">Name</button>
+        </form>
 
-<span th:each="entry : ${questionsCountByTag}">
-    <span th:if="${entry.value != 0}">
-        <a th:href="@{'questions/tagged/' + ${entry.key.name}}">
-            <span th:text="${entry.key.name}"></span>
-        </a>
-        <span th:text="${entry.value}"></span>
-        <span th:text="${formattedCreatedAt[entry.key]}"></span><br>
+        <form th:action="@{/tags}" method="get">
+            <input type="hidden" name="tab" value="new">
+            <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+            <button type="submit">New</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Tag Boxes Section -->
+<div class="tag-boxes">
+    <span th:each="entry, status : ${questionsCountByTag}">
+        <span th:if="${entry.value != 0}">
+            <div class="tag-box">
+                <a th:href="@{'questions/tagged/' + ${entry.key.name}}">
+                    <span th:text="${entry.key.name}"></span><br>
+                    <span th:text="${entry.value}"></span><br>
+                    <span th:text="${formattedCreatedAt[entry.key]}"></span>
+                </a>
+            </div>
+            <!-- Add clearfix for every 8th element to start a new row -->
+            <div th:if="${status.index % 8 == 7}" class="clearfix"></div>
+        </span>
     </span>
-</span>
+</div>
+
+
 <script>
       function toggleMenu() {
         var menu = document.getElementById("menu");
@@ -154,6 +306,30 @@
       function redirectToOption(option) {
         window.location.href = option;
       }
+</script>
+
+
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+    <div class="site-footer--container">
+        <div class="site-footer--row">
+            <a th:href="@{/}" class="logo">StackOverflow</a>
+            <a th:href="@{/questions}">Questions</a>
+            <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
+        </div>
+        <div class="site-footer--row">
+            <p>This is StackOverflow clone project contributed by users <a href="#" id="showContributors">(see contributors)</a></p>
+            <div id="userDetails" style="display:none;">
+                <p>Kunal Raj - kunalraj0106@gmail.com</p>
+                <p>Murthy - murthyk7592@gmail.com</p>
+                <p>Jegan - jeganpandian001@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    document.getElementById('showContributors').addEventListener('click', function() {
+       document.getElementById('userDetails').style.display = 'block';
+    });
 </script>
 </body>
 </html>
