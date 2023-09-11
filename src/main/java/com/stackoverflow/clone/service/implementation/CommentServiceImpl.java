@@ -6,6 +6,7 @@ import com.stackoverflow.clone.service.CommentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -28,5 +29,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteById(Long id) {
         commentRepository.deleteById(id);
+    }
+
+    @Override
+    public Comment findById(Long commentId) {
+        return commentRepository.findById(commentId).get();
     }
 }

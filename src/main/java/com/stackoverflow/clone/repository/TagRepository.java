@@ -24,6 +24,7 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
     @Query("SELECT t FROM Tag t WHERE " +
             "LOWER(t.name) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Tag> search(@Param("search") String search, Sort sort);
+
     @Query("SELECT t FROM Tag t WHERE " +
             "LOWER(t.name) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Tag> search(@Param("search") String search);

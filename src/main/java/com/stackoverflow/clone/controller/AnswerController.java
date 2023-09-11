@@ -25,16 +25,18 @@ public class AnswerController {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final UserService userService;
-    public AnswerController(QuestionService questionService, AnswerService answerService, UserService userService){
+
+    public AnswerController(QuestionService questionService, AnswerService answerService, UserService userService) {
         this.questionService = questionService;
         this.answerService = answerService;
         this.userService = userService;
     }
+
     @PostMapping("/save")
     public String saveAnswer(@RequestParam("questionId") Long questionId,
                              @RequestParam(value = "id", required = false) Long id,
                              @RequestParam("theAnswer") String theAnswer,
-                             @ModelAttribute("answer") Answer answer){
+                             @ModelAttribute("answer") Answer answer) {
 
         Question question = questionService.findById(questionId);
         if (id != null) {
@@ -43,19 +45,18 @@ public class AnswerController {
             answer.setTheAnswer(theAnswer);
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user= userService.findByUsername(authentication.getName());
+        User user = userService.findByUsername(authentication.getName());
 
         answer.setUser(user);
         answer.setQuestion(question);
         answerService.save(answer);
-        return "redirect:/question/"+questionId;
+        return "redirect:/question/" + questionId;
     }
 
     @PostMapping("/updateAnswer")
     public String updateAnswer(@RequestParam("answerId") Long answerId,
-                               Model model){
+                               Model model) {
         Answer tempAnswer = answerService.findById(answerId);
-
         model.addAttribute("question", tempAnswer.getQuestion());
         model.addAttribute("tempAnswer", tempAnswer);
         return "answer/edit-answer";
@@ -63,8 +64,8 @@ public class AnswerController {
 
     @PostMapping("/delete")
     public String deleteAnswer(@RequestParam("questionId") Long questionId,
-                               @RequestParam("answerId") Long answerId){
+                               @RequestParam("answerId") Long answerId) {
         answerService.deleteById(answerId);
-        return "redirect:/question/"+questionId;
+        return "redirect:/question/" + questionId;
     }
 }

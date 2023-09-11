@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/comment")
@@ -31,18 +34,21 @@ public class CommentController {
 
     @PostMapping("/add")
     public String addComment(@RequestParam("answerId") Long answerId,
-                             @RequestParam("theComment") String theComment) {
-
+                             @RequestParam("theComment") String theComment,
+                             @RequestParam(value = "commentId", required = false) Long commentId) {
+        System.out.println("Comment "+theComment);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user= userService.findByUsername(authentication.getName());
-
         Answer answer = answerService.findById(answerId);
-
-        Comment comment = new Comment();
+        Comment comment;
+        if(commentId!=null) {
+            comment = commentService.findById(commentId);
+        } else {
+            comment = new Comment();
+        }
         comment.setTheComment(theComment);
         comment.setUser(user);
         comment.setAnswer(answer);
-
         commentService.save(comment);
 
         return "redirect:/question/" + answer.getQuestion().getId();
@@ -53,7 +59,6 @@ public class CommentController {
                              @RequestParam("commentId") Long commentId) {
         commentService.deleteById(commentId);
         Answer answer = answerService.findById(answerId);
-
         return "redirect:/question/" + answer.getQuestion().getId();
     }
 }
