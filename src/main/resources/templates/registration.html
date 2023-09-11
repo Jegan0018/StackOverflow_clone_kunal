@@ -147,7 +147,7 @@
       }
 
       .registration-form button:hover {
-        background-color: rgb(231, 136, 136);
+        background-color: rgb(231, 136, 136, 0.5);
       }
 
       .login-link {
@@ -197,9 +197,9 @@
         <button class="menu-button" onclick="toggleMenu()">Menu</button>
         <div class="menu" id="menu">
           <ul>
-            <li onclick="redirectToOption('/option1')">Questions</li>
-            <li onclick="redirectToOption('/option2')">Tags</li>
-            <li onclick="redirectToOption('/option3')">Users</li>
+            <li onclick="redirectToOption('/questions')">Questions</li>
+            <li onclick="redirectToOption('/tags')">Tags</li>
+            <li onclick="redirectToOption('/users')">Users</li>
           </ul>
         </div>
       </div>
@@ -214,8 +214,7 @@
           placeholder="Search..."
         />
       </form>
-      <button class="login-button">Login</button>
-      <button class="signup-button">Sign Up</button>
+      <a th:href="@{/login}" class="login-button">Login</a>
     </div>
     <div class="container">
       <div class="registration-container">

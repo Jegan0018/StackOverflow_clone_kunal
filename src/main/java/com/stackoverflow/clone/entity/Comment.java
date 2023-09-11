@@ -32,6 +32,10 @@ public class Comment {
     @JoinColumn(name = "answer_id", nullable = false)
     private Answer answer;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+
     @PrePersist
     protected void onCreate() {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
@@ -94,5 +98,13 @@ public class Comment {
 
     public void setAnswer(Answer answer) {
         this.answer = answer;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

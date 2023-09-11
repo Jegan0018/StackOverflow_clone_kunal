@@ -2,6 +2,7 @@ package com.stackoverflow.clone.service.implementation;
 
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
+import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.repository.QuestionRepository;
 import com.stackoverflow.clone.service.QuestionService;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,14 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.countQuestionsByTags(tag);
     }
 
+    @Override
+    public List<Question> findByUser(User user) {
+        return questionRepository.findByUser(user);
+    }
+
+    @Override
+    public List<Question> findTop10ByOrderByCreatedAtDesc() {
+        return questionRepository.findTop10ByOrderByCreatedAtDesc();
+    }
 
 }

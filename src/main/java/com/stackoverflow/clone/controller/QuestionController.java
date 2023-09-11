@@ -1,11 +1,10 @@
 package com.stackoverflow.clone.controller;
 
-import com.stackoverflow.clone.entity.Answer;
-import com.stackoverflow.clone.entity.Question;
-import com.stackoverflow.clone.entity.Tag;
-import com.stackoverflow.clone.service.AnswerService;
-import com.stackoverflow.clone.service.QuestionService;
-import com.stackoverflow.clone.service.TagService;
+import com.stackoverflow.clone.entity.*;
+import com.stackoverflow.clone.service.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -21,16 +21,29 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
-    private TagService tagService;
+    private final TagService tagService;
+    private final UserService userService;
+    private final CommentService commentService;
 
-    public QuestionController(QuestionService questionService,TagService tagService, AnswerService answerService) {
-        this.questionService=questionService;
-        this.tagService=tagService;
+    public QuestionController(QuestionService questionService, UserService userService,
+                              TagService tagService, AnswerService answerService, CommentService commentService) {
+        this.questionService = questionService;
+        this.userService = userService;
+        this.tagService = tagService;
         this.answerService = answerService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/")
-    public String home(){
+    public String home(Model model) {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user= userService.findByUsername(authentication.getName());
+        List<Question> recent10Question = questionService.findTop10ByOrderByCreatedAtDesc();
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("recent10Question", recent10Question);
         return "Home-Page";
     }
     @GetMapping("/questions")
@@ -53,7 +66,11 @@ public class QuestionController {
         if (question.getId()!=null){
             question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user= userService.findByUsername(authentication.getName());
         Set<Tag> tags = tagService.findOrCreateTag(tagNames);
+
+        question.setUser(user);
         question.setTags(tags);
         questionService.save(question);
         return "redirect:/question/"+question.getId();
@@ -66,6 +83,12 @@ public class QuestionController {
         List<Answer> answers = answerService.findByQuestionId(questionId);
         Answer answer = new Answer();
 
+        for (Answer ans : answers) {
+            List<Comment> comments = commentService.findByAnswerId(ans.getId());
+            ans.setComments(comments);
+        }
+
+        model.addAttribute("user", question.getUser());
         model.addAttribute("answers", answers);
         model.addAttribute("answer", answer);
         model.addAttribute("question",question);

@@ -19,18 +19,6 @@ public class User {
     @Column(name = "role")
     private String role;
 
-
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-
-
     @Column(name = "name")
     private String name;
 
@@ -108,5 +96,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

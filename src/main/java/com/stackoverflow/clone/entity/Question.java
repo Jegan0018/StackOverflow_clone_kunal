@@ -30,7 +30,9 @@ public class Question {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "u")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private Collection<Answer> answers;
@@ -51,14 +53,16 @@ public class Question {
     public Question() {
     }
 
-    public Question(String title, String problem, String exceptedSolution, Set<Tag> tags, Timestamp createdAt, Timestamp updatedAt) {
-        this.title = title;
-        this.problem = problem;
-        this.exceptedSolution = exceptedSolution;
-        this.tags = tags;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+//    public Question(String title, String problem, String exceptedSolution,
+//                    Set<Tag> tags, Timestamp createdAt, Timestamp updatedAt,
+//                    ) {
+//        this.title = title;
+//        this.problem = problem;
+//        this.exceptedSolution = exceptedSolution;
+//        this.tags = tags;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
+//    }
 
     public Long getId() {
         return id;
@@ -122,5 +126,13 @@ public class Question {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -146,6 +146,9 @@
             text-align: center;
             margin-top: 10px;
         }
+        .error{
+          color: red;
+        }
     </style>
 </head>
 
@@ -157,9 +160,9 @@
     <button class="menu-button" onclick="toggleMenu()">Menu</button>
     <div class="menu" id="menu">
       <ul>
-        <li onclick="redirectToOption('/option1')">Questions</li>
-        <li onclick="redirectToOption('/option2')">Tags</li>
-        <li onclick="redirectToOption('/option3')">Users</li>
+        <li onclick="redirectToOption('/questions')">Questions</li>
+        <li onclick="redirectToOption('/tags')">Tags</li>
+        <li onclick="redirectToOption('/users')">Users</li>
       </ul>
     </div>
   </div>
@@ -167,7 +170,6 @@
   <form action="/search" method="get" class="search-form">
     <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
   </form>
-  <button class="login-button">Login</button>
   <button class="signup-button">Sign Up</button>
 </div>
 
@@ -176,6 +178,7 @@
     <h2>Login</h2>
   </div>
   <form th:action="@{/login}" method="post" class="login-form">
+    <span th:if="${param.error}" class="error">Incorrect Credentials</span>
     <div>
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>

@@ -5,6 +5,8 @@ import com.stackoverflow.clone.repository.CommentRepository;
 import com.stackoverflow.clone.service.CommentService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
@@ -16,5 +18,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void save(Comment comment) {
         commentRepository.save(comment);
+    }
+
+    @Override
+    public List<Comment> findByAnswerId(Long id) {
+        return commentRepository.findByAnswerId(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        commentRepository.deleteById(id);
     }
 }

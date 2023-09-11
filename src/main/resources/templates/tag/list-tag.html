@@ -1,41 +1,141 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>List Tags</title>
+    <style>
+              body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        color: black;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+        padding: 7.5px 7.5px;
+        border-radius: 5px;
+        border: 2px solid orange;
+
+      }
+
+      .logo {
+        font-size: 24px;
+        text-decoration: none;
+        color: black;
+      }
+
+      .menu-container {
+        position: relative;
+      }
+
+      .menu-button,
+      .About-button,
+      .login-button,
+      .signup-button {
+        background-color:  rgb(92, 172, 237);
+        color: black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 5px;
+        padding: 7.5px 15px;
+        text-decoration: nane;
+      }
+
+      .menu-button:hover,
+      .About-button:hover,
+      .login-button:hover,
+      .signup-button:hover {
+        background-color: white;
+        border: 1px solid;
+      }
+
+      .menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
+
+      .menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .menu ul li {
+        padding: 10px 15px;
+        cursor: pointer;
+      }
+
+      .menu ul li:hover {
+        background-color: #f0f0f0;
+      }
+    </style>
 </head>
 <body>
+<div class="header-container">
+    <a th:href="@{/questions}" class="logo">
+        <img src="/logo.png" alt="logo" height="30" width="50"/>
+        Stack overflow</a>
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()">Menu</button>
+        <div class="menu" id="menu">
+            <ul>
+                <li onclick="redirectToOption('/questions')">Questions</li>
+                <li onclick="redirectToOption('/tags')">Tags</li>
+                <li onclick="redirectToOption('/users')">Users</li>
+            </ul>
+        </div>
+    </div>
+    <button class="About-button">About</button>
+    <form action="/search" method="get" class="search-form">
+        <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
+    </form>
+    <span th:if="${not #authorization.expression('isAuthenticated()')}">
+        <a th:href="@{/login}" class="login-button">Login</a>
+        <a th:href="@{/register}"class="signup-button">Sign Up</a>
+    </span>
+    <span sec:authorize="isAuthenticated()">
+        <a th:href="@{/profile}" class="login-button">Profile</a>
+        <a th:href="@{/logout}" class="login-button">Logout</a>
+    </span>
+</div>
 <form th:action="@{/tags}" method="get">
     <h3>Filters</h3>
-    <input type="text" name="search" class="form-control" placeholder="Search..." th:value="${search}">
+    <input type="text" name="tagSearch" class="form-control" placeholder="Search..." th:value="${tagSearch}">
     <button type="submit">SEARCH</button>
     <a th:href="@{/tags}">CLEAR</a>
 </form>
 <form th:action="@{/tags}" method="get">
     <input type="hidden" name="tab" value="popular">
-    <input type="hidden" name="search" th:value="${search}">
+    <input type="hidden" name="tagSearch" th:value="${tagSearch}">
     <button type="submit">Popular</button>
 </form>
 
 <form th:action="@{/tags}" method="get">
     <input type="hidden" name="tab" value="name">
-    <input type="hidden" name="search" th:value="${search}">
+    <input type="hidden" name="tagSearch" th:value="${tagSearch}">
     <button type="submit">Name</button>
 </form>
 
 <form th:action="@{/tags}" method="get">
     <input type="hidden" name="tab" value="new">
-    <input type="hidden" name="search" th:value="${search}">
+    <input type="hidden" name="tagSearch" th:value="${tagSearch}">
     <button type="submit">New</button>
 </form>
 
-<!--<span th:each="tag, count : ${tags}">-->
-<!--    <a th:href="@{'/questions/tagged/' + ${tag.name}}">-->
-<!--        <span th:text="${tag.name}"></span>-->
-<!--    </a>-->
-<!--    <span th:text="${questionsCount[count.index]}"></span>-->
-<!--    <br>-->
-<!--</span>-->
 <span th:each="entry : ${questionsCountByTag}">
     <span th:if="${entry.value != 0}">
         <a th:href="@{'questions/tagged/' + ${entry.key.name}}">
@@ -45,5 +145,15 @@
         <span th:text="${formattedCreatedAt[entry.key]}"></span><br>
     </span>
 </span>
+<script>
+      function toggleMenu() {
+        var menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      function redirectToOption(option) {
+        window.location.href = option;
+      }
+</script>
 </body>
 </html>

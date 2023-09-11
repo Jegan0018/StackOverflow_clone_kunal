@@ -1,83 +1,87 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f8f8f8;
-            padding: 10px 20px;
-        }
+            body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        color: black;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
 
-        .logo {
-            font-size: 24px;
-            text-decoration: none;
-            color: #333;
-            margin-right: 10px;
-        }
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+        padding: 7.5px 7.5px;
+        border-radius: 5px;
+        border: 2px solid orange;
 
-        .menu-container {
-            position: relative;
-        }
+      }
 
-        .menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 1;
-            flex-direction: column;
-        }
+      .logo {
+        font-size: 24px;
+        text-decoration: none;
+        color: black;
+      }
 
-        .menu-button, .About-button, .login-button, .signup-button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0 5px;
-        }
+      .menu-container {
+        position: relative;
+      }
 
-        .menu ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+      .menu-button,
+      .About-button,
+      .login-button,
+      .signup-button {
+        background-color:  rgb(92, 172, 237);
+        color: black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 5px;
+        padding: 7.5px 15px;
+        text-decoration: nane;
+      }
 
-        .menu ul li {
-            display: block;
-            padding: 10px 15px;
-            cursor: pointer;
-        }
+      .menu-button:hover,
+      .About-button:hover,
+      .login-button:hover,
+      .signup-button:hover {
+        background-color: white;
+        border: 1px solid;
+      }
 
-        .menu ul li:hover {
-            background-color: #f0f0f0;
-        }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
 
-        .stack-icon {
-            cursor: pointer;
-        }
+      .menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
 
-        .search-form {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-        }
+      .menu ul li {
+        padding: 10px 15px;
+        cursor: pointer;
+      }
 
-        .search-input {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            flex-grow: 1;
-            margin-left: 10px;
-            min-width: 500px;
-        }
+      .menu ul li:hover {
+        background-color: #f0f0f0;
+      }
 
         #my-image {
             display: block;
@@ -144,11 +148,16 @@
             margin-bottom: 0px;
             box-sizing: border-box;
         }
+        .site-footer js-footer{
+            background-color: rgb(108, 108, 112);
+        }
     </style>
 </head>
 <body>
 <div class="header-container">
-    <a th:href="@{/questions}" class="logo">StackflowOver</a>
+    <a th:href="@{/}" class="logo">
+        <img src="/logo.png" alt="logo" height="30" width="50"/>
+        Stack overflow</a>
     <div class="menu-container">
         <button class="menu-button" onclick="toggleMenu()">Menu</button>
         <div class="menu" id="menu">
@@ -163,10 +172,16 @@
     <form action="/search" method="get" class="search-form">
         <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
     </form>
-    <a th:href="@{/login}" class="login-button">Login</a>
-    <a th:href="@{/register}"class="signup-button">Sign Up</a>
+    <span th:if="${not #authorization.expression('isAuthenticated()')}">
+        <a th:href="@{/login}" class="login-button">Login</a>
+        <a th:href="@{/register}"class="signup-button">Sign Up</a>
+    </span>
+    <span sec:authorize="isAuthenticated()">
+        <a th:href="@{/profile}" class="login-button">Profile</a>
+        <a th:href="@{/logout}" class="login-button">Logout</a>
+    </span>
 </div>
-
+<span th:if="${not #authorization.expression('isAuthenticated()')}">
 <div>
     <br>
     <img id="my-image" src="/body.gif" width="950" alt="image is loading">
@@ -268,12 +283,31 @@
     </div>
 </section>
 
+</span>
+<span sec:authorize="isAuthenticated()">
+    Welcome, <a th:href="@{/profile}" th:text="${user.name}"></a>!
+    <span th:each="tempQuestion : ${recent10Question}">
+    <p><strong>Title:</strong> <span th:text="${tempQuestion.title}"></span></p>
+    <p><strong>Problem:</strong> <span th:text="${tempQuestion.problem}"></span></p>
+    <p><strong>Tags:</strong></p>
+    <ul>
+        <li th:each="tag, tagStat : ${tempQuestion.tags}" style="list-style: none; display: inline-block; margin-right: 10px;">
+            <a th:href="@{'/questions/tagged/' + ${tag.name}}" style="color: blue;">
+                <span th:text="${tag.name}"></span>
+            </a>
+        </li>
+    </ul>
 
+
+    <a th:href="@{'/question/' + ${tempQuestion.id}}" style="color: blue;">read more</a>
+
+</span>
+</span>
 <footer id="footer" class="site-footer js-footer" role="contentinfo">
     <div class="site-footer--container">
         <div class="site-footer--row">
-            <a th:href="@{/questions}" class="logo">StackOverflow</a>
-            <a href="#">Questions</a>
+            <a th:href="@{/}" class="logo">StackOverflow</a>
+            <a th:href="@{/questions}">Questions</a>
             <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
         </div>
         <div class="site-footer--row">
@@ -286,11 +320,21 @@
         </div>
     </div>
 </footer>
+<script>
+      function toggleMenu() {
+        var menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
 
+      function redirectToOption(option) {
+        window.location.href = option;
+      }
+</script>
+</body>
 <style>
 
     #footer {
-        background-color: #f8f8f8;
+        background-color: grey;
         padding: 20px;
     }
 

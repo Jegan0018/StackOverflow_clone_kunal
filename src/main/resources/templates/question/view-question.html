@@ -65,6 +65,21 @@
         a:hover {
             text-decoration: none;
         }
+
+        .comments-container {
+            display: none;
+        }
+
+        .toggle-comments-button:focus + .comments-container,
+        .comments-container.show-comments {
+             display: block;
+        }
+        .toggle-comments-button:focus + .comments-container,
+        .comments-container.show-comments,
+        button:focus + .comments-container {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -76,58 +91,112 @@
     <div th:text="${question.exceptedSolution}"></div>
     <p><strong>Tags:</strong></p>
     <ul>
-        <li th:each="tag : ${question.tags}" th:text="${tag.name}"></li>
+        <li th:each="tag, tagStat : ${question.tags}" style="list-style: none; display: inline-block; margin-right: 10px;">
+            <a th:href="@{'/questions/tagged/' + ${tag.name}}">
+                <span th:text="${tag.name}"></span>
+            </a>
+        </li>
     </ul>
 
-    <div class="button-group">
-        <form action="#" th:action="@{'/question/editQuestion/' + ${question.id}}" method="post">
-            <button type="submit">Edit</button>
-        </form>
-        <form action="#" th:action="@{'/question/delete/' + ${question.id}}" method="post">
-            <button type="submit">Delete</button>
-        </form>
-    </div>
+    <span sec:authorize="isAuthenticated()">
+        <div class="button-group">
+            <span th:if="${user.username == #authentication.principal.username}">
+            <form action="#" th:action="@{'/question/editQuestion/' + ${question.id}}" method="post">
+                <button type="submit">Edit</button>
+            </form>
+            </span>
+            <div th:if="${user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
+            <form action="#" th:action="@{'/question/delete/' + ${question.id}}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+            </div>
+        </div>
+    </span>
     <br>
     <a th:href="@{/questions}">BACK TO QUESTIONS</a>
 </div>
-<form th:action="@{/answer/save}" method="post">
+<span sec:authorize="isAuthenticated()">
+    <span th:if="${#authorization.expression('hasRole(''USER'')')}">
+    <form th:action="@{/answer/save}" method="post">
     <input type="hidden" name="questionId" th:value="${question.id}">
     <h3>Answer the Question</h3>
-    <div class="form-group">
-        <label for="name">Your Name:</label>
-        <input type="text" id="name" name="name" th:value="${answer.name}" required>
-    </div>
-    <div class="form-group">
-        <label for="email">Your Email:</label>
-        <input type="email" id="email" name="email" th:value="${answer.email}" required>
-    </div>
     <div class="form-group">
         <label for="theAnswer">Your Answer:</label>
         <textarea id="theAnswer" name="theAnswer" rows="4" th:value="${answer.theAnswer}" required></textarea>
     </div>
     <button type="submit">Submit Answer</button>
 </form>
+</span>
+</span>
 
 <span th:each="tempAnswer : ${answers}">
-     <p><strong>Name:</strong> <span th:text="${tempAnswer.name}"></span></p>
+    <p><strong>Name:</strong> <span th:text="${tempAnswer.user.name}"></span></p>
     <p><strong>Answer:</strong> <span th:text="${tempAnswer.theAnswer}"></span></p>
-    <div>
-    <form action="#" th:action="@{/answer/updateAnswer}" method="post">
-        <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
-        <button type="submit">Edit</button>
-    </form>
-    <form action="#" th:action="@{/answer/delete}" method="post">
-        <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
-        <input type="hidden" name="questionId" th:value="${question.id}">
-        <button type="submit">Delete</button>
-    </form>
-    </div>
-    <form th:action="@{/comment/add}" method="post">
-        <input type="text" name="theComment" required>
-        <input type="submit" value="add comment">
-    </form>
-</span>
-</span>
+    <span sec:authorize="isAuthenticated()">
+       <span th:if="${tempAnswer.user.username == #authentication.principal.username}">
+            <form action="#" th:action="@{/answer/updateAnswer}" method="post">
+                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                <button type="submit">Edit</button>
+            </form>
+       </span>
+       <span th:if="${tempAnswer.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
+            <form action="#" th:action="@{/answer/delete}" method="post">
+                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                <input type="hidden" name="questionId" th:value="${question.id}">
+                <button type="submit">Delete</button>
+            </form>
+       </span>
+    </span>
 
+
+<!--       <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" onclick="console.log('Button clicked for answerId=' + ${tempAnswer.id}); toggleComments(${tempAnswer.id});">Comments</button>-->
+
+<!--    <div th:id="'commentsContainer' + ${tempAnswer.id}" style="display: none;">-->
+<!--        <h4>Comments:</h4>-->
+<!--        <ul>-->
+<!--            <li th:each="comment : ${tempAnswer.comments}">-->
+<!--                &lt;!&ndash; Display comments for the answer &ndash;&gt;-->
+<!--                <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>-->
+<!--                <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+    <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" class="toggle-comments-button" onclick="toggleComments(${tempAnswer.id});">Comments</button>
+    <div th:id="'commentsContainer' + ${tempAnswer.id}" class="comments-container">
+        <h4>Comments:</h4>
+        <ul>
+            <li th:each="comment : ${tempAnswer.comments}">
+                <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>
+                <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>
+                <span sec:authorize="isAuthenticated()">
+                <span th:if="${comment.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
+                <form th:action="@{/comment/delete}" method="post">
+                    <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                    <input type="hidden" name="commentId" th:value="${comment.id}">
+                    <input type="submit" value="delete">
+                </form>
+                </span>
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <span sec:authorize="isAuthenticated()">
+        <span th:if="${#authorization.expression('hasRole(''USER'')')}">
+            <form th:action="@{/comment/add}" method="post">
+                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                <input type="text" name="theComment" required>
+                <input type="submit" value="Add Comment">
+            </form>
+        </span>
+   </span>
+    <span th:if="${not #authorization.expression('isAuthenticated()')}">
+        <form th:action="@{/login}">
+<!--            <input type="hidden" name="questionId" th:value="${question.id}}">-->
+            <input type="submit" value="add comment">
+        </form>
+    </span>
+</span>
+</span>
 </body>
 </html>

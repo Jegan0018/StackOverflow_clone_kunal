@@ -37,19 +37,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(authorizeRequests ->
+                .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/Home-Page").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/question/edit/**", "/new-question").hasRole("USER")
+                                .requestMatchers( "/save","/question/delete/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true) // Allow POST requests to /posts
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/Home-Page")
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
 

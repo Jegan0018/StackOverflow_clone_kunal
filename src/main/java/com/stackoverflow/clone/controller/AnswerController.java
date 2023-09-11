@@ -2,8 +2,12 @@ package com.stackoverflow.clone.controller;
 
 import com.stackoverflow.clone.entity.Answer;
 import com.stackoverflow.clone.entity.Question;
+import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.service.AnswerService;
 import com.stackoverflow.clone.service.QuestionService;
+import com.stackoverflow.clone.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,9 +24,11 @@ public class AnswerController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
-    public AnswerController(QuestionService questionService, AnswerService answerService){
+    private final UserService userService;
+    public AnswerController(QuestionService questionService, AnswerService answerService, UserService userService){
         this.questionService = questionService;
         this.answerService = answerService;
+        this.userService = userService;
     }
     @PostMapping("/save")
     public String saveAnswer(@RequestParam("questionId") Long questionId,
@@ -36,6 +42,10 @@ public class AnswerController {
             answer.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
             answer.setTheAnswer(theAnswer);
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user= userService.findByUsername(authentication.getName());
+
+        answer.setUser(user);
         answer.setQuestion(question);
         answerService.save(answer);
         return "redirect:/question/"+questionId;

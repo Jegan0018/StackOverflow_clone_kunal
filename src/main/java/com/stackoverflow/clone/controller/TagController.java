@@ -29,13 +29,13 @@ public class TagController {
 
     @GetMapping("/tags")
     public String listTags(Model model,
-                           @RequestParam(value = "search", required = false) String search,
+                           @RequestParam(value = "tagSearch", required = false) String tagSearch,
                            @RequestParam(value = "tab",defaultValue = "popular") String tab) {
         List<Tag> tags;
         Map<Tag,Integer> questionsCountByTag = new LinkedHashMap<>();
 
-        if(search != null){
-            tags = tagService.search(search, tab);
+        if(tagSearch != null){
+            tags = tagService.search(tagSearch, tab);
         }
         else if(tab==null){
 
@@ -77,7 +77,7 @@ public class TagController {
             formattedCreatedAt.put(tag, formattedTimeElapsed);
         }
 
-        model.addAttribute("search", search);
+        model.addAttribute("tagSearch", tagSearch);
         model.addAttribute("formattedCreatedAt", formattedCreatedAt);
         model.addAttribute("questionsCountByTag",questionsCountByTag);
 
