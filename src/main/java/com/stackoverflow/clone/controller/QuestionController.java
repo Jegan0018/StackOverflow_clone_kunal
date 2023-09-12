@@ -112,7 +112,7 @@ public class QuestionController {
         return "question/edit-question";
     }
 
-    @PostMapping("question/delete/{deleteId}")
+    @PostMapping("/question/delete/{deleteId}")
     public String delete(@PathVariable("deleteId") Long deleteId) {
         questionService.deleteById(deleteId);
         return "redirect:/";
@@ -122,13 +122,26 @@ public class QuestionController {
     public String searchAll(Model model,
                             @RequestParam(value = "q", required = false) String q) {
         String[] searchArray = q.split("[,\\s]+");
+
         List<Question> questions=new ArrayList<>();
         if(searchArray.length>1) {
+            if(searchArray[0].startsWith("user:")){
+                Long userId = Long.parseLong(searchArray[0].substring(5, searchArray[0].length()));
+
+                String tagName = searchArray[1].startsWith("[")
+                        ? searchArray[1].substring(1, searchArray[1].length() - 1)
+                        : searchArray[1].substring(0, searchArray[1].length() - 1);
+                questions = questionService.findQuestionsByUserAndTag(userId,tagName);
+                model.addAttribute("questions", questions);
+                model.addAttribute("q",q);
+                return "all-question";
+            }
             for (String search : searchArray) {
                 if (tagService.tagExists(search)) {
                     List<Question> tagQuestions = tagService.findQuestionsByTagName(search);
                     questions.addAll(tagQuestions);
-                } else {
+                }
+                else {
                     List<Question> keywordQuestions = questionService.findQuestionsBySearch(search);
                     questions.addAll(keywordQuestions);
                 }
@@ -164,11 +177,23 @@ public class QuestionController {
             } else if(searchArray[0].startsWith("user:")) {
                 int userId = Integer.parseInt(searchArray[0].substring(5, searchArray[0].length()));
                 User user=userService.findById(userId);
-                questions = questionService.findAllByUserName(user.getUsername());
+                questions = questionService.findByUser(user);
                 model.addAttribute("questions", questions);
                 model.addAttribute("q", searchArray[0]);
             }
         }
+        return "all-question";
+    }
+
+    @GetMapping("/questions/user/{userId}/tagged/{tagName}")
+    public String userWithTagged(@PathVariable("userId") Long id,
+                                 @PathVariable("tagName") String tagName,
+                                 Model model){
+
+        List<Question> questions = questionService.findQuestionsByUserAndTag(id,tagName);
+
+        model.addAttribute("q", "user:"+id+" ["+tagName+"]");
+        model.addAttribute("questions", questions);
         return "all-question";
     }
 }

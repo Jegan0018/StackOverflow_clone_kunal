@@ -208,9 +208,6 @@
         margin: 5px 0;
     }
 
-
-
-
     </style>
 </head>
 <body>
@@ -238,7 +235,7 @@
         <a th:href="@{/register}"class="signup-button">Sign Up</a>
     </span>
     <span sec:authorize="isAuthenticated()">
-        <a th:href="@{/profile}" class="login-button">Profile</a>
+        <a th:href="@{'/users/' + ${@userInfoService.currentUser().id}}" class="login-button">Profile</a>
         <a th:href="@{/logout}" class="login-button">Logout</a>
     </span>
 </div>

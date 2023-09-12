@@ -176,10 +176,12 @@
         <a th:href="@{/login}" class="login-button">Login</a>
         <a th:href="@{/register}" class="signup-button">Sign Up</a>
     </span>
+
     <span sec:authorize="isAuthenticated()">
-        <a th:href="@{/profile}" class="login-button">Profile</a>
-        <a th:href="@{/logout}" class="login-button">Logout</a>
+    <a th:href="@{'/users/' + ${@userInfoService.currentUser().id}}" class="login-button">Profile</a>
+    <a th:href="@{/logout}" class="login-button">Logout</a>
     </span>
+
 </div>
 <span th:if="${not #authorization.expression('isAuthenticated()')}">
 <div>
@@ -286,6 +288,10 @@
 </span>
 <span sec:authorize="isAuthenticated()">
     Welcome, <a th:href="@{/profile}" th:text="${user.name}"></a>!
+
+<!--   <div th:text="${@userInfoService.currentUser().id}"></div>-->
+
+
     <span th:each="tempQuestion : ${recent10Question}">
     <p><strong>Title:</strong> <span th:text="${tempQuestion.title}"></span></p>
     <p><strong>Problem:</strong> <span th:text="${tempQuestion.problem}"></span></p>

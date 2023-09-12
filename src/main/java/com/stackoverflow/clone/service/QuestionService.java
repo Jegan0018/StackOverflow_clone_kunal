@@ -26,4 +26,8 @@ public interface QuestionService {
     Page<Question> findAllByCreatedAtDesc(Pageable pageable);
 
     List<Question> findAllByUserName(String username);
+
+    List<Question> findQuestionsByUserAndTag(Long userId, String tagName);
+    List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user);
+
 }

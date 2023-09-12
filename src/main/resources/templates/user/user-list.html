@@ -6,10 +6,41 @@
     <title>Users</title>
 </head>
 <body>
+<div class="filter-search">
+    <form th:action="@{/users}" method="get" id="userSearchForm">
+        <input type="search" name="userSearch" class="form-control" placeholder="Search..." th:value="${userSearch}" form="userSearchForm"  autofocus>
+        <button type="submit">SEARCH</button>
+        <a th:href="@{/users}" onclick="clearForm()">CLEAR</a>
+    </form>
+<!--    oninput="this.form.submit()"-->
+</div>
+<div class="filter-tabs">
+    <form th:action="@{/users}" method="get">
+        <input type="hidden" name="tab" value="popular">
+        <input type="hidden" name="userSearch" th:value="${userSearch}">
+        <button type="submit">Popular</button>
+    </form>
+
+    <form th:action="@{/users}" method="get">
+        <input type="hidden" name="tab" value="name">
+        <input type="hidden" name="userSearch" th:value="${userSearch}">
+        <button type="submit">Name</button>
+    </form>
+
+    <form th:action="@{/users}" method="get">
+        <input type="hidden" name="tab" value="new">
+        <input type="hidden" name="userSearch" th:value="${userSearch}">
+        <button type="submit">New</button>
+    </form>
+</div>
 <span th:each="tempUser : ${users}">
     <span th:if="${tempUser.role == 'ROLE_USER'}">
-    <p><strong>Name:</strong> <span th:text="${tempUser.name}"></span></p>
-    <span th:text="${tempUser.username}"></span>
+            <p><strong>Name:</strong>
+                <a th:href="@{'/users/' + ${tempUser.id}}">
+                <span th:text="${tempUser.name}"></span></a></p>
+            <span th:text="${tempUser.username}"></span>
+        <p><strong>No of Question Asked :</strong>
+    <span th:text="${#lists.size(tempUser.questions)}"></span></p>
     <p><strong>Tags:</strong></p>
     <ul th:if="${tempUser.topTags != null}">
         <span th:each="tag : ${tempUser.topTags}">

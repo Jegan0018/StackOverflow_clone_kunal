@@ -21,4 +21,9 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     Page<Question> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     List<Question> findAllByUserName(String username);
+
+    @Query("SELECT q FROM Question q JOIN q.tags t WHERE q.user.id = :userId AND t.name = :tagName")
+    List<Question> findQuestionsByUserAndTag(@Param("userId") Long userId, @Param("tagName") String tagName);
+    List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user);
+
 }

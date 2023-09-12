@@ -60,6 +60,16 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<Question> findQuestionsByUserAndTag(Long userId, String tagName) {
+        return questionRepository.findQuestionsByUserAndTag(userId,tagName);
+    }
+
+    @Override
+    public List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user) {
+        return questionRepository.findFirst5ByUserOrderByCreatedAtDesc(user);
+    }
+
+    @Override
     public List<Question> findQuestionsBySearch(String search) {
         List<Question> questions=questionRepository.findQuestionsBySearch(search);
         return questions;

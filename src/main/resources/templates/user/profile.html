@@ -6,6 +6,66 @@
     <title>Profile</title>
 </head>
 <body>
+<a href="javascript:history.back()">Back</a>
+<span th:if="${user}">
+<h3>
+<span th:text="${user.name}"></span>
+</h3>
+    <span sec:authorize="isAuthenticated()">
+        <span th:if="${user.username == #authentication.principal.username}">
+            <form th:action="@{'/users/edit/' + ${user.id}}" method="post">
+                <input type="submit" value="edit profile">
+            </form>
+        </span>
+    </span>
+    Member since
+<span th:text="${memberSince}"></span>
+<span th:if="${user.info}">
+    <h4>About :</h4>
+    <span th:text="${user.info}"></span>
+</span>
 
+<br>
+<br>
+    <span th:if="${topTags}">
+Tags:
+<span th:each="tag : ${topTags}">
+
+    <form th:action="@{'/questions/user/' + ${user.id} + '/tagged/' + ${tag.name} }">
+        <button type="submit">
+        <span th:text="${tag.name}"></span></button>
+    </form>
+</span>
+<br>
+    </span>
+<span th:if="${topQuestion}">
+<h4>Recent Question :</h4>
+<span th:each="question : ${topQuestion}">
+    <br>
+    <a th:href="@{'/question/' + ${question.id}}">
+        <span th:text="${question.title}"></span>
+    </a>
+    <br>
+</span>
+<br>
+<a th:href="@{'/search?q=user%3A' + ${user.id}}">see all</a>
+    </span>
+<br>
+<h4>Recent Answered Questions :</h4>
+<span th:each="answer : ${topAnswers}">
+    <br>
+        <a th:href="@{'/question/' + ${answer.question.id}}">
+        <span th:text="${answer.question.title}"></span>
+    </a>
+    <br>
+</span>
+<br>
+    <span th:unless="${allAnswers}">
+<form th:href="@{'/users/' + ${user.id}}">
+    <input type="hidden" name="allAnswers" th:value="yes">
+    <input type="submit" value="see all">
+</form>
+        </span>
+</span>
 </body>
 </html>
