@@ -5,12 +5,10 @@ import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.service.QuestionService;
 import com.stackoverflow.clone.service.TagService;
 import com.stackoverflow.clone.util.TimeElapsedFormatter;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
@@ -38,7 +36,6 @@ public class TagController {
             tags = tagService.search(tagSearch, tab);
         }
         else if(tab==null){
-
             tags = tagService.findAll();
         }
         else if(tab.equals("name")){
@@ -90,6 +87,7 @@ public class TagController {
         List<Question> questions = tagService.findQuestionsByTagName(tagName);
         model.addAttribute("questions",questions);
         model.addAttribute("tagName",tagName);
+        model.addAttribute("q", "["+tagName+"]");
         return "all-question";
     }
 }

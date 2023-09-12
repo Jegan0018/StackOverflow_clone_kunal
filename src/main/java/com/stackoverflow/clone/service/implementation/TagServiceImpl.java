@@ -81,4 +81,9 @@ public class TagServiceImpl implements TagService {
         return tagRepository.search(search);
     }
 
+    @Override
+    public boolean tagExists(String search) {
+        return tagRepository.searchIfExists(search);
+    }
+
 }

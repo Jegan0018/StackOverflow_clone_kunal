@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -115,5 +113,57 @@ public class QuestionController {
     public String delete(@PathVariable("deleteId") Long deleteId) {
         questionService.deleteById(deleteId);
         return "redirect:/";
+    }
+
+    @GetMapping("/search")
+    public String searchAll(Model model,
+                            @RequestParam(value = "q", required = false) String q) {
+        String[] searchArray = q.split("[,\\s]+");
+        System.out.println("Search Result In Array"+ Arrays.toString(searchArray));
+        List<Question> questions=new ArrayList<>();
+        if(searchArray.length>1) {
+            for (String search : searchArray) {
+                if (tagService.tagExists(search)) {
+                    List<Question> tagQuestions = tagService.findQuestionsByTagName(search);
+                    questions.addAll(tagQuestions);
+                } else {
+                    List<Question> keywordQuestions = questionService.findQuestionsBySearch(search);
+                    questions.addAll(keywordQuestions);
+                }
+            }
+            model.addAttribute("questions", questions);
+            model.addAttribute("q", q);
+        } else {
+            if (tagService.tagExists(searchArray[0])) {
+                System.out.println("In Tags Part");
+                questions = tagService.findQuestionsByTagName(searchArray[0]);
+                model.addAttribute("questions", questions);
+                model.addAttribute("tagName", searchArray[0]);
+                model.addAttribute("q", searchArray[0]);
+            } else if (searchArray[0].endsWith("\"")) {
+                String searchTerm = searchArray[0].startsWith("\"")
+                        ? searchArray[0].substring(1, searchArray[0].length() - 1)
+                        : searchArray[0].substring(0, searchArray[0].length() - 1);
+                questions = questionService.findQuestionsBySearch(searchTerm);
+                model.addAttribute("questions", questions);
+                model.addAttribute("q", searchArray[0]);
+            } else if (!(searchArray[0].endsWith("\"")) && !(searchArray[0].endsWith("]"))) {
+                System.out.println("Question Search " + searchArray[0]);
+                questions = questionService.findQuestionsBySearch(searchArray[0]);
+                model.addAttribute("questions", questions);
+                model.addAttribute("q", searchArray[0]);
+            } else if (searchArray[0].endsWith("]")) {
+                String tagName = searchArray[0].startsWith("[")
+                        ? searchArray[0].substring(1, searchArray[0].length() - 1)
+                        : searchArray[0].substring(0, searchArray[0].length() - 1);
+                questions = tagService.findQuestionsByTagName(tagName);
+                model.addAttribute("questions", questions);
+                model.addAttribute("tagName", tagName);
+                model.addAttribute("q", searchArray[0]);
+            }
+        }
+
+
+        return "all-question";
     }
 }

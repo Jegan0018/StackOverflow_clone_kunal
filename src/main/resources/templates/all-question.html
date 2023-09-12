@@ -230,8 +230,8 @@
         </div>
     </div>
     <button class="About-button">About</button>
-    <form action="/search" method="get" class="search-form">
-        <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
+    <form th:action="@{/search}" method="get" class="search-form">
+        <input type="text" th:value="${q}" th:name="q" class="search-input" placeholder="Search...">
     </form>
     <span th:if="${not #authorization.expression('isAuthenticated()')}">
         <a th:href="@{/login}" class="login-button">Login</a>
@@ -242,8 +242,7 @@
         <a th:href="@{/logout}" class="login-button">Logout</a>
     </span>
 </div>
-<h1 th:if="${tagName != null}">
-    <span th:text="${tagName}"></span>
+<h1 th:if="${tagName != null}">Questions Tagged [<span th:text="${tagName}"></span>]
 </h1>
 
 <a th:href="@{/new-question}" class="lnk">Ask Question</a>
