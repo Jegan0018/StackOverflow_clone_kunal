@@ -16,4 +16,6 @@ public interface UserService {
     List<Object[]> findTop3TagsForEachUser();
 
     List<Tag> findTop3TagsByUserId(@Param("userId") Long userId);
+
+    User findById(int userId);
 }

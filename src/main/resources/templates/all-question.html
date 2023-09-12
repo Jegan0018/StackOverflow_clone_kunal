@@ -246,7 +246,23 @@
 </h1>
 
 <a th:href="@{/new-question}" class="lnk">Ask Question</a>
+<!--<div class="filter-tabs">-->
+<!--    <form th:action="@{/questions}" method="get">-->
+<!--        <input type="hidden" name="tab" value="popular">-->
+<!--        <input type="hidden" name="tagSearch" th:value="${tagSearch}">-->
+<!--        <button type="submit">Popular</button>-->
+<!--    </form>-->
 
+<!--    <form th:action="@{/questions}" method="get">-->
+<!--        <input type="hidden" name="tab" value="unanswered">-->
+<!--        <button type="submit">Unanswered</button>-->
+<!--    </form>-->
+
+<!--    <form th:action="@{/questions}" method="get">-->
+<!--        <input type="hidden" name="question" value="new">-->
+<!--        <button type="submit">New</button>-->
+<!--    </form>-->
+<!--</div>-->
 <span th:each="tempQuestion : ${questions}">
     <div class="question-container">
         <h2 class="question-title" th:text="${tempQuestion.title}"></h2>

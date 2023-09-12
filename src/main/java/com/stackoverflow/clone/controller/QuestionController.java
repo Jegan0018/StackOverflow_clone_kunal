@@ -2,6 +2,9 @@ package com.stackoverflow.clone.controller;
 
 import com.stackoverflow.clone.entity.*;
 import com.stackoverflow.clone.service.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -119,7 +122,6 @@ public class QuestionController {
     public String searchAll(Model model,
                             @RequestParam(value = "q", required = false) String q) {
         String[] searchArray = q.split("[,\\s]+");
-        System.out.println("Search Result In Array"+ Arrays.toString(searchArray));
         List<Question> questions=new ArrayList<>();
         if(searchArray.length>1) {
             for (String search : searchArray) {
@@ -135,7 +137,6 @@ public class QuestionController {
             model.addAttribute("q", q);
         } else {
             if (tagService.tagExists(searchArray[0])) {
-                System.out.println("In Tags Part");
                 questions = tagService.findQuestionsByTagName(searchArray[0]);
                 model.addAttribute("questions", questions);
                 model.addAttribute("tagName", searchArray[0]);
@@ -147,7 +148,7 @@ public class QuestionController {
                 questions = questionService.findQuestionsBySearch(searchTerm);
                 model.addAttribute("questions", questions);
                 model.addAttribute("q", searchArray[0]);
-            } else if (!(searchArray[0].endsWith("\"")) && !(searchArray[0].endsWith("]"))) {
+            } else if (!(searchArray[0].endsWith("\"")) && !(searchArray[0].endsWith("]")) && !(searchArray[0].startsWith("user:"))) {
                 System.out.println("Question Search " + searchArray[0]);
                 questions = questionService.findQuestionsBySearch(searchArray[0]);
                 model.addAttribute("questions", questions);
@@ -160,10 +161,14 @@ public class QuestionController {
                 model.addAttribute("questions", questions);
                 model.addAttribute("tagName", tagName);
                 model.addAttribute("q", searchArray[0]);
+            } else if(searchArray[0].startsWith("user:")) {
+                int userId = Integer.parseInt(searchArray[0].substring(5, searchArray[0].length()));
+                User user=userService.findById(userId);
+                questions = questionService.findAllByUserName(user.getUsername());
+                model.addAttribute("questions", questions);
+                model.addAttribute("q", searchArray[0]);
             }
         }
-
-
         return "all-question";
     }
 }
