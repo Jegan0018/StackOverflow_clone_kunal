@@ -5,6 +5,8 @@ import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.repository.QuestionRepository;
 import com.stackoverflow.clone.service.QuestionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,5 +63,15 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> findQuestionsBySearch(String search) {
         List<Question> questions=questionRepository.findQuestionsBySearch(search);
         return questions;
+    }
+
+    @Override
+    public Page<Question> findAllByCreatedAtDesc(Pageable pageable) {
+        return questionRepository.findAllByOrderByCreatedAtDesc(pageable);
+    }
+
+    @Override
+    public List<Question> findAllByUserName(String username) {
+        return questionRepository.findAllByUserName(username);
     }
 }

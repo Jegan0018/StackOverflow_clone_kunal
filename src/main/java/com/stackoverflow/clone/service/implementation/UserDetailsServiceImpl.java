@@ -62,6 +62,11 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         return userRepository.findTop3TagsByUserId(userId);
     }
 
+    @Override
+    public User findById(int userId) {
+        return userRepository.findById(Long.valueOf(userId)).get();
+    }
+
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {
         return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
