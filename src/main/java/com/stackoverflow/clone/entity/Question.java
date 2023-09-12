@@ -1,6 +1,7 @@
 package com.stackoverflow.clone.entity;
 
 import jakarta.persistence.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -24,6 +25,8 @@ public class Question {
     @Column(name = "excepted_solution", length = 1500)
     private String exceptedSolution;
 
+    @Column(name = "vote_count")
+    private Integer voteCount;
 
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
@@ -48,6 +51,7 @@ public class Question {
 
     @PrePersist
     protected void onCreate() {
+        voteCount=0;
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
@@ -135,5 +139,13 @@ public class Question {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
 }

@@ -312,6 +312,18 @@
             </a>
         </li>
     </ul>
+    <div>
+        <form th:action="@{'/question/upvote/' + ${question.id} + '/UPVOTE'}" method="post">
+            <button type="submit">Upvote</button>
+        </form>
+    </div>
+    <span th:text="${question.voteCount}"></span>
+    <div>
+        <form th:action="@{'/question/downvote/' + ${question.id} + '/DOWNVOTE'}" method="post">
+            <button type="submit">Downvote</button>
+        </form>
+    </div>
+
     <span sec:authorize="isAuthenticated()">
             <div class="button-group">
                 <span th:if="${user.username == #authentication.principal.username}">
