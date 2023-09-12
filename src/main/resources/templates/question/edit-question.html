@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Edit Question</title>
@@ -8,75 +8,223 @@
             font-family: Arial, sans-serif;
             background-color: #f7f7f7;
             margin: 0;
-            padding: 0;
+            padding: 6%;
         }
-
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px 30px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 30px 30px;
+}
 
-        h3 {
-            color: #333;
-        }
 
-        form {
-            padding: 20px;
-        }
 
-        label {
-            font-weight: bold;
-        }
+.header-container {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding: 10px 20px;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-        input[type="text"],
-        input[type="hidden"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+.logo {
+    font-size: 24px;
+    text-decoration: none;
+    color: #333;
+    margin-right: 10px;
+}
 
-        label,
-        textarea {
-            display: block;
-        }
+.menu-container {
+    position: relative;
+    margin-right: 10px;
+}
 
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: vertical;
-            height: 100px;
-        }
+.menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    flex-direction: column;
+}
 
-        button,
-        a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: grey;
-            color: #fff;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+.menu-button,
+.About-button,
+.login-button,
+.signup-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 8px;
+    padding: 10px 20px;
+}
 
-        button:hover,
-        a:hover {
-            border: 1px solid;
-            color: black;
-            background-color: white;
-        }
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu ul li {
+    display: block;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.menu ul li:hover {
+    background-color: #f0f0f0;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.search-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex-grow: 1;
+    margin-left: 10px;
+    min-width: 500px;
+}
+
+.container form {
+    margin-top: 20px;
+}
+
+.container form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.container form input[type="text"],
+.container form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.container form .common-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.container form .common-button:hover {
+    background-color: #0056b3;
+}
+
+.container form a {
+    margin-left: 10px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.container form a:hover {
+    text-decoration: underline;
+}
+
+
+
+        #footer {
+    background-color: grey;
+    padding:5px 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.site-footer--container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.site-footer--row {
+    display: flex;
+    align-items: center;
+}
+
+.logo-footer {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.footer-link {
+    margin-right: 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.footer-text {
+    margin-bottom: 10px;
+}
+
+#showContributors {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#showContributors:hover {
+    color: #ff5733;
+}
+
+#userDetails p {
+    margin: 5px 0;
+}
+
+
+
     </style>
 </head>
 <body>
+<div class="header-container">
+    <a th:href="@{/}" class="logo">
+        <img src="/logo.png" alt="loading.." height="30" width="50"/>
+        Stack Overflow</a>
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()">Menu</button>
+        <div class="menu" id="menu">
+            <ul>
+                <li onclick="redirectToOption('/questions')">Questions</li>
+                <li onclick="redirectToOption('/tags')">Tags</li>
+                <li onclick="redirectToOption('/users')">Users</li>
+            </ul>
+        </div>
+    </div>
+    <button class="About-button">About</button>
+    <form action="/search" method="get" class="search-form">
+        <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
+    </form>
+    <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/profile}" class="login-button">Profile</a>
+            <a th:href="@{/logout}" class="login-button">Logout</a>
+        </span>
+</div>
 <div class="container">
     <h3>Update Question</h3>
     <form th:action="@{/save}" th:object="${question}" method="post">
@@ -90,7 +238,8 @@
         <textarea id="problem" name="problem" th:text="${question.problem}" required></textarea><br>
 
         <label for="exceptedSolution">Expected Solution:</label>
-        <textarea id="exceptedSolution" name="exceptedSolution" th:text="${question.exceptedSolution}" required></textarea><br>
+        <textarea id="exceptedSolution" name="exceptedSolution" th:text="${question.exceptedSolution}"
+                  required></textarea><br>
 
         <label>Tags (space-separated):</label>
         <input type="text" id="tagNames" name="tagNames" th:value="${tagNames}" class="form-control mb-4"></input><br>
@@ -98,5 +247,45 @@
         <a href="javascript:history.back()">Cancel</a>
     </form>
 </div>
+
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+    <div class="site-footer--container">
+        <div class="site-footer--row">
+            <a th:href="@{/}" class="logo-footer">StackOverflow</a>
+            <a th:href="@{/questions}" class="footer-link">Questions</a>
+            <a th:href="@{mailto:kunalraj0106@gmail.com}" class="footer-link">Contact Us</a>
+        </div>
+        <div class="site-footer--row">
+            <p class="footer-text">This is StackOverflow clone project contributed by users <a href="#"
+                                                                                               id="showContributors">(see
+                contributors)</a></p>
+            <div id="userDetails" style="display:none;">
+                <p>Kunal Raj - kunalraj0106@gmail.com</p>
+                <p>Murthy - murthyk7592@gmail.com</p>
+                <p>Jegan - jeganpandian001@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('showContributors').addEventListener('click', function() {
+    document.getElementById('userDetails').style.display = 'block';
+});
+
+function toggleMenu() {
+    var menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+function redirectToOption(option) {
+    window.location.href = option;
+}
+
+
+
+
+
+</script>
 </body>
 </html>
