@@ -1,8 +1,11 @@
 package com.stackoverflow.clone.service.implementation;
 
 import com.stackoverflow.clone.entity.Answer;
+import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.repository.AnswerRepository;
 import com.stackoverflow.clone.service.AnswerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,4 +37,9 @@ public class AnswerServiceImpl implements AnswerService {
     public void deleteById(Long id) {
         answerRepository.deleteById(id);
     }
+
+//    @Override
+//    public Page<Question> findAllByNotAnswered(Pageable pageable) {
+//        return answerRepository.findAllByNotAnswered(pageable);
+//    }
 }
