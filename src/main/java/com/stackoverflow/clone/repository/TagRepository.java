@@ -29,4 +29,7 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
             "LOWER(t.name) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Tag> search(@Param("search") String search);
 
+    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Tag t WHERE t.name = :search")
+    boolean searchIfExists(@Param("search") String search);
+
 }

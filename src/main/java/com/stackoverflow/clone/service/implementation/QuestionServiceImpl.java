@@ -57,4 +57,9 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findTop10ByOrderByCreatedAtDesc();
     }
 
+    @Override
+    public List<Question> findQuestionsBySearch(String search) {
+        List<Question> questions=questionRepository.findQuestionsBySearch(search);
+        return questions;
+    }
 }

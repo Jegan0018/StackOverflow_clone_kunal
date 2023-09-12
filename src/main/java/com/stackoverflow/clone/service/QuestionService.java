@@ -18,4 +18,6 @@ public interface QuestionService {
     int countQuestionsByTag(Tag tag);
     List<Question> findByUser(User user);
     List<Question> findTop10ByOrderByCreatedAtDesc();
+
+    List<Question> findQuestionsBySearch(String search);
 }

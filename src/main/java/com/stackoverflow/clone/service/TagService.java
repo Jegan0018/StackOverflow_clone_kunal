@@ -22,4 +22,5 @@ public interface TagService {
 
     List<Tag> search(String search, String tab);
 
+    boolean tagExists(String search);
 }
