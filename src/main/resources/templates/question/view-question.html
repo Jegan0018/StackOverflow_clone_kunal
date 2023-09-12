@@ -1,88 +1,293 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
-    <title>View Question</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question and Answers</title>
     <style>
+
+      * {
+        margin: 0;
+
+        box-sizing: border-box;
+      }
         body {
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
+            line-height: 1.6;
+            background-color: #fff;
             margin: 0;
+            padding-top:6%;
+        }
+         .header-container {
+            display: flex;
+            position: fixed;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f8f8;
+            padding: 10px 20px;
+            width: 100%;
+            top: 0;
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            text-decoration: none;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .menu-container {
+            position: relative;
+            margin-right: 10px;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            flex-direction: column;
+        }
+
+        .menu-button,
+        .About-button,
+        .login-button,
+        .signup-button {
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 8px;
+            padding: 10px 20px;
+        }
+
+        .menu ul {
+            list-style-type: none;
             padding: 0;
+            margin: 0;
+        }
+
+        .menu ul li {
+            display: block;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .menu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex-grow: 1;
+            margin-left: 10px;
+            min-width: 500px;
         }
 
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
 
-        h3 {
+        h3, h4 {
             color: #333;
         }
 
-        strong {
-            font-weight: bold;
+      .button-group button {
+       margin-right: 10px;
+       padding: auto ;
+       border: 1px solid #000;
+       border-radius: 4px;
+       cursor: pointer;
+       background-color: #fff;
+       color: #000;
+     }
+
+        .button-group button:last-child {
+            margin-right: 0;
         }
 
-        p {
+        .button-group button.edit-btn,
+        .button-group button.delete-btn {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .button-group button.edit-btn:hover,
+        .button-group button.delete-btn:hover {
+            background-color: #333;
+        }
+
+        .button-group button.submit-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .button-group button.submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .button-group button.add-comment-btn {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .button-group button.add-comment-btn:hover {
+            background-color: #218838;
+        }
+
+        .answer,
+        .comment {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        .comment {
+            background-color: #f0f0f0;
+        }
+
+        .comment-buttons button {
+            margin-right: 5px;
+        }
+
+        .form-group {
             margin-bottom: 10px;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
+        label {
+            display: block;
+            font-weight: bold;
             margin-bottom: 5px;
+            color: #555;
         }
 
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
+        textarea,
+        input[type="text"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
-        button {
-            background-color: white;
-            color: black;
-            border: 1px solid;
-            border-radius: 5px;
-            padding: 10px 20px;
+        button[type="submit"] {
             cursor: pointer;
         }
 
         a {
-            text-decoration: none;
             color: #007bff;
+            text-decoration: none;
         }
 
         a:hover {
-            text-decoration: none;
+            text-decoration: underline;
         }
+        #footer {
+        background-color: grey;
+        padding:5px 20px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
 
-        .comments-container {
-            display: none;
-        }
+    .site-footer--container {
+        display: flex;
+        justify-content: space-between;
+    }
 
-        .toggle-comments-button:focus + .comments-container,
-        .comments-container.show-comments {
-             display: block;
-        }
-        .toggle-comments-button:focus + .comments-container,
-        .comments-container.show-comments,
-        button:focus + .comments-container {
-            display: block;
-        }
+    .site-footer--row {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    a {
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+
+    #showContributors {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    #showContributors:hover {
+        color: #ff5733;
+    }
+
+    #userDetails p {
+        margin: 5px 0;
+    }
+
 
     </style>
 </head>
+
 <body>
+<div class="header-container">
+    <a th:href="@{/}" class="logo">
+        <img src="/logo.png" alt="loading.." height="30" width="50" />
+        Stack Overflow</a>
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()">Menu</button>
+        <div class="menu" id="menu">
+            <ul>
+                <li onclick="redirectToOption('/questions')">Questions</li>
+                <li onclick="redirectToOption('/tags')">Tags</li>
+                <li onclick="redirectToOption('/users')">Users</li>
+            </ul>
+        </div>
+    </div>
+    <button class="About-button">About</button>
+    <form action="/search" method="get" class="search-form">
+        <input type="text" th:value="${search}" name="search" class="search-input" placeholder="Search...">
+    </form>
+    <span th:if="${not #authorization.expression('isAuthenticated()')}">
+            <a th:href="@{/login}" class="login-button">Login</a>
+            <a th:href="@{/register}" class="signup-button">Sign Up</a>
+        </span>
+    <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/profile}" class="login-button">Profile</a>
+            <a th:href="@{/logout}" class="login-button">Logout</a>
+        </span>
+</div>
 <div class="container">
     <h3>View Question</h3>
     <p><strong>Title:</strong> <span th:text="${question.title}"></span></p>
@@ -98,123 +303,193 @@
             </a>
         </li>
     </ul>
-
     <span sec:authorize="isAuthenticated()">
-        <div class="button-group">
-            <span th:if="${user.username == #authentication.principal.username}">
-            <form action="#" th:action="@{'/question/editQuestion/' + ${question.id}}" method="post">
-                <button type="submit">Edit</button>
-            </form>
-            </span>
-            <div th:if="${user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
-            <form action="#" th:action="@{'/question/delete/' + ${question.id}}" method="post">
-                <button type="submit">Delete</button>
-            </form>
+            <div class="button-group">
+                <span th:if="${user.username == #authentication.principal.username}">
+                    <form action="#" th:action="@{'/question/editQuestion/' + ${question.id}}" method="post">
+                        <button type="submit">Edit</button>
+                    </form>
+                </span>
+                <div th:if="${user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
+                    <form action="#" th:action="@{'/question/delete/' + ${question.id}}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </span>
+        </span>
     <br>
     <a th:href="@{/questions}">BACK TO QUESTIONS</a>
 </div>
-<span sec:authorize="isAuthenticated()">
-    <span th:if="${#authorization.expression('hasRole(''USER'')')}">
-    <form th:action="@{/answer/save}" method="post">
-    <input type="hidden" name="questionId" th:value="${question.id}">
-    <h3>Answer the Question</h3>
-    <div class="form-group">
-        <label for="theAnswer">Your Answer:</label>
-        <textarea id="theAnswer" name="theAnswer" rows="4" th:value="${answer.theAnswer}" required></textarea>
-    </div>
-    <button type="submit">Submit Answer</button>
-</form>
-</span>
-</span>
 
-<span th:each="tempAnswer : ${answers}">
-    <p><strong>Name:</strong> <span th:text="${tempAnswer.user.name}"></span></p>
-    <p><strong>Answer:</strong> <span th:text="${tempAnswer.theAnswer}"></span></p>
-    <span sec:authorize="isAuthenticated()">
-       <span th:if="${tempAnswer.user.username == #authentication.principal.username}">
-            <form action="#" th:action="@{/answer/updateAnswer}" method="post">
-                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
-                <button type="submit">Edit</button>
-            </form>
-       </span>
-       <span th:if="${tempAnswer.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
-            <form action="#" th:action="@{/answer/delete}" method="post">
-                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
-                <input type="hidden" name="questionId" th:value="${question.id}">
-                <button type="submit">Delete</button>
-            </form>
-       </span>
-    </span>
-
-
-    <!--       <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" onclick="console.log('Button clicked for answerId=' + ${tempAnswer.id}); toggleComments(${tempAnswer.id});">Comments</button>-->
-
-    <!--    <div th:id="'commentsContainer' + ${tempAnswer.id}" style="display: none;">-->
-    <!--        <h4>Comments:</h4>-->
-    <!--        <ul>-->
-    <!--            <li th:each="comment : ${tempAnswer.comments}">-->
-    <!--                &lt;!&ndash; Display comments for the answer &ndash;&gt;-->
-    <!--                <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>-->
-    <!--                <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>-->
-    <!--            </li>-->
-    <!--        </ul>-->
-    <!--    </div>-->
-    <!--    <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" class="toggle-comments-button" onclick="toggleComments(${tempAnswer.id});">Comments</button>-->
-    <!--    <div th:id="'commentsContainer' + ${tempAnswer.id}" class="comments-container">-->
-        <h4>Comments:</h4>
-        <ul>
-            <li th:each="comment : ${tempAnswer.comments}">
-                <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>
-                <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>
-                <span sec:authorize="isAuthenticated()">
-                <span th:if="${comment.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
-                <form th:action="@{/comment/delete}" method="post">
-                    <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
-                    <input type="hidden" name="commentId" th:value="${comment.id}">
-                    <input type="submit" value="delete">
+<div class="container">
+        <span sec:authorize="isAuthenticated()">
+            <span th:if="${#authorization.expression('hasRole(''USER'')')}">
+                <form th:action="@{/answer/save}" method="post">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <h3>Answer the Question</h3>
+                    <div class="form-group">
+                        <label for="theAnswer">Your Answer:</label>
+                        <textarea id="theAnswer" name="theAnswer" rows="4" th:value="${answer.theAnswer}"
+                                  required></textarea>
+                    </div>
+                    <button type="submit">Submit Answer</button>
                 </form>
-
-                 <button onclick="toggleUpdateForm(this)">Update</button>
-                <form th:action="@{/comment/add}" method="post" style="display:none;">
-                    <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
-                    <input type="hidden" name="commentId" th:value="${comment.id}">
-                    <input type="text" name="theComment" th:value="${comment.theComment}" required>
-                    <input type="submit" value="Update">
-                </form>
-                    </span>
-                </span>
-            </li>
-        </ul>
-
-   <script th:inline="javascript">
-    function toggleUpdateForm(button) {
-        var form = button.nextElementSibling;
-        if (form.style.display === "none" || form.style.display === "") {
-            form.style.display = "block";
-        } else {
-            form.style.display = "none";
-        }
-    }
-    </script>
-
-    <span sec:authorize="isAuthenticated()">
-        <span th:if="${#authorization.expression('hasRole(''USER'')')}">
-            <form th:action="@{/comment/add}" method="post">
-                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
-                <input type="text" name="theComment" required>
-                <input type="submit" value="Add Comment">
-            </form>
+            </span>
         </span>
-   </span>
-    <span th:if="${not #authorization.expression('isAuthenticated()')}">
-        <form th:action="@{/login}">
-            <input type="submit" value="add comment">
-        </form>
+    <span th:each="tempAnswer : ${answers}">
+            <p><strong>Name:</strong> <span th:text="${tempAnswer.user.name}"></span></p>
+            <p><strong>Answer:</strong> <span th:text="${tempAnswer.theAnswer}"></span></p>
+            <span sec:authorize="isAuthenticated()">
+                <span th:if="${tempAnswer.user.username == #authentication.principal.username}">
+                    <form action="#" th:action="@{/answer/updateAnswer}" method="post">
+                        <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                        <button type="submit">Edit</button>
+                    </form>
+                </span>
+                <span th:if="${tempAnswer.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
+                    <form action="#" th:action="@{/answer/delete}" method="post">
+                        <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                        <input type="hidden" name="questionId" th:value="${question.id}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </span>
+            </span>
+
+            <h4>Comments:</h4>
+            <ul>
+                <li th:each="comment, commentStat : ${tempAnswer.comments}" th:if="${commentStat.index < 2}">
+                    <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>
+                    <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>
+                    <span sec:authorize="isAuthenticated()">
+                        <span th:if="${comment.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
+                            <form th:action="@{/comment/delete}" method="post" style="display:inline;">
+                                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                                <input type="hidden" name="commentId" th:value="${comment.id}">
+                                <input type="submit" value="Delete">
+                            </form>
+                            <button onclick="toggleUpdateForm(this)">Update</button>
+                            <form th:action="@{/comment/add}" method="post" style="display:none;">
+                                <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                                <input type="hidden" name="commentId" th:value="${comment.id}">
+                                <input type="text" name="theComment" th:value="${comment.theComment}" required>
+                                <input type="submit" value="Update">
+                            </form>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+
+            <span th:if="${tempAnswer.comments.size() > 2}">
+                <a href="#" onclick="toggleComments(this)">View More Comments
+                <span th:text="${#lists.size(tempAnswer.comments)}"></span>
+                </a>
+                <ul id="comments-list" style="display:none;">
+                    <li th:each="comment : ${tempAnswer.comments}" th:unless="${commentStat.index < 2}">
+                        <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>
+                        <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>
+                        <span sec:authorize="isAuthenticated()">
+                            <span th:if="${comment.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">
+                                <form th:action="@{/comment/delete}" method="post" style="display:inline;">
+                                    <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                                    <input type="hidden" name="commentId" th:value="${comment.id}">
+                                    <input type="submit" value="Delete">
+                                </form>
+                                <button onclick="toggleUpdateForm(this)">Update</button>
+                                <form th:action="@{/comment/add}" method="post" style="display:none;">
+                                    <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                                    <input type="hidden" name="commentId" th:value="${comment.id}">
+                                    <input type="text" name="theComment" th:value="${comment.theComment}" required>
+                                    <input type="submit" value="Update">
+                                </form>
+                            </span>
+                        </span>
+                    </li>
+                </ul>
+            </span>
+
+            <script th:inline="javascript">
+                function toggleUpdateForm(button) {
+                    var form = button.nextElementSibling;
+                    if (form.style.display === "none" || form.style.display === "") {
+                        form.style.display = "block";
+                    } else {
+                        form.style.display = "none";
+                    }
+                }
+
+                function toggleComments(link) {
+                    var commentsList = link.nextElementSibling;
+                    if (commentsList.style.display === "none" || commentsList.style.display === "") {
+                        commentsList.style.display = "block";
+                        link.innerText = "Hide Comments";
+                    } else {
+                        commentsList.style.display = "none";
+                        link.innerText = "View More Comments";
+                    }
+                }
+            </script>
+
+            <span sec:authorize="isAuthenticated()">
+                <span th:if="${#authorization.expression('hasRole(''USER'')')}">
+                    <form th:action="@{/comment/add}" method="post">
+                        <input type="hidden" name="answerId" th:value="${tempAnswer.id}">
+                        <input type="text" name="theComment" required>
+                        <button type="submit">Add Comment</button>
+                    </form>
+                </span>
+            </span>
+            <span th:if="${not #authorization.expression('isAuthenticated()')}">
+                <form th:action="@{/login}" method="get">
+                    <button type="submit">Add Comment</button>
+                </form>
+            </span>
     </span>
-</span>
-</span>
+
+</div>
+
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+    <div class="site-footer--container">
+        <div class="site-footer--row">
+            <a th:href="@{/}" class="logo">StackOverflow</a>
+            <a th:href="@{/questions}">Questions</a>
+            <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
+        </div>
+        <div class="site-footer--row">
+            <p>This is StackOverflow clone project contributed by users <a href="#" id="showContributors">(see contributors)</a></p>
+            <div id="userDetails" style="display:none;">
+                <p>Kunal Raj - kunalraj0106@gmail.com</p>
+                <p>Murthy - murthyk7592@gmail.com</p>
+                <p>Jegan - jeganpandian001@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('showContributors').addEventListener('click', function() {
+       document.getElementById('userDetails').style.display = 'block';
+    });
+</script>
+
+
 </body>
+
 </html>
+
+
+
+
+<!--       <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" onclick="console.log('Button clicked for answerId=' + ${tempAnswer.id}); toggleComments(${tempAnswer.id});">Comments</button>-->
+
+<!--    <div th:id="'commentsContainer' + ${tempAnswer.id}" style="display: none;">-->
+<!--        <h4>Comments:</h4>-->
+<!--        <ul>-->
+<!--            <li th:each="comment : ${tempAnswer.comments}">-->
+<!--                &lt;!&ndash; Display comments for the answer &ndash;&gt;-->
+<!--                <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>-->
+<!--                <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <button th:id="'toggleCommentsButton' + ${tempAnswer.id}" class="toggle-comments-button" onclick="toggleComments(${tempAnswer.id});">Comments</button>-->
+<!--    <div th:id="'commentsContainer' + ${tempAnswer.id}" class="comments-container">-->
