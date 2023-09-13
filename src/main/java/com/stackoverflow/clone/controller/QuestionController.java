@@ -196,4 +196,95 @@ public class QuestionController {
         model.addAttribute("questions", questions);
         return "all-question";
     }
+    
+    @PostMapping("/question/upvote/{questionId}/{voteType}")
+    public String upvote(@PathVariable Long questionId, @PathVariable VoteType voteType, Model model) {
+        Question question = questionService.findById(questionId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByUsername(authentication.getName());
+        Vote existingVote = questionService.findVoteByUserAndQuestion(user, question);
+        System.out.println("Existing Vote "+existingVote);
+//        if (question.getVoteCount() == null) {
+//            question.setVoteCount(0); // Set a default value if it's null
+//        }
+        if (existingVote != null) {
+            if (existingVote.getVoteType() != voteType) {
+                existingVote.setVoteType(voteType);
+                System.out.println(existingVote.getVoteType());
+                questionService.updateVote(existingVote);
+                System.out.println("Vote Count Not Null" + question.getVoteCount());
+                Integer voteCount = question.getVoteCount();
+
+                question.setVoteCount(voteCount + 1);
+
+            }
+//            else{
+//                questionService.deleteVote(existingVote.getVoteId());
+//                Integer voteCount = question.getVoteCount();
+//                if (existingVote.getVoteType() != VoteType.UPVOTE) {
+//                    question.setVoteCount(voteCount - 2);
+//                } else {
+//                    question.setVoteCount(voteCount - 1);
+//                }
+//            }
+        }
+        else {
+            System.out.println("Vote Count "+question.getVoteCount());
+            Vote vote = new Vote();
+            vote.setQuestion(question);
+            vote.setUser(user);
+            vote.setVoteType(voteType);
+            questionService.createVote(vote);
+            Integer voteCount = question.getVoteCount();
+            question.setVoteCount(voteCount + 1);
+
+        }
+        model.addAttribute("voteType", voteType);
+
+        questionService.save(question);
+
+        return "redirect:/question/{questionId}";
+    }
+
+    @PostMapping("/question/downvote/{questionId}/{voteType}")
+    public String downVote(@PathVariable Long questionId, @PathVariable VoteType voteType, Model model) {
+        Question question = questionService.findById(questionId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByUsername(authentication.getName());
+
+        Vote existingVote = questionService.findVoteByUserAndQuestion(user, question);
+
+        if (existingVote != null) {
+            if (existingVote.getVoteType() != voteType) {
+                existingVote.setVoteType(voteType);
+                questionService.updateVote(existingVote);
+                int voteCount = question.getVoteCount();
+                question.setVoteCount(voteCount - 1);
+
+            }
+//            else{
+//                questionService.deleteVote(existingVote.getVoteId());
+//                Integer voteCount = question.getVoteCount();
+//                if (existingVote.getVoteType() != VoteType.UPVOTE) {
+//                    question.setVoteCount(voteCount + 2);
+//                } else {
+//                    question.setVoteCount(voteCount - 1);
+//                }
+//            }
+        } else {
+            Vote vote = new Vote();
+            vote.setQuestion(question);
+            vote.setUser(user);
+            vote.setVoteType(voteType);
+            questionService.createVote(vote);
+            System.out.println();
+            int voteCount = question.getVoteCount();
+            question.setVoteCount(voteCount -1);
+
+        }
+        model.addAttribute("voteType", voteType);
+        questionService.save(question);
+
+        return "redirect:/question/{questionId}";
+    }
 }

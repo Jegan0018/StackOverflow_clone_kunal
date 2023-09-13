@@ -3,6 +3,7 @@ package com.stackoverflow.clone.service;
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.entity.User;
+import com.stackoverflow.clone.entity.Vote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,4 +31,9 @@ public interface QuestionService {
     List<Question> findQuestionsByUserAndTag(Long userId, String tagName);
     List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user);
 
+    void updateVote(Vote existingVote);
+
+    Vote findVoteByUserAndQuestion(User user, Question question);
+
+    void createVote(Vote vote);
 }
