@@ -236,14 +236,8 @@
     </div>
     <button class="About-button">About</button>
 
-    <form action="/search" method="get" class="search-form">
-        <input
-                type="text"
-                th:value="${search}"
-                name="search"
-                class="search-input"
-                placeholder="Search..."
-        />
+    <form th:action="@{/search}" method="get" class="search-form">
+        <input type="text" th:name="q" class="search-input" placeholder="Search..." th:value="${q}">
     </form>
     <span th:if="${not #authorization.expression('isAuthenticated()')}">
         <a th:href="@{/login}" class="login-button">Login</a>

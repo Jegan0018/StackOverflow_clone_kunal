@@ -265,7 +265,6 @@ body {
     </span>
 
 </div>
-<span th:if="${not #authorization.expression('isAuthenticated()')}">
 <div>
     <br>
     <img id="my-image" src="/body.gif" width="950" alt="image is loading">
@@ -367,30 +366,7 @@ body {
     </div>
 </section>
 
-</span>
-<span sec:authorize="isAuthenticated()">
-    Welcome, <a th:href="@{/profile}" th:text="${user.name}"></a>!
 
-<!--   <div th:text="${@userInfoService.currentUser().id}"></div>-->
-
-
-    <span th:each="tempQuestion : ${recent10Question}">
-    <p><strong>Title:</strong> <span th:text="${tempQuestion.title}"></span></p>
-    <p><strong>Problem:</strong> <span th:text="${tempQuestion.problem}"></span></p>
-    <p><strong>Tags:</strong></p>
-    <ul>
-        <li th:each="tag, tagStat : ${tempQuestion.tags}" style="list-style: none; display: inline-block; margin-right: 10px;">
-            <a th:href="@{'/questions/tagged/' + ${tag.name}}" style="color: blue;">
-                <span th:text="${tag.name}"></span>
-            </a>
-        </li>
-    </ul>
-
-
-    <a th:href="@{'/question/' + ${tempQuestion.id}}" style="color: blue;">read more</a>
-
-</span>
-</span>
 <footer id="footer" class="site-footer js-footer" role="contentinfo">
     <div class="site-footer--container">
         <div class="site-footer--row">

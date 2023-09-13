@@ -41,7 +41,7 @@
             margin-right: 10px;
         }
 
-        .menu-container {
+      .menu-container {
             position: relative;
             margin-right: 1%;
         }
@@ -59,50 +59,49 @@
             flex-direction: column;
         }
 
-       .menu-button,
-       .About-button,
-       .login-button,
-       .signup-button {
-           background-color: #e0e0e0;
-           color: #333;
-           border: none;
-           border-radius: 8px;
-           cursor: pointer;
-           margin: 0% 1%;
-           padding: 8px 10px;
-       }
+.menu-button,
+.About-button,
+.login-button,
+.signup-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 8px;
+    padding: 10px 20px;
+}
 
-        .menu ul {
-            list-style-type: none;
-            padding: auto;
-            margin: auto;
-        }
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
-        .menu ul li {
-            display: block;
-            padding: 10px 15px;
-            cursor: pointer;
-        }
+.menu ul li {
+    display: block;
+    padding: 10px 15px;
+    cursor: pointer;
+}
 
-        .menu ul li:hover {
+  .menu ul li:hover {
             background-color: #fad5ab;
         }
 
-        .search-form {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-        }
+.search-form {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
 
-        .search-input {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            flex-grow: 1;
-            margin-left: auto;
-            min-width: 30vw;
-            width: fit-content;
-        }
+.search-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex-grow: 1;
+    margin-left: 10px;
+    min-width: 500px;
+}
 
 
         .container {
@@ -288,14 +287,8 @@
     </div>
     <button class="About-button">About</button>
 
-    <form action="/search" method="get" class="search-form">
-        <input
-                type="text"
-                th:value="${search}"
-                name="search"
-                class="search-input"
-                placeholder="Search..."
-        />
+    <form th:action="@{/search}" method="get" class="search-form">
+        <input type="text" th:name="q" class="search-input" placeholder="Search..." th:value="${q}">
     </form>
     <span th:if="${not #authorization.expression('isAuthenticated()')}">
         <a th:href="@{/login}" class="login-button">Login</a>
