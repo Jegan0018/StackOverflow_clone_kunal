@@ -3,7 +3,7 @@ package com.stackoverflow.clone.entity;
 import java.util.Arrays;
 
 public enum VoteType {
-    UPVOTE(1), DOWNVOTE(-1),
+    UPVOTE(1), DOWNVOTE(-1), NOVOTE(0)
     ;
 
     private int direction;

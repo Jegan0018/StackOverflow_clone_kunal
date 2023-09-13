@@ -208,25 +208,28 @@ public class QuestionController {
 //            question.setVoteCount(0); // Set a default value if it's null
 //        }
         if (existingVote != null) {
-            if (existingVote.getVoteType() != voteType) {
+
+            if (existingVote.getVoteType() == voteType.NOVOTE) {
                 existingVote.setVoteType(voteType);
-                System.out.println(existingVote.getVoteType());
-                questionService.updateVote(existingVote);
-                System.out.println("Vote Count Not Null" + question.getVoteCount());
+
+
                 Integer voteCount = question.getVoteCount();
 
                 question.setVoteCount(voteCount + 1);
 
+            } else if (existingVote.getVoteType() == voteType.DOWNVOTE){
+
+
+                existingVote.setVoteType(voteType.UPVOTE);
+                Integer voteCount = question.getVoteCount();
+                question.setVoteCount(voteCount + 2);
+
             }
-//            else{
-//                questionService.deleteVote(existingVote.getVoteId());
-//                Integer voteCount = question.getVoteCount();
-//                if (existingVote.getVoteType() != VoteType.UPVOTE) {
-//                    question.setVoteCount(voteCount - 2);
-//                } else {
-//                    question.setVoteCount(voteCount - 1);
-//                }
-//            }
+            else {
+                existingVote.setVoteType(voteType.NOVOTE);
+                Integer voteCount = question.getVoteCount();
+                question.setVoteCount(voteCount - 1);
+            }
         }
         else {
             System.out.println("Vote Count "+question.getVoteCount());
@@ -255,29 +258,33 @@ public class QuestionController {
         Vote existingVote = questionService.findVoteByUserAndQuestion(user, question);
 
         if (existingVote != null) {
-            if (existingVote.getVoteType() != voteType) {
+            if (existingVote.getVoteType() == voteType.NOVOTE) {
+
                 existingVote.setVoteType(voteType);
-                questionService.updateVote(existingVote);
+
                 int voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount - 1);
 
             }
-//            else{
-//                questionService.deleteVote(existingVote.getVoteId());
-//                Integer voteCount = question.getVoteCount();
-//                if (existingVote.getVoteType() != VoteType.UPVOTE) {
-//                    question.setVoteCount(voteCount + 2);
-//                } else {
-//                    question.setVoteCount(voteCount - 1);
-//                }
-//            }
+            else if (existingVote.getVoteType() == voteType.UPVOTE){
+                existingVote.setVoteType(voteType.DOWNVOTE);
+                Integer voteCount = question.getVoteCount();
+                question.setVoteCount(voteCount - 2);
+
+            }
+            else{
+                existingVote.setVoteType(voteType.NOVOTE);
+                Integer voteCount = question.getVoteCount();
+                question.setVoteCount(voteCount + 1);
+            }
+
         } else {
             Vote vote = new Vote();
             vote.setQuestion(question);
             vote.setUser(user);
             vote.setVoteType(voteType);
             questionService.createVote(vote);
-            System.out.println();
+
             int voteCount = question.getVoteCount();
             question.setVoteCount(voteCount -1);
 
