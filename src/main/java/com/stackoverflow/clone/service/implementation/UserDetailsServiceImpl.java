@@ -1,11 +1,12 @@
 package com.stackoverflow.clone.service.implementation;
 
-import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.repository.UserRepository;
 import com.stackoverflow.clone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService, UserService {
@@ -59,13 +61,52 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public List<Tag> findTop3TagsByUserId(Long userId) {
-        return userRepository.findTop3TagsByUserId(userId);
+        return userRepository.findTop3TagsByUserId(userId,3);
     }
 
     @Override
     public User findById(int userId) {
         return userRepository.findById(Long.valueOf(userId)).get();
     }
+
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public List<Tag> findTopTags(Long userId) {
+        return userRepository.findTop3TagsByUserId(userId,5);
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public List<User> search(String searchTerm) {
+        return null;
+    }
+
+    @Override
+    public Page<User> searchAndSortByUsernameOrName(String searchTerm, String tab, Pageable pageable) {
+        int isEmpty = (searchTerm == null || searchTerm.isEmpty()) ? 1 : 0;
+
+        if(tab.equals("name")){
+            return userRepository.searchAndSort(searchTerm,isEmpty,pageable);
+        }
+        if(tab.equals("new")){
+            return userRepository.searchAndSortCreatedAt(searchTerm,isEmpty,pageable);
+        }
+        return userRepository.searchAndSortNoOfQuestions(searchTerm,isEmpty,pageable);
+    }
+
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {
         return Collections.singletonList(new SimpleGrantedAuthority(role));

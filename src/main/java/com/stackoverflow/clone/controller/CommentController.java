@@ -36,7 +36,7 @@ public class CommentController {
     public String addComment(@RequestParam("answerId") Long answerId,
                              @RequestParam("theComment") String theComment,
                              @RequestParam(value = "commentId", required = false) Long commentId) {
-        System.out.println("Comment "+theComment);
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user= userService.findByUsername(authentication.getName());
         Answer answer = answerService.findById(answerId);

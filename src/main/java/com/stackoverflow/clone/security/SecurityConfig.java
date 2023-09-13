@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/question/edit/**", "/new-question").hasRole("USER")
+                                .requestMatchers("/users/edit/**","/users/save/**").hasRole("USER")
                                 .requestMatchers( "/save","/question/delete/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll()
                 )

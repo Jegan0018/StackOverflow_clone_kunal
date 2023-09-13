@@ -3,6 +3,7 @@ package com.stackoverflow.clone.controller;
 
 import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.repository.UserRepository;
+import com.stackoverflow.clone.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -37,7 +38,7 @@ public class AuthController {
         }
 
 
-        if (userRepository.existsByUsername(user.getUsername())) {
+        if (userService.existsByUsername(user.getUsername())) {
 //            result.rejectValue("username", "error.username", "Username is already taken");
             model.addAttribute("user", user);
             model.addAttribute("usernameError", "Username is already taken");
@@ -48,7 +49,7 @@ public class AuthController {
 
         user.setRole("ROLE_USER");
 
-        userRepository.save(user);
+        userService.save(user);
 
         return "redirect:/login";
     }

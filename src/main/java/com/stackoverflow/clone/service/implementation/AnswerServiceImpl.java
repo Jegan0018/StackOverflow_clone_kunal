@@ -1,7 +1,7 @@
 package com.stackoverflow.clone.service.implementation;
 
 import com.stackoverflow.clone.entity.Answer;
-import com.stackoverflow.clone.entity.Question;
+import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.repository.AnswerRepository;
 import com.stackoverflow.clone.service.AnswerService;
 import org.springframework.data.domain.Page;
@@ -38,8 +38,13 @@ public class AnswerServiceImpl implements AnswerService {
         answerRepository.deleteById(id);
     }
 
-//    @Override
-//    public Page<Question> findAllByNotAnswered(Pageable pageable) {
-//        return answerRepository.findAllByNotAnswered(pageable);
-//    }
+    @Override
+    public List<Answer> findFirst5ByUserOrderByCreatedAtDesc(User user) {
+        return answerRepository.findFirst5ByUserOrderByCreatedAtDesc(user);
+    }
+
+    @Override
+    public Page<Answer> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable) {
+        return answerRepository.findAllByUserOrderByCreatedAtDesc(user,pageable);
+    }
 }

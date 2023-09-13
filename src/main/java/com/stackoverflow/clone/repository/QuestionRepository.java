@@ -3,11 +3,9 @@ package com.stackoverflow.clone.repository;
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.entity.User;
-import com.stackoverflow.clone.entity.Vote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,5 +21,9 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     Page<Question> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     List<Question> findAllByUserName(String username);
+
+    @Query("SELECT q FROM Question q JOIN q.tags t WHERE q.user.id = :userId AND t.name = :tagName")
+    List<Question> findQuestionsByUserAndTag(@Param("userId") Long userId, @Param("tagName") String tagName);
+    List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user);
 
 }

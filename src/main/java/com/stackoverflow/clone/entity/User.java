@@ -46,13 +46,6 @@ public class User {
     @Transient
     private List<Tag> topTags;
 
-    public List<Tag> getTopTags() {
-        return topTags;
-    }
-
-    public void setTopTags(List<Tag> topTags) {
-        this.topTags = topTags;
-    }
     public User() {
     }
 
@@ -126,5 +119,13 @@ public class User {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+    }
+
+    public List<Tag> getTopTags() {
+        return topTags;
+    }
+
+    public void setTopTags(List<Tag> topTags) {
+        this.topTags = topTags;
     }
 }

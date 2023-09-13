@@ -39,11 +39,11 @@ public class TagController {
             tags = tagService.findAll();
         }
         else if(tab.equals("name")){
-            tags=tagService.findAllByTagNameAsc();
+            tags = tagService.findAllByTagNameAsc();
         }
 
         else{
-            tags=tagService.findAllByCreatedAtDesc();
+            tags= tagService.findAllByCreatedAtDesc();
         }
 
         for (Tag tag : tags) {

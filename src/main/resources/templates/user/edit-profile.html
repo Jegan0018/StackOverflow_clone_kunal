@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Edit Profile</h3>
+<form th:action="@{'/users/save/' + ${user.id}}" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:value="${user.name}" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" th:value="${user.email}" required>
+
+    <label for="info">About:</label>
+    <textarea id="info" name="info" th:text="${user.info}"></textarea>
+
+    <input type="submit" value="Save">
+</form>
+
+</body>
+</html>
