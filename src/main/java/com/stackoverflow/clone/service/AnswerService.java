@@ -17,9 +17,9 @@ public interface AnswerService {
     Answer findById(Long id);
 
     void deleteById(Long id);
+
     List<Answer> findFirst5ByUserOrderByCreatedAtDesc(User user);
 
     Page<Answer> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
-
 
 }

@@ -26,4 +26,8 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     List<Question> findQuestionsByUserAndTag(@Param("userId") Long userId, @Param("tagName") String tagName);
     List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user);
 
+    @Query("SELECT q FROM Question q WHERE q.id NOT IN (SELECT a.question.id FROM Answer a)")
+    Page<Question> findAllQuestionsWithoutAnswers(Pageable pageable);
+
+    Page<Question> findAllByOrderByVoteCountDesc(Pageable pageable);
 }

@@ -36,4 +36,8 @@ public interface QuestionService {
     Vote findVoteByUserAndQuestion(User user, Question question);
 
     void createVote(Vote vote);
+
+    Page<Question> findAllByNotAnswered(Pageable pageable);
+
+    Page<Question> findAllByVoteCount(Pageable pageable);
 }

@@ -105,8 +105,14 @@ public class QuestionServiceImpl implements QuestionService {
         voteRepository.save(vote);
     }
 
-//    @Override
-//    public void deleteVote(Long voteId) {
-//        voteRepository.deleteById(voteId);
-//    }
+    @Override
+    public Page<Question> findAllByNotAnswered(Pageable pageable) {
+        return questionRepository.findAllQuestionsWithoutAnswers(pageable);
+    }
+
+    @Override
+    public Page<Question> findAllByVoteCount(Pageable pageable) {
+        return questionRepository.findAllByOrderByVoteCountDesc(pageable);
+    }
+
 }
