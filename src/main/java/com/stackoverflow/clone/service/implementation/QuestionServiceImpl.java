@@ -3,7 +3,9 @@ package com.stackoverflow.clone.service.implementation;
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.entity.User;
+import com.stackoverflow.clone.entity.Vote;
 import com.stackoverflow.clone.repository.QuestionRepository;
+import com.stackoverflow.clone.repository.VoteRepository;
 import com.stackoverflow.clone.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +18,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     private QuestionRepository questionRepository;
 
-    public QuestionServiceImpl(QuestionRepository questionRepository) {
+    private VoteRepository voteRepository;
+
+    public QuestionServiceImpl(QuestionRepository questionRepository,VoteRepository voteRepository) {
         this.questionRepository=questionRepository;
+        this.voteRepository=voteRepository;
     }
 
     @Override
@@ -84,4 +89,24 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> findAllByUserName(String username) {
         return questionRepository.findAllByUserName(username);
     }
+    
+    @Override
+    public Vote findVoteByUserAndQuestion(User user, Question question) {
+        return voteRepository.findVoteByUserAndQuestion(user,question);
+    }
+
+    @Override
+    public void updateVote(Vote existingVote) {
+        voteRepository.save(existingVote);
+    }
+
+    @Override
+    public void createVote(Vote vote) {
+        voteRepository.save(vote);
+    }
+
+//    @Override
+//    public void deleteVote(Long voteId) {
+//        voteRepository.deleteById(voteId);
+//    }
 }
