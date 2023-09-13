@@ -41,6 +41,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/question/edit/**", "/new-question").hasRole("USER")
                                 .requestMatchers("/users/edit/**","/users/save/**").hasRole("USER")
+                                .requestMatchers("/question/upvote/**", "/question/downvote/**").hasRole("USER")
                                 .requestMatchers( "/save","/question/delete/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll()
                 )
