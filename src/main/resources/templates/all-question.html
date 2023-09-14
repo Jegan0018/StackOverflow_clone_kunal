@@ -133,6 +133,12 @@
          margin-bottom: 15px;
        }
 
+       .question-voteCount {
+         font-size: 16px;
+         color: #555;
+         margin-bottom: 15px;
+       }
+
 
       .question-tags {
          font-size: 14px;
@@ -236,8 +242,14 @@
     </div>
     <button class="About-button">About</button>
 
-    <form th:action="@{/search}" method="get" class="search-form">
-        <input type="text" th:name="q" class="search-input" placeholder="Search..." th:value="${q}">
+    <form action="/search" method="get" class="search-form">
+        <input
+                type="text"
+                th:value="${q}"
+                name="q"
+                class="search-input"
+                placeholder="Search..."
+        />
     </form>
     <span th:if="${not #authorization.expression('isAuthenticated()')}">
         <a th:href="@{/login}" class="login-button">Login</a>
@@ -270,6 +282,7 @@
     <div class="question-container">
         <h2 class="question-title" th:text="${tempQuestion.title}"></h2>
         <p class="question-problem" th:text="${tempQuestion.problem}"></p>
+        <p class="question-voteCount" th:text="${tempQuestion.voteCount} + ' votes'"></p>
         <div class="question-tags">
             <p><strong>Tags:</strong></p>
             <ul>
