@@ -50,17 +50,19 @@ public class QuestionController {
 
     @GetMapping("/questions")
     public String questions(Model model, @RequestParam(value = "tab", defaultValue = "new") String tab,
+                            @RequestParam(value = "q", required = false) String tagSearch,
                             @RequestParam(defaultValue = "1") int page) {
         Page<Question> questionPage = null;
-        Pageable pageable = PageRequest.of(page - 1, 5);
-        if (tab.equals("new")) {
-            questionPage = questionService.findAllByCreatedAtDesc(pageable);
-        } else if (tab.equals("unanswered")) {
-            questionPage = questionService.findAllByNotAnswered(pageable);
-        } else if (tab.equals("score")) {
-            questionPage = questionService.findAllByVoteCount(pageable);
-        }
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        List<Question> questions=new ArrayList<>();
+        questions=questionService.findAll();
+        questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
+
+        model.addAttribute("tab",tab);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", questionPage.getTotalPages());
         model.addAttribute("questions", questionPage);
+        model.addAttribute("q",tagSearch);
         return "all-question";
     }
 
@@ -130,7 +132,12 @@ public class QuestionController {
 
     @GetMapping("/search")
     public String searchAll(Model model,
-                            @RequestParam(value = "q", required = false) String q) {
+                            @RequestParam(value = "tab", defaultValue = "new") String tab,
+                            @RequestParam(value = "q", required = false) String q,
+                            @RequestParam(defaultValue = "1") int page) {
+        Page<Question> questionPage = null;
+        Pageable pageable = PageRequest.of(page - 1, 2);
+
         String[] searchArray = q.split("[,\\s]+");
 
         List<Question> questions = new ArrayList<>();
@@ -191,6 +198,13 @@ public class QuestionController {
                 model.addAttribute("q", searchArray[0]);
             }
         }
+        questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
+
+        model.addAttribute("tab", tab);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", questionPage.getTotalPages());
+        model.addAttribute("questions",questionPage);
+
         return "all-question";
     }
 

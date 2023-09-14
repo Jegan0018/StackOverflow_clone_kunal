@@ -24,8 +24,6 @@ public interface QuestionService {
 
     List<Question> findQuestionsBySearch(String search);
 
-    Page<Question> findAllByCreatedAtDesc(Pageable pageable);
-
     List<Question> findAllByUserName(String username);
 
     List<Question> findQuestionsByUserAndTag(Long userId, String tagName);
@@ -37,7 +35,5 @@ public interface QuestionService {
 
     void createVote(Vote vote);
 
-    Page<Question> findAllByNotAnswered(Pageable pageable);
-
-    Page<Question> findAllByVoteCount(Pageable pageable);
+    Page<Question> searchAndSortByNewOrUnansweredOrScore(List<Question> questions, String tab, Pageable pageable);
 }

@@ -79,10 +79,6 @@ public class UserController {
             List<Tag> topTags = userService.findTopTags(userId);
             List<Question> qusetion = questionService.findFirst5ByUserOrderByCreatedAtDesc(user.get());
             List<Answer> answers = answerService.findFirst5ByUserOrderByCreatedAtDesc(user.get());
-
-
-
-
             model.addAttribute("topAnswers", answers);
             model.addAttribute("topQuestion", qusetion);
             model.addAttribute("topTags", topTags);

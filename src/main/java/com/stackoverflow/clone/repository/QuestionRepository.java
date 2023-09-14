@@ -18,16 +18,12 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     @Query("SELECT q FROM Question q WHERE q.title LIKE %:search% OR q.problem LIKE %:search%")
     List<Question> findQuestionsBySearch(@Param("search") String search);
 
-    Page<Question> findAllByOrderByCreatedAtDesc(Pageable pageable);
-
     List<Question> findAllByUserName(String username);
 
     @Query("SELECT q FROM Question q JOIN q.tags t WHERE q.user.id = :userId AND t.name = :tagName")
     List<Question> findQuestionsByUserAndTag(@Param("userId") Long userId, @Param("tagName") String tagName);
+
     List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user);
 
-    @Query("SELECT q FROM Question q WHERE q.id NOT IN (SELECT a.question.id FROM Answer a)")
-    Page<Question> findAllQuestionsWithoutAnswers(Pageable pageable);
 
-    Page<Question> findAllByOrderByVoteCountDesc(Pageable pageable);
 }
