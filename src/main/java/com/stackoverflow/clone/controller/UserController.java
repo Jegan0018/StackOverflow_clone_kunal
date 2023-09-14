@@ -1,5 +1,6 @@
 package com.stackoverflow.clone.controller;
 
+import ch.qos.logback.classic.Logger;
 import com.stackoverflow.clone.entity.Answer;
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.*;
 
@@ -90,14 +92,35 @@ public class UserController {
         return "user/profile";
     }
 
+
     @PostMapping("/users/edit/{userId}")
-    public String editProfile(@PathVariable("userId") Long userId,
-                              Model model){
+    public String editProfile(@PathVariable("userId") Long userId, Model model){
+
+
         Optional<User> user = userService.findById(userId);
 
-        model.addAttribute("user", user.get());
-        return "user/edit-profile";
+        if (user.isPresent()) {
+            String name = user.get().getName();
+            String avatarUrl = "https://via.placeholder.com/100/007bff/ffffff?text=";
+
+            if (name != null && !name.isEmpty()) {
+                avatarUrl += name.charAt(0);
+            } else {
+                avatarUrl += "Unknown";
+            }
+
+            model.addAttribute("user", user.get());
+            model.addAttribute("avatarUrl", avatarUrl);
+            return "user/edit-profile";
+        } else {
+            // Handle the case where user is not found
+            model.addAttribute("errorUser", "User Not Found");
+            return "user/profile";
+        }
     }
+
+
+
 
     @PostMapping("/users/save/{userId}")
     public String saveProfile(@PathVariable Long userId, @ModelAttribute User updatedUser) {
