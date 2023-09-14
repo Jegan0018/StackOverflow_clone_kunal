@@ -2,6 +2,9 @@ package com.stackoverflow.clone.service;
 
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -14,13 +17,13 @@ public interface TagService {
 
     List<Question> findQuestionsByTagName(String tagName);
 
-    List<Tag> findAll();
+    Page<Tag> findAll(Pageable pageable);
 
-    List<Tag> findAllByCreatedAtDesc();
+    Page<Tag> findAllByCreatedAtDesc(Pageable pageable);
 
-    List<Tag> findAllByTagNameAsc();
+    Page<Tag> findAllByTagNameAsc(Pageable pageable);
 
-    List<Tag> search(String search, String tab);
+    Page<Tag> search(String search, String tab, Pageable pageable);
 
     boolean tagExists(String search);
 }

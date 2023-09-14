@@ -37,9 +37,9 @@ public class QuestionController {
 
     @GetMapping("/")
     public String home(Model model) {
-
+        
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByUsername(authentication.getName());
+        User user= userService.findByUsername(authentication.getName());
         List<Question> recent10Question = questionService.findTop10ByOrderByCreatedAtDesc();
         if (user != null) {
             model.addAttribute("user", user);
@@ -66,32 +66,33 @@ public class QuestionController {
         return "all-question";
     }
 
+
     @GetMapping("/new-question")
-    public String newQuestion(Model model) {
+    public String newQuestion(Model model){
         Question question = new Question();
-        model.addAttribute("question", question);
+        model.addAttribute("question",question);
         return "question/new-question";
     }
 
     @PostMapping("/save")
     public String saveQuestion(@ModelAttribute("question") Question question,
                                @RequestParam(value = "tagNames", required = false) String tagNames) {
-        if (question.getId() != null) {
+        if (question.getId()!=null){
             question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByUsername(authentication.getName());
+        User user= userService.findByUsername(authentication.getName());
         Set<Tag> tags = tagService.findOrCreateTag(tagNames);
 
         question.setUser(user);
         question.setTags(tags);
         questionService.save(question);
-        return "redirect:/question/" + question.getId();
+        return "redirect:/question/"+question.getId();
     }
 
     @GetMapping("/question/{questionId}")
     public String viewQuestion(@PathVariable("questionId") Long questionId,
-                               Model model) {
+                               Model model){
         Question question = questionService.findById(questionId);
         List<Answer> answers = answerService.findByQuestionId(questionId);
         Answer answer = new Answer();
@@ -100,12 +101,20 @@ public class QuestionController {
             List<Comment> comments = commentService.findByAnswerId(ans.getId());
             ans.setComments(comments);
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            User user= userService.findByUsername(authentication.getName());
+            Vote existingVote = questionService.findVoteByUserAndQuestion(user, question);
+            if (existingVote != null) {
+                model.addAttribute("voteType", existingVote.getVoteType());
+            }
+        }
 
         model.addAttribute("commentDeleted", true);
         model.addAttribute("user", question.getUser());
         model.addAttribute("answers", answers);
         model.addAttribute("answer", answer);
-        model.addAttribute("question", question);
+        model.addAttribute("question",question);
         return "question/view-question";
     }
 
@@ -140,24 +149,25 @@ public class QuestionController {
 
         String[] searchArray = q.split("[,\\s]+");
 
-        List<Question> questions = new ArrayList<>();
-        if (searchArray.length > 1) {
-            if (searchArray[0].startsWith("user:")) {
+        List<Question> questions=new ArrayList<>();
+        if(searchArray.length>1) {
+            if(searchArray[0].startsWith("user:")){
                 Long userId = Long.parseLong(searchArray[0].substring(5, searchArray[0].length()));
 
                 String tagName = searchArray[1].startsWith("[")
                         ? searchArray[1].substring(1, searchArray[1].length() - 1)
                         : searchArray[1].substring(0, searchArray[1].length() - 1);
-                questions = questionService.findQuestionsByUserAndTag(userId, tagName);
+                questions = questionService.findQuestionsByUserAndTag(userId,tagName);
                 model.addAttribute("questions", questions);
-                model.addAttribute("q", q);
+                model.addAttribute("q",q);
                 return "all-question";
             }
             for (String search : searchArray) {
                 if (tagService.tagExists(search)) {
                     List<Question> tagQuestions = tagService.findQuestionsByTagName(search);
                     questions.addAll(tagQuestions);
-                } else {
+                }
+                else {
                     List<Question> keywordQuestions = questionService.findQuestionsBySearch(search);
                     questions.addAll(keywordQuestions);
                 }
@@ -190,9 +200,9 @@ public class QuestionController {
                 model.addAttribute("questions", questions);
                 model.addAttribute("tagName", tagName);
                 model.addAttribute("q", searchArray[0]);
-            } else if (searchArray[0].startsWith("user:")) {
+            } else if(searchArray[0].startsWith("user:")) {
                 int userId = Integer.parseInt(searchArray[0].substring(5, searchArray[0].length()));
-                User user = userService.findById(userId);
+                User user=userService.findById(userId);
                 questions = questionService.findByUser(user);
                 model.addAttribute("questions", questions);
                 model.addAttribute("q", searchArray[0]);
@@ -211,39 +221,49 @@ public class QuestionController {
     @GetMapping("/questions/user/{userId}/tagged/{tagName}")
     public String userWithTagged(@PathVariable("userId") Long id,
                                  @PathVariable("tagName") String tagName,
-                                 Model model) {
+                                 Model model){
 
-        List<Question> questions = questionService.findQuestionsByUserAndTag(id, tagName);
+        List<Question> questions = questionService.findQuestionsByUserAndTag(id,tagName);
 
-        model.addAttribute("q", "user:" + id + " [" + tagName + "]");
+        model.addAttribute("q", "user:"+id+" ["+tagName+"]");
         model.addAttribute("questions", questions);
         return "all-question";
     }
-
+    
     @PostMapping("/question/upvote/{questionId}/{voteType}")
     public String upvote(@PathVariable Long questionId, @PathVariable VoteType voteType, Model model) {
         Question question = questionService.findById(questionId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByUsername(authentication.getName());
         Vote existingVote = questionService.findVoteByUserAndQuestion(user, question);
-        System.out.println("Existing Vote " + existingVote);
+
+
         if (existingVote != null) {
+
             if (existingVote.getVoteType() == voteType.NOVOTE) {
                 existingVote.setVoteType(voteType);
+
+
                 Integer voteCount = question.getVoteCount();
+
                 question.setVoteCount(voteCount + 1);
-            } else if (existingVote.getVoteType() == voteType.DOWNVOTE) {
+
+            } else if (existingVote.getVoteType() == voteType.DOWNVOTE){
+
+
                 existingVote.setVoteType(voteType.UPVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount + 2);
 
-            } else {
+            }
+            else {
                 existingVote.setVoteType(voteType.NOVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount - 1);
             }
-        } else {
-            System.out.println("Vote Count " + question.getVoteCount());
+        }
+        else {
+
             Vote vote = new Vote();
             vote.setQuestion(question);
             vote.setUser(user);
@@ -276,12 +296,14 @@ public class QuestionController {
                 int voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount - 1);
 
-            } else if (existingVote.getVoteType() == voteType.UPVOTE) {
+            }
+            else if (existingVote.getVoteType() == voteType.UPVOTE){
                 existingVote.setVoteType(voteType.DOWNVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount - 2);
 
-            } else {
+            }
+            else{
                 existingVote.setVoteType(voteType.NOVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount + 1);
@@ -295,11 +317,12 @@ public class QuestionController {
             questionService.createVote(vote);
 
             int voteCount = question.getVoteCount();
-            question.setVoteCount(voteCount - 1);
+            question.setVoteCount(voteCount -1);
 
         }
         model.addAttribute("voteType", voteType);
         questionService.save(question);
+
         return "redirect:/question/{questionId}";
     }
 }

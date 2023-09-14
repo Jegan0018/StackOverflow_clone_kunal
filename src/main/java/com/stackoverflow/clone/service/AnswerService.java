@@ -3,6 +3,7 @@ package com.stackoverflow.clone.service;
 import com.stackoverflow.clone.entity.Answer;
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.User;
+import com.stackoverflow.clone.entity.Vote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,4 +23,9 @@ public interface AnswerService {
 
     Page<Answer> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 
+    Vote findVoteByUserAndAnswer(User user, Answer answer);
+
+    void updateVote(Vote existingVote);
+
+    void createVote(Vote vote);
 }

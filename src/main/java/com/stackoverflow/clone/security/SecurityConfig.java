@@ -42,12 +42,13 @@ public class SecurityConfig {
                                 .requestMatchers("/question/edit/**", "/new-question").hasRole("USER")
                                 .requestMatchers("/users/edit/**","/users/save/**").hasRole("USER")
                                 .requestMatchers("/question/upvote/**", "/question/downvote/**").hasRole("USER")
+                                .requestMatchers("/answer/question/upvote/**", "/answer/question/downvote/**").hasRole("USER")
                                 .requestMatchers( "/save","/question/delete/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/questions", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

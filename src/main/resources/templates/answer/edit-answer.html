@@ -268,7 +268,7 @@ input[type="submit"]:hover {
     </div>
     <div class="answer-details">
         <label for="name">Name :</label>
-        <span id="name" name="name" th:text="${tempAnswer.name}"></span><br>
+        <span id="name" name="name" th:text="${tempAnswer.user.name}"></span><br>
         <label for="theAnswer">Answer :</label>
         <textarea id="theAnswer" name="theAnswer" th:text="${tempAnswer.theAnswer}" required></textarea><br>
     </div>

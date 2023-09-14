@@ -65,6 +65,14 @@ public class Vote {
         this.question = question;
     }
 
+    public Answer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
+
     @Override
     public String toString() {
         return "Vote{" +

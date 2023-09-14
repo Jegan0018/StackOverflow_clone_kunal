@@ -46,16 +46,25 @@ public class UserController {
     @GetMapping("/users")
     public String users(@RequestParam(name = "userSearch",defaultValue = "") String userSearch,
                         @RequestParam(name ="tab", defaultValue = "popular") String tab,
+                        @RequestParam(defaultValue = "1") int page,
                         Model model){
 
-        Pageable pageable = PageRequest.of(0, 5);
+        Pageable pageable = PageRequest.of(page - 1, 2);
         Page<User> users = userService.searchAndSortByUsernameOrName(userSearch,tab,pageable);
 
         for (User user : users) {
             user.setTopTags(userService.findTop3TagsByUserId(user.getId()));
         }
 
-        model.addAttribute("userSearch", userSearch);
+        if(tab != null && !tab.equals("")) {
+            model.addAttribute("tab",tab);
+        }
+        if(userSearch != null && !userSearch.equals("")){
+            model.addAttribute("userSearch", userSearch);
+        }
+
+        model.addAttribute("totalPages", users.getTotalPages());
+        model.addAttribute("currentPage", page);
         model.addAttribute("users", users);
         return "user/user-list";
     }

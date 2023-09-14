@@ -2,6 +2,8 @@ package com.stackoverflow.clone.repository;
 
 import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,17 +19,17 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
     List<Question> findQuestionsByTagId(@Param("tagName") String tagName);
 
     @Query("SELECT t FROM Tag t ORDER BY t.createdAt DESC")
-    List<Tag> findAllTagsByCreatedAtDesc();
+    Page<Tag> findAllTagsByCreatedAtDesc(Pageable pageable);
 
-    List<Tag> findAllByOrderByNameAsc();
-
-    @Query("SELECT t FROM Tag t WHERE " +
-            "LOWER(t.name) LIKE LOWER(CONCAT('%', :search, '%'))")
-    List<Tag> search(@Param("search") String search, Sort sort);
+    Page<Tag> findAllByOrderByNameAsc(Pageable pageable);
 
     @Query("SELECT t FROM Tag t WHERE " +
             "LOWER(t.name) LIKE LOWER(CONCAT('%', :search, '%'))")
-    List<Tag> search(@Param("search") String search);
+    Page<Tag> searchAndSort(@Param("search") String search, Pageable pageable);
+
+    @Query("SELECT t FROM Tag t WHERE " +
+            "LOWER(t.name) LIKE LOWER(CONCAT('%', :search, '%'))")
+    Page<Tag> search(@Param("search") String search, Pageable pageable);
 
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Tag t WHERE t.name = :search")
     boolean searchIfExists(@Param("search") String search);

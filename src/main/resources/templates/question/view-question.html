@@ -41,7 +41,7 @@
             margin-right: 10px;
         }
 
-      .menu-container {
+        .menu-container {
             position: relative;
             margin-right: 1%;
         }
@@ -59,49 +59,50 @@
             flex-direction: column;
         }
 
-.menu-button,
-.About-button,
-.login-button,
-.signup-button {
-    background-color: #e0e0e0;
-    color: #333;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 0 8px;
-    padding: 10px 20px;
-}
+       .menu-button,
+       .About-button,
+       .login-button,
+       .signup-button {
+           background-color: #e0e0e0;
+           color: #333;
+           border: none;
+           border-radius: 8px;
+           cursor: pointer;
+           margin: 0% 1%;
+           padding: 8px 10px;
+       }
 
-.menu ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
+        .menu ul {
+            list-style-type: none;
+            padding: auto;
+            margin: auto;
+        }
 
-.menu ul li {
-    display: block;
-    padding: 10px 15px;
-    cursor: pointer;
-}
+        .menu ul li {
+            display: block;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
 
-  .menu ul li:hover {
+        .menu ul li:hover {
             background-color: #fad5ab;
         }
 
-.search-form {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-}
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
 
-.search-input {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    flex-grow: 1;
-    margin-left: 10px;
-    min-width: 500px;
-}
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            flex-grow: 1;
+            margin-left: auto;
+            min-width: 30vw;
+            width: fit-content;
+        }
 
 
         .container {
@@ -259,7 +260,15 @@
     #userDetails p {
         margin: 5px 0;
     }
+    .upvote-button {
+        background-color: #007bff; /* Blue color for upvote */
+        color: #fff;
+    }
 
+    .downvote-button {
+        background-color: #dc3545; /* Red color for downvote */
+        color: #fff;
+    }
 
     </style>
 </head>
@@ -287,8 +296,14 @@
     </div>
     <button class="About-button">About</button>
 
-    <form th:action="@{/search}" method="get" class="search-form">
-        <input type="text" th:name="q" class="search-input" placeholder="Search..." th:value="${q}">
+    <form action="/search" method="get" class="search-form">
+        <input
+                type="text"
+                th:value="${q}"
+                name="q"
+                class="search-input"
+                placeholder="Search..."
+        />
     </form>
     <span th:if="${not #authorization.expression('isAuthenticated()')}">
         <a th:href="@{/login}" class="login-button">Login</a>
@@ -315,18 +330,29 @@
             </a>
         </li>
     </ul>
+<br>
     <div>
         <form th:action="@{'/question/upvote/' + ${question.id} + '/UPVOTE'}" method="post">
-            <button type="submit">Upvote</button>
+            <span th:if="${#strings.equals(voteType, 'UPVOTE')}">
+            <button type="submit" style="background: gray;">Upvote</button>
+                </span>
+            <span th:unless="${#strings.equals(voteType, 'UPVOTE')}">
+                <button type="submit">Upvote</button>
+                </span>
         </form>
     </div>
     <span th:text="${question.voteCount}"></span>
     <div>
         <form th:action="@{'/question/downvote/' + ${question.id} + '/DOWNVOTE'}" method="post">
+            <span th:if="${#strings.equals(voteType, 'DOWNVOTE')}">
+            <button type="submit" style="background: gray;">Downvote</button>
+            </span>
+            <span th:unless="${#strings.equals(voteType, 'DOWNVOTE')}">
             <button type="submit">Downvote</button>
+            </span>
         </form>
     </div>
-
+    <br>
     <span sec:authorize="isAuthenticated()">
             <div class="button-group">
                 <span th:if="${user.username == #authentication.principal.username}">
@@ -342,7 +368,11 @@
             </div>
         </span>
     <br>
-    <a th:href="@{/questions}">BACK TO QUESTIONS</a>
+    <span>
+    <a th:href="@{/questions}">BACK TO QUESTIONS</a></span>
+    <span style="float: right;">
+        Asked By : <a th:href="@{'/users/' + ${user.id}}"><span th:text="${user.name}"></span></a>
+    </span>
 </div>
 
 <div class="container">
@@ -360,9 +390,25 @@
                 </form>
             </span>
         </span>
+    <br>
     <span th:each="tempAnswer : ${answers}">
-            <p><strong>Name:</strong> <span th:text="${tempAnswer.user.name}"></span></p>
-            <p><strong>Answer:</strong> <span th:text="${tempAnswer.theAnswer}"></span></p>
+        <p><strong>Answered By:</strong> <a th:href="@{'/users/' + ${tempAnswer.user.id}}"><span th:text="${tempAnswer.user.name}"></span></a></p>
+            <p><span th:text="${tempAnswer.theAnswer}"></span></p>
+
+            <div>
+        <form th:action="@{'/answer/question/upvote/' + ${question.id} +'/' +${tempAnswer.id}+ '/UPVOTE'}" method="post">
+
+            <button type="submit">Upvote</button>
+        </form>
+        </div>
+            <span th:text="${tempAnswer.voteCount}"></span>
+            <div>
+        <form th:action="@{'/answer/question/downvote/' + ${question.id} +'/' +${tempAnswer.id}+ '/DOWNVOTE'}" method="post">
+            <button type="submit">Downvote</button>
+        </form>
+    </div>
+
+
             <span sec:authorize="isAuthenticated()">
                 <span th:if="${tempAnswer.user.username == #authentication.principal.username}">
                     <form action="#" th:action="@{/answer/updateAnswer}" method="post">
@@ -382,7 +428,7 @@
             <h4>Comments:</h4>
             <ul>
                 <li th:each="comment, commentStat : ${tempAnswer.comments}" th:if="${commentStat.index < 2}">
-                    <p><strong>Name:</strong> <span th:text="${comment.user.name}"></span></p>
+                    <p><strong>Name:</strong><a th:href="@{'/users/' + ${comment.user.id}}"><span th:text="${comment.user.name}"></span></a></p>
                     <p><strong>Comment:</strong> <span th:text="${comment.theComment}"></span></p>
                     <span sec:authorize="isAuthenticated()">
                         <span th:if="${comment.user.username == #authentication.principal.username or #authorization.expression('hasRole(''ADMIN'')')}">

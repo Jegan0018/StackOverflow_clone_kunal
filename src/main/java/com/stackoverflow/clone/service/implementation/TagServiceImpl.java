@@ -4,6 +4,9 @@ import com.stackoverflow.clone.entity.Question;
 import com.stackoverflow.clone.entity.Tag;
 import com.stackoverflow.clone.repository.TagRepository;
 import com.stackoverflow.clone.service.TagService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
@@ -56,29 +59,31 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findAll() {
-        return tagRepository.findAll();
+    public Page<Tag> findAll(Pageable pageable) {
+        return tagRepository.findAll(pageable);
     }
 
     @Override
-    public List<Tag> findAllByCreatedAtDesc() {
-        return tagRepository.findAllTagsByCreatedAtDesc();
+    public Page<Tag> findAllByCreatedAtDesc(Pageable pageable) {
+        return tagRepository.findAllTagsByCreatedAtDesc(pageable);
     }
 
     @Override
-    public List<Tag> findAllByTagNameAsc() {
-        return tagRepository.findAllByOrderByNameAsc();
+    public Page<Tag> findAllByTagNameAsc(Pageable pageable) {
+        return tagRepository.findAllByOrderByNameAsc(pageable);
     }
 
     @Override
-    public List<Tag> search(String search, String tab) {
+    public Page<Tag> search(String search, String tab, Pageable pageable) {
+
         if (tab != null && !tab.equals("popular")) {
             int sortBy = tab.equals("name") ? 1 : 0;
             Sort sort = sortBy == 1 ? Sort.by(Sort.Order.asc("name")) : Sort.by(Sort.Order.desc("createdAt"));
 
-            return tagRepository.search(search,sort);
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+            return tagRepository.searchAndSort(search,pageable);
         }
-        return tagRepository.search(search);
+        return tagRepository.search(search,pageable);
     }
 
     @Override

@@ -6,16 +6,16 @@
     <title>List Tags</title>
     <style>
        * {
+       padding: 0;
         margin: 0;
         box-sizing: border-box;
       }
        body {
             font-family: 'Arial', sans-serif;
             background-color: #f7f7f7;
-            margin: 0;
+<!--            margin: 0;-->
             display: flex;
             justify-content: center;
-            min-height: 40vh;
             flex-direction: column;
             padding-top:6%;
         }
@@ -106,11 +106,10 @@
          #footer {
         background-color: grey;
         padding:5px 20px;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
         z-index: 100;
+        position: fixed;
+        width: 100%;
+        bottom: 0;
     }
 
     .site-footer--container {
@@ -156,20 +155,30 @@
     }
      /* Add this CSS to your existing styles */
 
+.tag-con{
+margin-left: 15%;
+margin-right: 15%;
+}
+
+
+
 /* Filters Section */
 .filters-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    margin-right: 20px;
 }
 
 .filter-search {
-    display: flex;
+    margin-left: 8%
+<!--    display: flex;-->
     align-items: center;
 }
 
 .filter-tabs form {
+
     display: inline-block;
     margin-left: 10px;
 }
@@ -214,6 +223,45 @@
     width: 100%;
     content: "";
 }
+
+.pg-btn{
+color: orange;
+    background-color: #e0e0e0;
+
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 8px;
+    padding: 10px 20px;
+}
+.pg-btn:hover{
+background-color: orange;
+color: black;
+}
+
+.tag-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tag-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 50px;
+<!--    width: 20%;-->
+<!--    width: calc(33.33% - 20px); /* Adjust the width here */-->
+    box-sizing: border-box;
+
+}
+
+#nxt{
+margin-bottom: 5rem;
+float: right;
+}
+#pre{
+margin-bottom: 5rem;
+}
     </style>
 </head>
 <body>
@@ -239,8 +287,14 @@
     </div>
     <button class="About-button">About</button>
 
-    <form th:action="@{/search}" method="get" class="search-form">
-        <input type="text" th:name="q" class="search-input" placeholder="Search..." th:value="${q}">
+    <form action="/search" method="get" class="search-form">
+        <input
+                type="text"
+                th:value="${q}"
+                name="q"
+                class="search-input"
+                placeholder="Search..."
+        />
     </form>
     <span th:if="${not #authorization.expression('isAuthenticated()')}">
         <a th:href="@{/login}" class="login-button">Login</a>
@@ -253,6 +307,8 @@
     </span>
 </div>
 <!-- Filters Section -->
+<br>
+<br>
 <div class="filters-container">
     <div class="filter-search">
         <form th:action="@{/tags}" method="get">
@@ -265,25 +321,47 @@
     <div class="filter-tabs">
         <form th:action="@{/tags}" method="get">
             <input type="hidden" name="tab" value="popular">
+            <span th:if="${tagSearch}">
             <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+            </span>
+            <span th:unless="${tab == 'popular'}">
             <button type="submit">Popular</button>
+            </span>
+            <span th:if="${tab == 'popular'}">
+                <button type="submit" style="background-color: orange;">Popular</button>
+            </span>
         </form>
 
         <form th:action="@{/tags}" method="get">
             <input type="hidden" name="tab" value="name">
+            <span th:if="${tagSearch}">
             <input type="hidden" name="tagSearch" th:value="${tagSearch}">
-            <button type="submit">Name</button>
+            </span>
+            <span th:unless="${tab == 'name'}">
+                <button type="submit">Name</button>
+            </span>
+            <span th:if="${tab == 'name'}">
+                <button type="submit" style="background-color: orange;">Name</button>
+            </span>
         </form>
 
         <form th:action="@{/tags}" method="get">
             <input type="hidden" name="tab" value="new">
+            <span th:if="${tagSearch}">
             <input type="hidden" name="tagSearch" th:value="${tagSearch}">
-            <button type="submit">New</button>
+            </span>
+            <span th:unless="${tab == 'new'}">
+                <button type="submit">New</button>
+            </span>
+            <span th:if="${tab == 'new'}">
+                <button type="submit" style="background-color: orange;">New</button>
+            </span>
         </form>
     </div>
 </div>
-
-
+    <br>
+    <br>
+<div class="tag-con">
 <!-- Tag Boxes Section -->
 <div class="tag-boxes">
     <span th:each="entry, status : ${questionsCountByTag}">
@@ -296,24 +374,35 @@
                 </a>
             </div>
             <!-- Add clearfix for every 8th element to start a new row -->
-            <div th:if="${status.index % 8 == 7}" class="clearfix"></div>
+            <div th:if="${status.index % 3 == 2}" class="clearfix"></div>
         </span>
     </span>
 </div>
-
-
-<script>
-      function toggleMenu() {
-        var menu = document.getElementById("menu");
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
-      }
-
-      function redirectToOption(option) {
-        window.location.href = option;
-      }
-</script>
-
-
+</div>
+<span class="page-item" th:if="${currentPage > 1}">
+<form th:action="@{/tags}">
+    <span th:if="${tab}">
+        <input type="hidden" name="tab" th:value="${tab}">
+    </span>
+    <span th:if="${tagSearch}">
+        <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+    </span>
+    <input type="hidden" name="page" th:value="${currentPage - 1}">
+    <input type="submit" value="Previous" class="pg-btn" id="pre">
+</form>
+</span>
+<span class="page-item" th:if="${currentPage < totalPages}">
+<form th:action="@{/tags}">
+    <span th:if="${tab}">
+        <input type="hidden" name="tab" th:value="${tab}">
+    </span>
+    <span th:if="${tagSearch}">
+        <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+    </span>
+    <input type="hidden" name="page" th:value="${currentPage + 1}">
+    <input type="submit" value="Next" class="pg-btn" id="nxt">
+</form>
+</span>
 <footer id="footer" class="site-footer js-footer" role="contentinfo">
     <div class="site-footer--container">
         <div class="site-footer--row">
@@ -331,6 +420,19 @@
         </div>
     </div>
 </footer>
+<script>
+      function toggleMenu() {
+        var menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      function redirectToOption(option) {
+        window.location.href = option;
+      }
+</script>
+
+
+
 <script>
     document.getElementById('showContributors').addEventListener('click', function() {
        document.getElementById('userDetails').style.display = 'block';

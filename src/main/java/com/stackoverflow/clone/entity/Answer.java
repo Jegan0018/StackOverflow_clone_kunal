@@ -18,7 +18,7 @@ public class Answer {
     private String theAnswer;
 
     @Column(name = "vote_count")
-    private Long voteCount;
+    private Integer voteCount;
 
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
@@ -39,6 +39,7 @@ public class Answer {
 
     @PrePersist
     protected void onCreate() {
+        voteCount=0;
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
@@ -62,11 +63,11 @@ public class Answer {
         this.theAnswer = theAnswer;
     }
 
-    public Long getVoteCount() {
+    public Integer getVoteCount() {
         return voteCount;
     }
 
-    public void setVoteCount(Long voteCount) {
+    public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
     }
 

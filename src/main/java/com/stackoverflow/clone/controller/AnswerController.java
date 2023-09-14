@@ -1,8 +1,6 @@
 package com.stackoverflow.clone.controller;
 
-import com.stackoverflow.clone.entity.Answer;
-import com.stackoverflow.clone.entity.Question;
-import com.stackoverflow.clone.entity.User;
+import com.stackoverflow.clone.entity.*;
 import com.stackoverflow.clone.service.AnswerService;
 import com.stackoverflow.clone.service.QuestionService;
 import com.stackoverflow.clone.service.UserService;
@@ -10,10 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -66,6 +61,100 @@ public class AnswerController {
     public String deleteAnswer(@RequestParam("questionId") Long questionId,
                                @RequestParam("answerId") Long answerId) {
         answerService.deleteById(answerId);
+        return "redirect:/question/" + questionId;
+    }
+
+    @PostMapping("/question/upvote/{questionId}/{answerId}/{voteType}")
+    public String upvote(@PathVariable Long questionId, @PathVariable VoteType voteType,
+                         @PathVariable Long answerId, Model model) {
+        Answer answer = answerService.findById(answerId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByUsername(authentication.getName());
+        Vote existingVote = answerService.findVoteByUserAndAnswer(user, answer);
+
+        if (existingVote != null) {
+
+            if (existingVote.getVoteType() == voteType.NOVOTE) {
+                existingVote.setVoteType(voteType);
+
+
+                Integer voteCount = answer.getVoteCount();
+
+                answer.setVoteCount(voteCount + 1);
+
+            } else if (existingVote.getVoteType() == voteType.DOWNVOTE){
+
+
+                existingVote.setVoteType(voteType.UPVOTE);
+                Integer voteCount = answer.getVoteCount();
+                answer.setVoteCount(voteCount + 2);
+
+            }
+            else {
+                existingVote.setVoteType(voteType.NOVOTE);
+                Integer voteCount = answer.getVoteCount();
+                answer.setVoteCount(voteCount - 1);
+            }
+        }
+        else {
+            Vote vote = new Vote();
+            vote.setAnswer(answer);
+            vote.setUser(user);
+            vote.setVoteType(voteType);
+            questionService.createVote(vote);
+            Integer voteCount = answer.getVoteCount();
+            answer.setVoteCount(voteCount + 1);
+
+        }
+        model.addAttribute("voteType", voteType);
+
+        answerService.save(answer);
+
+        return "redirect:/question/" + questionId;
+    }
+
+    @PostMapping("/question/downvote/{questionId}/{answerId}/{voteType}")
+    public String downVote(@PathVariable Long questionId, @PathVariable VoteType voteType,
+                           @PathVariable Long answerId, Model model) {
+        Answer answer = answerService.findById(answerId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByUsername(authentication.getName());
+        Vote existingVote = answerService.findVoteByUserAndAnswer(user, answer);
+        if (existingVote != null) {
+            if (existingVote.getVoteType() == voteType.NOVOTE) {
+
+                existingVote.setVoteType(voteType);
+
+                int voteCount = answer.getVoteCount();
+                answer.setVoteCount(voteCount - 1);
+
+            }
+            else if (existingVote.getVoteType() == voteType.UPVOTE){
+                existingVote.setVoteType(voteType.DOWNVOTE);
+                Integer voteCount = answer.getVoteCount();
+                answer.setVoteCount(voteCount - 2);
+
+            }
+            else{
+                existingVote.setVoteType(voteType.NOVOTE);
+                Integer voteCount = answer.getVoteCount();
+                answer.setVoteCount(voteCount + 1);
+            }
+
+        } else {
+            Vote vote = new Vote();
+            vote.setAnswer(answer);
+            vote.setUser(user);
+            vote.setVoteType(voteType);
+            questionService.createVote(vote);
+
+            int voteCount = answer.getVoteCount();
+            answer.setVoteCount(voteCount -1);
+
+        }
+        model.addAttribute("voteType", voteType);
+        answerService.save(answer);
+
         return "redirect:/question/" + questionId;
     }
 }
