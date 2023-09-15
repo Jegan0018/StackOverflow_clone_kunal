@@ -49,7 +49,7 @@ public class UserController {
                         @RequestParam(defaultValue = "1") int page,
                         Model model){
 
-        Pageable pageable = PageRequest.of(page - 1, 2);
+        Pageable pageable = PageRequest.of(page - 1, 8);
         Page<User> users = userService.searchAndSortByUsernameOrName(userSearch,tab,pageable);
 
         for (User user : users) {
@@ -149,5 +149,15 @@ public class UserController {
 
             return "redirect:/error-page";
         }
+    }
+
+    @GetMapping("/answers/{userId}")
+    public String answers(@PathVariable(name = "userId") Long userId,
+                          Model model){
+        Optional<User> user = userService.findById(userId);
+        List<Answer> answers = answerService.findUnverifiedAnswersByUser(user.get());
+
+        model.addAttribute("answers", answers);
+        return "user/answers";
     }
 }

@@ -89,7 +89,6 @@ public class TagController {
         if(tab != null && !tab.equals("")) {
             model.addAttribute("tab",tab);
         }
-        
         model.addAttribute("totalPages", tags.getTotalPages());
         model.addAttribute("currentPage", page);
         model.addAttribute("formattedCreatedAt", formattedCreatedAt);

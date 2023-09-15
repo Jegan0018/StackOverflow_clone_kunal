@@ -6,6 +6,7 @@ import com.stackoverflow.clone.entity.User;
 import com.stackoverflow.clone.entity.Vote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -28,4 +29,5 @@ public interface AnswerService {
     void updateVote(Vote existingVote);
 
     void createVote(Vote vote);
+    List<Answer> findUnverifiedAnswersByUser(User user);
 }

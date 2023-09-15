@@ -66,4 +66,9 @@ public class AnswerServiceImpl implements AnswerService {
     public void createVote(Vote vote) {
         voteRepository.save(vote);
     }
+
+    @Override
+    public List<Answer> findUnverifiedAnswersByUser(User user) {
+        return answerRepository.findUnverifiedAnswersByUser(user);
+    }
 }

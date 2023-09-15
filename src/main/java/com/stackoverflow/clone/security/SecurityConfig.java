@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/question/edit/**", "/new-question").hasRole("USER")
-                                .requestMatchers("/users/edit/**","/users/save/**").hasRole("USER")
+                                .requestMatchers("/users/edit/**","/users/save/**","/answers/**").hasRole("USER")
                                 .requestMatchers("/question/upvote/**", "/question/downvote/**").hasRole("USER")
                                 .requestMatchers("/answer/question/upvote/**", "/answer/question/downvote/**").hasRole("USER")
                                 .requestMatchers( "/save","/question/delete/**").hasAnyRole("USER", "ADMIN")

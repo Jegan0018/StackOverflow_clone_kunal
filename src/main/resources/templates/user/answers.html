@@ -3,9 +3,9 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Update Profile</title>
+    <title>Answers</title>
     <style>
-        * {
+                * {
             margin: 0;
             box-sizing: border-box;
         }
@@ -101,99 +101,6 @@
             margin-left: 10px;
             min-width: 500px;
         }
-
-        #footer {
-            background-color: grey;
-            padding: 5px 20px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-        }
-
-        .site-footer--container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .site-footer--row {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-right: 20px;
-            text-decoration: none;
-            color: #333;
-        }
-
-        a {
-            margin-right: 20px;
-            text-decoration: none;
-            color: #333;
-        }
-
-        p {
-            margin-bottom: 10px;
-        }
-
-        #showContributors {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        #showContributors:hover {
-            color: #ff5733;
-        }
-
-        #userDetails p {
-            margin: 5px 0;
-        }
-
-         .edit-profile-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-top: 30px;
-        }
-
-        .edit-profile-container label {
-            font-weight: bold;
-        }
-
-        .edit-profile-container input,
-        .edit-profile-container textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .edit-profile-container textarea {
-            height: 150px;
-        }
-
-        .edit-profile-container input[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .edit-profile-container input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
@@ -254,64 +161,37 @@
     </span>
 </div>
 
-<div class="edit-profile-container">
-    <h3>Edit Profile</h3>
-
-    <!-- Display the avatar -->
-    <div class="user-avatar">
-        <img th:src="'https://via.placeholder.com/100/007bff/ffffff?text=' + ${user.name[0].toUpperCase()}" alt="User Avatar">
-    </div>
-
-    <form th:action="@{'/users/save/' + ${user.id}}" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" th:value="${user.name}" required>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" th:value="${user.email}" required>
-
-        <label for="info">About:</label>
-        <textarea id="info" name="info" th:text="${user.info}"></textarea>
-
-        <input type="submit" value="Save">
+<br>
+<br>
+<span th:each="tempAnswers: ${answers}">
+    Answer Id: <span th:text="${tempAnswers.id}"></span><br>
+    Question owner:<span th:text="${tempAnswers.question.user.name}"></span><br>
+    Answer owner:<span th:text="${tempAnswers.user.name}"></span><br>
+    <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post">
+        <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">
+        <input type="hidden" name="verify" th:value="ok">
+        <button type="submit">Accept</button>
     </form>
-
-</div>
-
-<script>
-        function toggleMenu() {
-            var menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
-
-        function redirectToOption(option) {
-            window.location.href = option;
-        }
-    </script>
-
-<footer id="footer" class="site-footer js-footer" role="contentinfo">
-    <div class="site-footer--container">
-        <div class="site-footer--row">
-            <a th:href="@{/}" class="logo">StackOverflow</a>
-            <a th:href="@{/questions}">Questions</a>
-            <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
-        </div>
-        <div class="site-footer--row">
-            <p>This is StackOverflow clone project contributed by users <a href="#" id="showContributors">(see contributors)</a></p>
-            <div id="userDetails" style="display:none;">
-                <p>Kunal Raj - kunalraj0106@gmail.com</p>
-                <p>Murthy - murthyk7592@gmail.com</p>
-                <p>Jegan - jeganpandian001@gmail.com</p>
-            </div>
-        </div>
-    </div>
-</footer>
+    <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post">
+        <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">
+        <input type="hidden" name="verify" value="no">
+        <button type="submit">Ignore</button>
+    </form>
+    <form th:action="@{'/answer/viewAnswer/' + ${tempAnswers.id}}" method="post">
+        <button type="submit">view full answer</button>
+    </form>
+    Verified:<span th:text="${tempAnswers.verified}"></span><br><br>
+</span>
 
 <script>
-        document.getElementById('showContributors').addEventListener('click', function() {
-            document.getElementById('userDetails').style.display = 'block';
-        });
-    </script>
+    function toggleMenu() {
+      var menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
 
+    function redirectToOption(option) {
+      window.location.href = option;
+    }
+</script>
 </body>
-
 </html>

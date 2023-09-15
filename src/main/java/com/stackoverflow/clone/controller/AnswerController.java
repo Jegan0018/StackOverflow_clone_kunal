@@ -157,4 +157,26 @@ public class AnswerController {
 
         return "redirect:/question/" + questionId;
     }
+
+    @PostMapping("/verify/{answerId}")
+    public String verifyAnswer(@RequestParam("verify") String verify,
+                               @PathVariable("answerId") Long answerId,
+                               @RequestParam(value = "questionId", required = false) Long questionId,
+                               @RequestParam("userId") Long userId){
+        Answer answer = answerService.findById(answerId);
+        answer.setVerified(verify);
+        answerService.save(answer);
+        if (questionId != null){
+            return "redirect:/question/" + questionId;
+        }
+        return "redirect:/answers/" + userId;
+    }
+
+    @PostMapping("/viewAnswer/{answerId}")
+    public String veiwAnswer(@PathVariable("answerId") Long answerId,
+                             Model model){
+        Answer answer = answerService.findById(answerId);
+        model.addAttribute("answer", answer);
+        return"answer/view-answer";
+    }
 }

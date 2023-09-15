@@ -26,6 +26,9 @@ public class Answer {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    @Column(name = "verified")
+    private String verified;
+
     @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
     private Collection<Comment> comments;
 
@@ -39,7 +42,8 @@ public class Answer {
 
     @PrePersist
     protected void onCreate() {
-        voteCount=0;
+        verified = "NA";
+        voteCount = 0;
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
@@ -109,5 +113,13 @@ public class Answer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
     }
 }

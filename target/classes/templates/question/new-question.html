@@ -29,7 +29,7 @@
             justify-content: space-between;
             align-items: center;
             background-color: #f8f8f8;
-            padding: 10px 20px;
+            padding: 3px 20px;
             width: 100%;
             position: fixed;
             top: 0;
@@ -224,6 +224,21 @@
 
 <body>
 <div class="header-container">
+
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()" style="background-color: #f8f8f8; background-size: cover;">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 48 48">
+                <path d="M 5.5 9 A 1.50015 1.50015 0 1 0 5.5 12 L 42.5 12 A 1.50015 1.50015 0 1 0 42.5 9 L 5.5 9 z M 5.5 22.5 A 1.50015 1.50015 0 1 0 5.5 25.5 L 42.5 25.5 A 1.50015 1.50015 0 1 0 42.5 22.5 L 5.5 22.5 z M 5.5 36 A 1.50015 1.50015 0 1 0 5.5 39 L 42.5 39 A 1.50015 1.50015 0 1 0 42.5 36 L 5.5 36 z"></path>
+            </svg>
+        </button>
+        <div class="menu" id="menu">
+            <ul>
+                <li onclick="redirectToOption('/questions')">Questions</li>
+                <li onclick="redirectToOption('/tags')">Tags</li>
+                <li onclick="redirectToOption('/users')">Users</li>
+            </ul>
+        </div>
+    </div>
     <a th:href="@{/}" class="logo" style="font-family:sans-serif;">
         <svg aria-hidden="true" class="svg-icon iconLogoGlyphMd native native" width="28" height="28"
              viewBox="0 0 32 37">
@@ -233,25 +248,36 @@
         </svg>
         Stack<strong style="font-family:sans-serif;">overflow</strong>
     </a>
-    <div class="menu-container">
-        <button class="menu-button" onclick="toggleMenu()">Menu</button>
-        <div class="menu" id="menu">
-            <ul>
-                <li onclick="redirectToOption('/questions')">Questions</li>
-                <li onclick="redirectToOption('/tags')">Tags</li>
-                <li onclick="redirectToOption('/users')">Users</li>
-            </ul>
-        </div>
-    </div>
-    <button class="About-button">About</button>
 
-    <form th:action="@{/search}" method="get" class="search-form">
-        <input type="text" th:name="q" class="search-input" placeholder="Search..." th:value="${q}">
+    <span sec:authorize="isAuthenticated()">
+        <span th:if="${@userInfoService.answers}">
+            <form th:action="@{'/answers/' + ${@userInfoService.currentUser().id}}">
+                <button type="submit"  class="About-button" style="background-color: #f8f8f8">
+                <img src="/inbox.png" alt="inbox" width="32px" height="32px">
+                </button>
+            </form>
+        </span>
+    </span>
+
+    <form action="/search" method="get" class="search-form">
+        <input
+                type="text"
+                th:value="${q}"
+                name="q"
+                class="search-input"
+                placeholder="Search..."
+        />
     </form>
-
-            <a th:href="@{/profile}" class="login-button">Profile</a>
-            <a th:href="@{/logout}" class="login-button">Logout</a>
-
+    <span th:if="${not #authorization.expression('isAuthenticated()')}">
+        <a th:href="@{/login}" class="login-button">Login</a>
+        <a th:href="@{/register}" class="signup-button">Sign Up</a>
+    </span>
+    <span sec:authorize="isAuthenticated()">
+        <a th:href="@{'/users/' + ${@userInfoService.currentUser().id}}" class="login-button" style="background-color: #f8f8f8">
+            <img src="profile.png" alt="Profile Icon" width="32px" height="32px"/></a>
+        <a th:href="@{/logout}" class="login-button" style="background-color: #f8f8f8">
+            <img src="/logout.png" alt="Logout Icon" width="32px" height="32px"/></a>
+    </span>
 </div>
 
 <div class="container">
