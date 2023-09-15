@@ -110,7 +110,7 @@ public class UserController {
 
         if (user.isPresent()) {
             String name = user.get().getName();
-            String avatarUrl = "https://via.placeholder.com/100/007bff/ffffff?text=";
+                String avatarUrl = "https://via.placeholder.com/100/007bff/ffffff?text=";
 
             if (name != null && !name.isEmpty()) {
                 avatarUrl += name.charAt(0);

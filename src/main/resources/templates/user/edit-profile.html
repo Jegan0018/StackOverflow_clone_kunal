@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Update Profile</title>
     <style>
         * {
             margin: 0;
@@ -234,7 +234,7 @@
 
     <!-- Display the avatar -->
     <div class="user-avatar">
-        <img src="#" alt="User Avatar" id="avatarImage">
+        <img th:src="'https://via.placeholder.com/100/007bff/ffffff?text=' + ${user.name[0].toUpperCase()}" alt="User Avatar">
     </div>
 
     <form th:action="@{'/users/save/' + ${user.id}}" method="post">
@@ -250,12 +250,6 @@
         <input type="submit" value="Save">
     </form>
 
-    <script>
-        // Get the avatar URL from the model
-        var avatarUrl = "[[@{avatarUrl}]]";
-        var avatarImage = document.getElementById("avatarImage");
-        avatarImage.src = avatarUrl;
-    </script>
 </div>
 
 <script>

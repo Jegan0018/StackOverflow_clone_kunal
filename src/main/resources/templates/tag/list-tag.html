@@ -13,11 +13,11 @@
        body {
             font-family: 'Arial', sans-serif;
             background-color: #f7f7f7;
-<!--            margin: 0;-->
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             flex-direction: column;
             padding-top:6%;
+            height: 100vh;
         }
 
 
@@ -167,8 +167,8 @@ margin-right: 15%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    margin-right: 20px;
+
+    margin: 20px 80px;
 }
 
 .filter-search {
@@ -224,19 +224,19 @@ margin-right: 15%;
     content: "";
 }
 
-.pg-btn{
-color: orange;
-    background-color: #e0e0e0;
+<!--.pg-btn{-->
+<!--color: orange;-->
+<!--    background-color: #e0e0e0;-->
 
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 0 8px;
-    padding: 10px 20px;
-}
-.pg-btn:hover{
-background-color: orange;
-color: black;
-}
+<!--    border-radius: 8px;-->
+<!--    cursor: pointer;-->
+<!--    margin: 0 8px;-->
+<!--    padding: 10px 20px;-->
+<!--}-->
+<!--.pg-btn:hover{-->
+<!--background-color: orange;-->
+<!--color: black;-->
+<!--}-->
 
 .tag-boxes {
     display: flex;
@@ -255,13 +255,47 @@ color: black;
 
 }
 
-#nxt{
-margin-bottom: 5rem;
-float: right;
+<!--#nxt{-->
+<!--margin-bottom: 5rem;-->
+<!--float: right;-->
+<!--}-->
+<!--#pre{-->
+<!--margin-bottom: 5rem;-->
+<!--}-->
+
+
+.page-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0; /* Add some margin to separate it from the content */
 }
-#pre{
-margin-bottom: 5rem;
+
+
+#nxt {
+    margin-bottom: 5rem;
+    float: right;
+    margin-left: 10px; /* Add a margin to separate it from the Previous button */
 }
+
+#pre {
+    margin-bottom: 5rem;
+    float: left; /* Change to float left to align with Next button */
+}
+
+.pg-btn {
+    color: orange;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 8px;
+    padding: 10px 20px;
+}
+
+.pg-btn:hover {
+    background-color: orange;
+    color: black;
+}
+
     </style>
 </head>
 <body>
@@ -307,8 +341,6 @@ margin-bottom: 5rem;
     </span>
 </div>
 <!-- Filters Section -->
-<br>
-<br>
 <div class="filters-container">
     <div class="filter-search">
         <form th:action="@{/tags}" method="get">
@@ -359,10 +391,8 @@ margin-bottom: 5rem;
         </form>
     </div>
 </div>
-    <br>
-    <br>
 <div class="tag-con">
-<!-- Tag Boxes Section -->
+
 <div class="tag-boxes">
     <span th:each="entry, status : ${questionsCountByTag}">
         <span th:if="${entry.value != 0}">
@@ -379,30 +409,58 @@ margin-bottom: 5rem;
     </span>
 </div>
 </div>
-<span class="page-item" th:if="${currentPage > 1}">
-<form th:action="@{/tags}">
-    <span th:if="${tab}">
-        <input type="hidden" name="tab" th:value="${tab}">
+<!--<span class="page-item" th:if="${currentPage > 1}">-->
+<!--<form th:action="@{/tags}">-->
+<!--    <span th:if="${tab}">-->
+<!--        <input type="hidden" name="tab" th:value="${tab}">-->
+<!--    </span>-->
+<!--    <span th:if="${tagSearch}">-->
+<!--        <input type="hidden" name="tagSearch" th:value="${tagSearch}">-->
+<!--    </span>-->
+<!--    <input type="hidden" name="page" th:value="${currentPage - 1}">-->
+<!--    <input type="submit" value="Previous" class="pg-btn" id="pre">-->
+<!--</form>-->
+<!--</span>-->
+<!--<span class="page-item" th:if="${currentPage < totalPages}">-->
+<!--<form th:action="@{/tags}">-->
+<!--    <span th:if="${tab}">-->
+<!--        <input type="hidden" name="tab" th:value="${tab}">-->
+<!--    </span>-->
+<!--    <span th:if="${tagSearch}">-->
+<!--        <input type="hidden" name="tagSearch" th:value="${tagSearch}">-->
+<!--    </span>-->
+<!--    <input type="hidden" name="page" th:value="${currentPage + 1}">-->
+<!--    <input type="submit" value="Next" class="pg-btn" id="nxt">-->
+<!--</form>-->
+<!--</span>-->
+
+<div class="page-navigation">
+    <span class="page-item" th:if="${currentPage > 1}">
+        <form th:action="@{/tags}">
+            <span th:if="${tab}">
+                <input type="hidden" name="tab" th:value="${tab}">
+            </span>
+            <span th:if="${tagSearch}">
+                <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+            </span>
+            <input type="hidden" name="page" th:value="${currentPage - 1}">
+            <input type="submit" value="Previous" class="pg-btn" id="pre">
+        </form>
     </span>
-    <span th:if="${tagSearch}">
-        <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+    <span class="page-item" th:if="${currentPage < totalPages}">
+        <form th:action="@{/tags}">
+            <span th:if="${tab}">
+                <input type="hidden" name="tab" th:value="${tab}">
+            </span>
+            <span th:if="${tagSearch}">
+                <input type="hidden" name="tagSearch" th:value="${tagSearch}">
+            </span>
+            <input type="hidden" name="page" th:value="${currentPage + 1}">
+            <input type="submit" value="Next" class="pg-btn" id="nxt">
+        </form>
     </span>
-    <input type="hidden" name="page" th:value="${currentPage - 1}">
-    <input type="submit" value="Previous" class="pg-btn" id="pre">
-</form>
-</span>
-<span class="page-item" th:if="${currentPage < totalPages}">
-<form th:action="@{/tags}">
-    <span th:if="${tab}">
-        <input type="hidden" name="tab" th:value="${tab}">
-    </span>
-    <span th:if="${tagSearch}">
-        <input type="hidden" name="tagSearch" th:value="${tagSearch}">
-    </span>
-    <input type="hidden" name="page" th:value="${currentPage + 1}">
-    <input type="submit" value="Next" class="pg-btn" id="nxt">
-</form>
-</span>
+</div>
+
 <footer id="footer" class="site-footer js-footer" role="contentinfo">
     <div class="site-footer--container">
         <div class="site-footer--row">
