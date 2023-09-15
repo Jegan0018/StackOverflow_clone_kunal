@@ -101,6 +101,93 @@
             margin-left: 10px;
             min-width: 500px;
         }
+
+
+        #footer {
+        background-color: grey;
+        padding:5px 20px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+
+    .site-footer--container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .site-footer--row {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    a {
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+
+    #showContributors {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    #showContributors:hover {
+        color: #ff5733;
+    }
+
+    #userDetails p {
+        margin: 5px 0;
+    }
+
+     .answer-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 50%;
+            margin: auto;
+        }
+
+        .answer-details {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .answer-buttons {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .view-full-answer-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .verified {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -163,25 +250,50 @@
 
 <br>
 <br>
-<span th:each="tempAnswers: ${answers}">
-    Answer Id: <span th:text="${tempAnswers.id}"></span><br>
-    Question owner:<span th:text="${tempAnswers.question.user.name}"></span><br>
-    Answer owner:<span th:text="${tempAnswers.user.name}"></span><br>
-    <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post">
-        <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">
-        <input type="hidden" name="verify" th:value="ok">
-        <button type="submit">Accept</button>
-    </form>
-    <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post">
-        <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">
-        <input type="hidden" name="verify" value="no">
-        <button type="submit">Ignore</button>
-    </form>
+<!--<span th:each="tempAnswers: ${answers}">-->
+<!--    Answer Id: <span th:text="${tempAnswers.id}"></span><br>-->
+<!--    Question owner:<span th:text="${tempAnswers.question.user.name}"></span><br>-->
+<!--    Answer owner:<span th:text="${tempAnswers.user.name}"></span><br>-->
+<!--    <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post">-->
+<!--        <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">-->
+<!--        <input type="hidden" name="verify" th:value="ok">-->
+<!--        <button type="submit">Accept</button>-->
+<!--    </form>-->
+<!--    <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post">-->
+<!--        <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">-->
+<!--        <input type="hidden" name="verify" value="no">-->
+<!--        <button type="submit">Ignore</button>-->
+<!--    </form>-->
+<!--    <form th:action="@{'/answer/viewAnswer/' + ${tempAnswers.id}}" method="post">-->
+<!--        <button type="submit">view full answer</button>-->
+<!--    </form>-->
+<!--    Verified:<span th:text="${tempAnswers.verified}"></span><br><br>-->
+<!--</span>-->
+<div class="answer-container" th:each="tempAnswers: ${answers}">
+    <div class="answer-details">
+        Answer Id: <span th:text="${tempAnswers.id}"></span><br>
+        Question owner:<span th:text="${tempAnswers.question.user.name}"></span><br>
+        Answer owner:<span th:text="${tempAnswers.user.name}"></span><br>
+    </div>
+    <div class="answer-buttons">
+        <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post" style="display: inline-block;">
+            <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">
+            <input type="hidden" name="verify" th:value="ok">
+            <button type="submit">Accept</button>
+        </form>
+        <form th:action="@{'/answer/verify/' + ${tempAnswers.id}}" method="post" style="display: inline-block;">
+            <input type="hidden" name="userId" th:value="${tempAnswers.question.user.id}">
+            <input type="hidden" name="verify" value="no">
+            <button type="submit">Ignore</button>
+        </form>
+    </div>
     <form th:action="@{'/answer/viewAnswer/' + ${tempAnswers.id}}" method="post">
-        <button type="submit">view full answer</button>
+        <button class="view-full-answer-btn" type="submit">View Full Answer</button>
     </form>
-    Verified:<span th:text="${tempAnswers.verified}"></span><br><br>
-</span>
+    <div class="verified">
+        Verified:<span th:text="${tempAnswers.verified}"></span><br><br>
+    </div>
+</div>
 
 <script>
     function toggleMenu() {
@@ -193,5 +305,29 @@
       window.location.href = option;
     }
 </script>
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+    <div class="site-footer--container">
+        <div class="site-footer--row">
+            <a th:href="@{/}" class="logo">StackOverflow</a>
+            <a th:href="@{/questions}">Questions</a>
+            <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
+        </div>
+        <div class="site-footer--row">
+            <p>This is StackOverflow clone project contributed by users <a href="#" id="showContributors">(see contributors)</a></p>
+            <div id="userDetails" style="display:none;">
+                <p>Kunal Raj - kunalraj0106@gmail.com</p>
+                <p>Murthy - murthyk7592@gmail.com</p>
+                <p>Jegan - jeganpandian001@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    document.getElementById('showContributors').addEventListener('click', function() {
+       document.getElementById('userDetails').style.display = 'block';
+    });
+</script>
+
+
 </body>
 </html>

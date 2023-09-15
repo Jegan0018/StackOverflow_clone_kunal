@@ -156,42 +156,33 @@
     #userDetails p {
         margin: 5px 0;
     }
+     /* Add this CSS to your existing styles */
 
 .answer-form {
-    width:60%;
-
-    margin: auto;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 60%;
+    margin: 20px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.question-info, .answer-details {
-    margin-bottom: 20px;
-}
-
-label {
+.answer-form label {
     font-weight: bold;
 }
 
-span, textarea {
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    padding: 8px;
-    width: 100%;
+.answer-form textarea {
+    height: 150px;
+    resize: none;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box;
+    padding: 8px;
     font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-textarea {
-    height: 150px;
-}
-
-input[type="submit"] {
+.answer-form input[type="submit"] {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -199,11 +190,14 @@ input[type="submit"] {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    margin-top: 10px;
 }
 
-input[type="submit"]:hover {
+.answer-form input[type="submit"]:hover {
     background-color: #45a049;
 }
+
+
 
 
 
@@ -295,7 +289,10 @@ input[type="submit"]:hover {
         <textarea id="theAnswer" name="theAnswer" th:text="${tempAnswer.theAnswer}" required></textarea><br>
     </div>
     <br>
+
     <input type="submit" value="save changes">
+    <input type="submit" value="Cancel changes">
+
 </form>
 
 <footer id="footer" class="site-footer js-footer" role="contentinfo">
@@ -320,5 +317,6 @@ input[type="submit"]:hover {
        document.getElementById('userDetails').style.display = 'block';
     });
 </script>
+
 </body>
 </html>

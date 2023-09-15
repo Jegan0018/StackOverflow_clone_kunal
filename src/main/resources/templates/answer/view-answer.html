@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-                * {
+        * {
             margin: 0;
             box-sizing: border-box;
         }
@@ -100,6 +100,102 @@
             margin-left: 10px;
             min-width: 500px;
         }
+
+        #footer {
+            background-color: grey;
+            padding: 5px 20px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .site-footer--container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .site-footer--row {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        #showContributors {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #showContributors:hover {
+            color: #ff5733;
+        }
+
+        #userDetails p {
+            margin: 5px 0;
+        }
+
+        .main-content {
+            margin-top: 100px;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+            margin: 5% 35%;
+        }
+
+        .question-info,
+        .answer-details {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        button {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .accept-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .ignore-button {
+            background-color: #f44336;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -160,33 +256,40 @@
     </span>
 </div>
 
-<span sec:authorize="isAuthenticated()">
-        <span th:if="${@userInfoService.answers}">
-            <form th:action="@{'/answers/' + ${@userInfoService.currentUser().id}}">
-                <button type="submit"  class="About-button" style="background-color: red;">
-                answers
-                </button>
+
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="question-info">
+        <h2>Question Title:</h2>
+        <p th:text="${answer.question.title}"></p>
+        <h2>Question Problem:</h2>
+        <p th:text="${answer.question.problem}"></p>
+    </div>
+
+    <div class="answer-details">
+        <h2>Answer:</h2>
+        <p th:text="${answer.theAnswer}"></p>
+        <h2>Answered By:</h2>
+        <p th:text="${answer.user.name}"></p>
+    </div>
+
+    <div class="answer-actions">
+        <div class="button-container">
+            <form th:action="@{'/answer/verify/' + ${answer.id}}" method="post">
+                <input type="hidden" name="questionId" th:value="${answer.question.id}">
+                <input type="hidden" name="userId" th:value="${answer.question.user.id}">
+                <input type="hidden" name="verify" th:value="ok">
+                <button type="submit" class="accept-button">Accept</button>
             </form>
-        </span>
-</span>
-
-
-Question title : <span th:text="${answer.question.title}"></span><br>
-Question problem : <span th:text="${answer.question.problem}"></span><br><br>
- Answer : <span th:text="${answer.theAnswer}"></span><br><br>
-Answered By : <span th:text="${answer.user.name}"></span><br><br>
-
-<form th:action="@{'/answer/verify/' + ${answer.id}}" method="post">
-    <input type="hidden" name="questionId" th:value="${answer.question.id}">
-    <input type="hidden" name="userId" th:value="${answer.question.user.id}">
-    <input type="hidden" name="verify" th:value="ok">
-    <button type="submit">Accept</button>
-</form>
-<form th:action="@{'/answer/verify/' + ${answer.id}}" method="post">
-    <input type="hidden" name="userId" th:value="${answer.question.user.id}">
-    <input type="hidden" name="verify" value="no">
-    <button type="submit">Ignore</button>
-</form>
+            <form th:action="@{'/answer/verify/' + ${answer.id}}" method="post">
+                <input type="hidden" name="userId" th:value="${answer.question.user.id}">
+                <input type="hidden" name="verify" value="no">
+                <button type="submit" class="ignore-button">Ignore</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -199,5 +302,29 @@ Answered By : <span th:text="${answer.user.name}"></span><br><br>
         window.location.href = option;
     }
 </script>
+
+<footer id="footer" class="site-footer js-footer" role="contentinfo">
+    <div class="site-footer--container">
+        <div class="site-footer--row">
+            <a th:href="@{/}" class="logo">StackOverflow</a>
+            <a th:href="@{/questions}">Questions</a>
+            <a th:href="@{mailto:kunalraj0106@gmail.com}">Contact Us</a>
+        </div>
+        <div class="site-footer--row">
+            <p>This is StackOverflow clone project contributed by users <a href="#" id="showContributors">(see contributors)</a></p>
+            <div id="userDetails" style="display:none;">
+                <p>Kunal Raj - kunalraj0106@gmail.com</p>
+                <p>Murthy - murthyk7592@gmail.com</p>
+                <p>Jegan - jeganpandian001@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    document.getElementById('showContributors').addEventListener('click', function() {
+       document.getElementById('userDetails').style.display = 'block';
+    });
+</script>
+
 </body>
 </html>
