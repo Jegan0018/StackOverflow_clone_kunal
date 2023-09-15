@@ -37,7 +37,7 @@ public class QuestionController {
 
     @GetMapping("/")
     public String home(Model model) {
-        
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user= userService.findByUsername(authentication.getName());
         List<Question> recent10Question = questionService.findTop10ByOrderByCreatedAtDesc();
@@ -57,11 +57,11 @@ public class QuestionController {
         List<Question> questions=new ArrayList<>();
         questions=questionService.findAll();
         questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
-
         model.addAttribute("tab",tab);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", questionPage.getTotalPages());
         model.addAttribute("questions", questionPage);
+        model.addAttribute("questionsSize", questions.size());
         model.addAttribute("q",tagSearch);
         return "all-question";
     }
@@ -188,7 +188,6 @@ public class QuestionController {
                 model.addAttribute("questions", questions);
                 model.addAttribute("q", searchArray[0]);
             } else if (!(searchArray[0].endsWith("\"")) && !(searchArray[0].endsWith("]")) && !(searchArray[0].startsWith("user:"))) {
-                System.out.println("Question Search " + searchArray[0]);
                 questions = questionService.findQuestionsBySearch(searchArray[0]);
                 model.addAttribute("questions", questions);
                 model.addAttribute("q", searchArray[0]);
@@ -201,11 +200,19 @@ public class QuestionController {
                 model.addAttribute("tagName", tagName);
                 model.addAttribute("q", searchArray[0]);
             } else if(searchArray[0].startsWith("user:")) {
-                int userId = Integer.parseInt(searchArray[0].substring(5, searchArray[0].length()));
-                User user=userService.findById(userId);
-                questions = questionService.findByUser(user);
-                model.addAttribute("questions", questions);
-                model.addAttribute("q", searchArray[0]);
+                if(searchArray[0].length()>5) {
+                    int userId = Integer.parseInt(searchArray[0].substring(5, searchArray[0].length()));
+                    User user=userService.findById(userId);
+                    questions = questionService.findByUser(user);
+                    model.addAttribute("questions", questions);
+                    model.addAttribute("q", searchArray[0]);
+                } else {
+                    questions=questionService.findAll();
+                    questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
+                    model.addAttribute("questions", questions);
+                    model.addAttribute("q", searchArray[0]);
+                }
+
             }
         }
         questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
@@ -214,6 +221,7 @@ public class QuestionController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", questionPage.getTotalPages());
         model.addAttribute("questions",questionPage);
+        model.addAttribute("questionsSize", questions.size());
 
         return "all-question";
     }
@@ -229,7 +237,7 @@ public class QuestionController {
         model.addAttribute("questions", questions);
         return "all-question";
     }
-    
+
     @PostMapping("/question/upvote/{questionId}/{voteType}")
     public String upvote(@PathVariable Long questionId, @PathVariable VoteType voteType, Model model) {
         Question question = questionService.findById(questionId);

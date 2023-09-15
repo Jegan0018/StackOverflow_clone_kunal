@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <style>
-
-
         * {
         margin: 0;
 
@@ -20,7 +18,7 @@
             justify-content: center;
             min-height: 40vh;
             flex-direction: column;
-            padding-top:2%;
+            padding-top:6%;
         }
 
         .container {
@@ -31,7 +29,7 @@
             justify-content: center;
             min-height: 40vh;
             flex-direction: column;
-            padding:2% 20%;
+            padding:5%;
         }
 
 
@@ -139,7 +137,7 @@
         }
 
 
-        .question-problem {
+       .question-problem {
          font-size: 16px;
          color: #555;
          margin-bottom: 15px;
@@ -151,9 +149,15 @@
          margin-bottom: 15px;
        }
 
+       .question-answersCount {
+        font-size: 16px;
+         color: #555;
+         margin-bottom: 15px;
+       }
+
 
       .question-tags {
-          font-size: 14px;
+         font-size: 14px;
           margin-top: 10px;
       }
 
@@ -257,6 +261,19 @@
         margin-right: 10px;
         margin-left:30%;
     }
+    .pagination {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .page-item {
+        display: inline-block;
+        margin: 0 0px;
+    }
+    .filter-tabs form {
+        display: inline-block;
+        margin-left: 10px;
+    }
     .filter-tabs{
            display: flex;
            flex-direction: row-reverse;
@@ -274,8 +291,6 @@
     .filter-tabs button:hover, .filter-tabs a:hover {
         background-color: #ccc;
     }
-
-
 
     </style>
 </head>
@@ -326,6 +341,10 @@
 <div class="container">
     <h1 th:if="${tagName != null}">Questions Tagged [<span th:text="${tagName}"></span>]
     </h1>
+    <h1 th:unless="${tagName != null}">All Questions
+
+    </h1>
+    <span th:text="${questionsSize + ' Questions'}"></span>
     <a th:href="@{/new-question}" class="lnk ask-question-link">Ask Question</a>
     <div class="filter-tabs">
         <form th:action="@{/search}" method="get">
@@ -367,6 +386,7 @@
             <h2 class="question-title" th:text="${tempQuestion.title}"></h2>
             <p class="question-problem" th:text="${tempQuestion.problem}"></p>
             <p class="question-voteCount" th:text="${tempQuestion.voteCount} + ' votes'"></p>
+            <p class="question-answersCount" th:text="${tempQuestion.answers.size() + ' answers'}"></p>
             <div class="question-tags">
                 <p><strong>Tags:</strong></p>
                 <ul>
@@ -376,10 +396,13 @@
                 </ul>
             </div>
             <a th:href="@{'/question/' + ${tempQuestion.id}}" class="read-more">Read more</a>
+            <span style="float: right;">
+                Asked By : <a th:href="@{'/users/' + ${tempQuestion.user.id}}"><span th:text="${tempQuestion.user.name}"></span></a>
+            </span>
         </div>
     </span>
-</div>
-<div>
+<!--</div>-->
+<div class="pagination">
     <span class="page-item" th:if="${currentPage > 1}">
         <span th:if="${param.q != null}" class="pagination-form">
             <form th:action="@{/search}">
@@ -433,6 +456,7 @@
         </form>
         </span>
     </span>
+</div>
 </div>
 
 <footer id="footer" class="site-footer js-footer" role="contentinfo">
