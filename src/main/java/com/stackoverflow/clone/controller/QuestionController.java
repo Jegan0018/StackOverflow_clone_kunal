@@ -53,10 +53,14 @@ public class QuestionController {
                             @RequestParam(value = "q", required = false) String tagSearch,
                             @RequestParam(defaultValue = "1") int page) {
         Page<Question> questionPage = null;
-        Pageable pageable = PageRequest.of(page - 1, 2);
+        Pageable pageable = PageRequest.of(page - 1, 6);
         List<Question> questions=new ArrayList<>();
         questions=questionService.findAll();
         questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
+
+        for (Question question : questionPage){
+            question.setVerifiedCount(questionService.findQuestionWithVerifiedAnswerCount(question));
+        }
         model.addAttribute("tab",tab);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", questionPage.getTotalPages());
@@ -145,7 +149,7 @@ public class QuestionController {
                             @RequestParam(value = "q", required = false) String q,
                             @RequestParam(defaultValue = "1") int page) {
         Page<Question> questionPage = null;
-        Pageable pageable = PageRequest.of(page - 1, 2);
+        Pageable pageable = PageRequest.of(page - 1, 6);
 
         String[] searchArray = q.split("[,\\s]+");
 
@@ -217,6 +221,9 @@ public class QuestionController {
         }
         questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
 
+        for (Question question : questionPage){
+            question.setVerifiedCount(questionService.findQuestionWithVerifiedAnswerCount(question));
+        }
         model.addAttribute("tab", tab);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", questionPage.getTotalPages());

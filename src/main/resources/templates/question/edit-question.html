@@ -268,7 +268,7 @@
     </span>
     <span sec:authorize="isAuthenticated()">
         <a th:href="@{'/users/' + ${@userInfoService.currentUser().id}}" class="login-button" style="background-color: #f8f8f8">
-            <img src="profile.png" alt="Profile Icon" width="32px" height="32px"/></a>
+            <img src="/profile.png" alt="Profile Icon" width="32px" height="32px"/></a>
         <a th:href="@{/logout}" class="login-button" style="background-color: #f8f8f8">
             <img src="/logout.png" alt="Logout Icon" width="32px" height="32px"/></a>
     </span>

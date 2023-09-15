@@ -26,4 +26,11 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     List<Question> findFirst5ByUserOrderByCreatedAtDesc(User user);
 
 
+    @Query("SELECT COUNT(a.id) " +
+            "FROM Question q " +
+            "LEFT JOIN q.answers a " +
+            "WHERE q.id = :questionId " +
+            "AND a.verified = 'ok'")
+    Long findQuestionWithVerifiedAnswerCount(@Param("questionId") Long questionId);
+//    List<Question> findQuestionWithVerifiedAnswerCount();
 }

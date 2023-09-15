@@ -315,7 +315,9 @@
                     <span sec:authorize="isAuthenticated()">
                         <span th:if="${user.username == #authentication.principal.username}">
                             <form th:action="@{'/users/edit/' + ${user.id}}" method="post">
-                                <input type="submit" value="Update profile info">
+                                <button type="submit" style="background-color: #f5f5f5; border: none;">
+                                <img src="/edit.png" alt="edit" width="30px" height="30px">
+                                </button>
                             </form>
                         </span>
                     </span>

@@ -55,6 +55,9 @@ public class Question {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
+    @Transient
+    private Long verifiedCount;
+
     public Question() {
     }
 
@@ -147,5 +150,13 @@ public class Question {
 
     public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
+    }
+
+    public Long getVerifiedCount() {
+        return verifiedCount;
+    }
+
+    public void setVerifiedCount(Long verifiedCount) {
+        this.verifiedCount = verifiedCount;
     }
 }

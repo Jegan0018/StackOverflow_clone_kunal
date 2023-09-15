@@ -138,4 +138,8 @@ public class QuestionServiceImpl implements QuestionService {
         return questionPage;
     }
 
+    public Long findQuestionWithVerifiedAnswerCount(Question question) {
+        return questionRepository.findQuestionWithVerifiedAnswerCount(question.getId());
+    }
+
 }

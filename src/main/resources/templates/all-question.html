@@ -10,6 +10,17 @@
 
         box-sizing: border-box;
       }
+      h1[th:if] {
+            display: inline;
+        }
+
+        h1[th:unless] {
+            display: none;
+        }
+        .title {
+            display: flex;
+            justify-content: space-between;
+        }
        body {
             font-family: 'Arial', sans-serif;
             background-color: #f7f7f7;
@@ -124,10 +135,7 @@
            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
            width: auto;
            padding: 20px;
-
         }
-
-
 
         .question-title {
            font-size: 20px;
@@ -353,12 +361,14 @@
 </div>
 
 <div class="container">
-    <h1 th:if="${tagName != null}">Questions Tagged [<span th:text="${tagName}"></span>]
-    </h1>
-    <h1 th:unless="${tagName != null}">All Questions
-
-    </h1>
-    <span th:text="${questionsSize + ' Questions'}"></span>
+    <span class="title">
+        <h1 th:if="${tagName != null}">Questions Tagged [<span th:text="${tagName}"></span>]
+        </h1>
+        <h1 th:unless="${tagName != null}">All Questions
+        </h1>
+        <b><span th:text="${questionsSize + ' results'}"></span></b>
+    </span>
+    <br>
     <a th:href="@{/new-question}" class="lnk ask-question-link">Ask Question</a>
     <br>
     <div class="filter-tabs">
@@ -371,7 +381,12 @@
                     class="search-input"
                     placeholder="Search..."
             />
-            <button type="submit">New</button>
+            <span th:unless="${tab == 'new'}">
+                <button type="submit">New</button>
+            </span>
+            <span th:if="${tab == 'new'}">
+                <button type="submit" style="background-color: orange;">New</button>
+            </span>
         </form>
         <form th:action="@{/search}" method="get">
             <input
@@ -382,7 +397,12 @@
                     placeholder="Search..."
             />
             <input type="hidden" name="tab" value="unanswered">
-            <button type="submit">Unanswered</button>
+            <span th:unless="${tab == 'unanswered'}">
+                <button type="submit">Unanswered</button>
+            </span>
+            <span th:if="${tab == 'unanswered'}">
+                <button type="submit" style="background-color: orange;">Unanswered</button>
+            </span>
         </form>
         <form th:action="@{/search}" method="get">
             <input
@@ -393,7 +413,12 @@
                     placeholder="Search..."
             />
             <input type="hidden" name="tab" value="score">
-            <button type="submit">Score</button>
+            <span th:unless="${tab == 'score'}">
+                <button type="submit">Score</button>
+            </span>
+            <span th:if="${tab == 'score'}">
+                <button type="submit" style="background-color: orange;">Score</button>
+            </span>
         </form>
     </div>
     <span th:each="tempQuestion : ${questions}">
@@ -401,7 +426,10 @@
             <h2 class="question-title" th:text="${tempQuestion.title}"></h2>
             <p class="question-problem" th:text="${tempQuestion.problem}"></p>
             <p class="question-voteCount" th:text="${tempQuestion.voteCount} + ' votes'"></p>
-            <p class="question-answersCount" th:text="${tempQuestion.answers.size() + ' answers'}"></p>
+            <span class="question-answersCount" th:text="${tempQuestion.answers.size() + ' answers'}"></span>
+            <span th:if="${tempQuestion.verifiedCount}">
+            <span class="question-answersCount" th:text="${tempQuestion.verifiedCount} + ' Verify answers'" style="margin-left: 10px; color: green;"></span>
+                </span>
             <div class="question-tags">
                 <p><strong>Tags:</strong></p>
                 <span th:each="tag, tagStat : ${tempQuestion.tags}">
@@ -410,7 +438,7 @@
             </div>
             <a th:href="@{'/question/' + ${tempQuestion.id}}" class="read-more">Read more</a>
             <span style="float: right;">
-                Asked By : <a th:href="@{'/users/' + ${tempQuestion.user.id}}"><span th:text="${tempQuestion.user.name}"></span></a>
+                Asked By : <b><a th:href="@{'/users/' + ${tempQuestion.user.id}}"><span th:text="${tempQuestion.user.name}"></span></a></b>
             </span>
         </div>
     </span>

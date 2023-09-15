@@ -36,4 +36,6 @@ public interface QuestionService {
     void createVote(Vote vote);
 
     Page<Question> searchAndSortByNewOrUnansweredOrScore(List<Question> questions, String tab, Pageable pageable);
+
+    Long findQuestionWithVerifiedAnswerCount(Question question);
 }
