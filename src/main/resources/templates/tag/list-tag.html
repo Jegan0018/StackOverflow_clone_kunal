@@ -326,14 +326,15 @@ margin-right: 15%;
     </a>
 
     <span sec:authorize="isAuthenticated()">
-        <span th:if="${@userInfoService.answers}">
-            <form th:action="@{'/answers/' + ${@userInfoService.currentUser().id}}">
-                <button type="submit"  class="About-button" style="background-color: #f8f8f8">
-                <img src="/inbox.png" alt="inbox" width="32px" height="32px">
-                </button>
-            </form>
-        </span>
-    </span>
+                <form th:action="@{'/answers/' + ${@userInfoService.currentUser().id}}">
+                    <button type="submit" class="About-button" style="background-color: #f8f8f8; position: relative;">
+                        <img src="/inbox.png" alt="inbox" width="32px" height="32px">
+                        <span th:if="${@userInfoService.answers}">
+                        <span style="position: absolute; color: white; size: 8px; width: 13px; height: 13px; background-color: red; border-radius: 50%;" th:text="${@userInfoService.answerCount()}"></span>
+                        </span>
+                    </button>
+                </form>
+            </span>
 
     <form action="/search" method="get" class="search-form">
         <input
@@ -352,7 +353,7 @@ margin-right: 15%;
         <a th:href="@{'/users/' + ${@userInfoService.currentUser().id}}" class="login-button" style="background-color: #f8f8f8">
             <img src="profile.png" alt="Profile Icon" width="32px" height="32px"/></a>
         <a th:href="@{/logout}" class="login-button" style="background-color: #f8f8f8">
-            <img src="/logout.png" alt="Logout Icon" width="32px" height="32px"/></a>
+            <img src="/logout.png" alt="Logout Icon" width="28px" height="28px"/></a>
     </span>
 </div>
 

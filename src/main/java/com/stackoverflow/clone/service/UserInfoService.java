@@ -46,4 +46,15 @@ public class UserInfoService {
         }
         return false;
     }
+    public int answerCount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            User user = userService.findByUsername(authentication.getName());
+            List<Answer> answers = answerService.findUnverifiedAnswersByUser(user);
+            if (answers != null) {
+                return answers.size();
+            }
+        }
+        return 0; // Return 0 if there are no unverified answers or if no user is authenticated.
+    }
 }
