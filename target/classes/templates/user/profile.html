@@ -213,8 +213,19 @@
             font-style: italic;
         }
 
+           .bordered-table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #ccc;
+    }
 
-
+    .bordered-table td, .bordered-table th {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+        button{
+        cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -280,9 +291,6 @@
         <div class="contentWrapper">
             <br>
             <div class="vcard">
-<!--                <div class="user-avatar">-->
-<!--                    <img src="https://lh3.googleusercontent.com/a/AEdFTp7r4e7q07kE3pG8EWTrhe1oq0j9WF17e-ex2X7GcA=k-s128" alt="User Avatar">-->
-<!--                </div>-->
                 <div class="user-avatar">
                     <img th:src="'https://via.placeholder.com/100/007bff/ffffff?text=' + ${user.name[0].toUpperCase()}" alt="User Avatar">
                 </div>
@@ -333,41 +341,59 @@
         <hr>
         <br>
         <span th:if="${topTags}">
-                Tags:
+                Top Tags:
+            <br>
+            <br>
+            <table class="bordered-table">
                 <span th:each="tag : ${topTags}">
-                    <form th:action="@{'/questions/user/' + ${user.id} + '/tagged/' + ${tag.name} }">
-                        <button type="submit">
-                            <span th:text="${tag.name}"></span>
-                        </button>
-                    </form>
+                    <tr>
+                        <td>
+                            <form th:action="@{'/questions/user/' + ${user.id} + '/tagged/' + ${tag.name} }">
+                                <button type="submit" style="background-color: rgba(91, 139, 222, 0.5); border: 0; color: rga(0, 63, 171); padding: 7px; border-radius: 10px;">
+                                    <span th:text="${tag.name}"></span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                 </span>
+            </table>
                 <br>
+            <hr>
             </span>
-        <hr>
+
         <div class="top-questions">
                 <span th:if="${topQuestion}">
-                    <div class="heading">Recent Question</div>
+                    <div class="heading">Recent Question :</div>
+                    <table class="bordered-table">
                     <span th:each="question : ${topQuestion}">
-                        <br>
+                        <tr>
+                        <td>
                         <a th:href="@{'/question/' + ${question.id}}">
-                            <span th:text="${question.title}"></span>
+                            <span th:text="${question.title}" style="color: rgb(12, 93, 232);"></span>
                         </a>
-                        <br>
+                             </td>
+                    </tr>
                     </span>
+                    </table>
                     <br>
-                    <a th:href="@{'/search?q=user%3A' + ${user.id}}">see all</a>
+                    <a th:href="@{'/search?q=user%3A' + ${user.id}}" style="border: 1px; border-radius: 5px;">see all</a>
+                    <br>
                 </span>
         </div>
         <hr>
         <div class="top-answers">
-            <div class="heading">Recent Answered Questions</div>
+            <div class="heading">Recent Answered Questions :</div>
+            <table class="bordered-table">
             <span th:each="answer : ${topAnswers}">
-                    <br>
+                     <tr>
+                        <td>
                     <a th:href="@{'/question/' + ${answer.question.id}}">
-                        <span th:text="${answer.question.title}"></span>
+                        <span th:text="${answer.question.title}" style="color: rgb(12, 93, 232);"></span>
                     </a>
-                    <br>
+                     </td>
+                    </tr>
                 </span>
+            </table>
             <br>
             <span th:unless="${allAnswers}">
                     <form th:href="@{'/users/' + ${user.id}}">
