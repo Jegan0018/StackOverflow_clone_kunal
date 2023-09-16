@@ -122,4 +122,15 @@ public class Answer {
     public void setVerified(String verified) {
         this.verified = verified;
     }
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
+    private Collection<Vote> votes;
+
+    public Collection<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Collection<Vote> votes) {
+        this.votes = votes;
+    }
 }

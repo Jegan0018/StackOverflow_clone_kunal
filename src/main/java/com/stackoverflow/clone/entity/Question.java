@@ -61,17 +61,6 @@ public class Question {
     public Question() {
     }
 
-//    public Question(String title, String problem, String exceptedSolution,
-//                    Set<Tag> tags, Timestamp createdAt, Timestamp updatedAt,
-//                    ) {
-//        this.title = title;
-//        this.problem = problem;
-//        this.exceptedSolution = exceptedSolution;
-//        this.tags = tags;
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//    }
-
     public Long getId() {
         return id;
     }
@@ -158,5 +147,16 @@ public class Question {
 
     public void setVerifiedCount(Long verifiedCount) {
         this.verifiedCount = verifiedCount;
+    }
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private Collection<Vote> votes;
+
+    public Collection<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Collection<Vote> votes) {
+        this.votes = votes;
     }
 }

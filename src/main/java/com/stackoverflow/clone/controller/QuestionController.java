@@ -39,7 +39,7 @@ public class QuestionController {
     public String home(Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user= userService.findByUsername(authentication.getName());
+        User user = userService.findByUsername(authentication.getName());
         List<Question> recent10Question = questionService.findTop10ByOrderByCreatedAtDesc();
         if (user != null) {
             model.addAttribute("user", user);
@@ -54,49 +54,56 @@ public class QuestionController {
                             @RequestParam(defaultValue = "1") int page) {
         Page<Question> questionPage = null;
         Pageable pageable = PageRequest.of(page - 1, 6);
-        List<Question> questions=new ArrayList<>();
-        questions=questionService.findAll();
-        questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
+        List<Question> questions = new ArrayList<>();
+        questions = questionService.findAll();
+        questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions, tab, pageable);
 
-        for (Question question : questionPage){
+        for (Question question : questionPage) {
             question.setVerifiedCount(questionService.findQuestionWithVerifiedAnswerCount(question));
         }
-        model.addAttribute("tab",tab);
+        model.addAttribute("tab", tab);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", questionPage.getTotalPages());
         model.addAttribute("questions", questionPage);
         model.addAttribute("questionsSize", questions.size());
-        model.addAttribute("q",tagSearch);
+        model.addAttribute("q", tagSearch);
         return "all-question";
     }
 
 
     @GetMapping("/new-question")
-    public String newQuestion(Model model){
+    public String newQuestion(Model model) {
         Question question = new Question();
-        model.addAttribute("question",question);
+        model.addAttribute("question", question);
         return "question/new-question";
     }
 
     @PostMapping("/save")
     public String saveQuestion(@ModelAttribute("question") Question question,
+                               @RequestParam(value = "voteCount", required = false) Integer voteCount,
                                @RequestParam(value = "tagNames", required = false) String tagNames) {
-        if (question.getId()!=null){
+        if (question.getId() != null) {
             question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user= userService.findByUsername(authentication.getName());
+        User user = userService.findByUsername(authentication.getName());
         Set<Tag> tags = tagService.findOrCreateTag(tagNames);
 
+        if (voteCount != null) {
+            question.setVoteCount(voteCount);
+        }
+        if (voteCount == null) {
+            question.setVoteCount(0);
+        }
         question.setUser(user);
         question.setTags(tags);
         questionService.save(question);
-        return "redirect:/question/"+question.getId();
+        return "redirect:/question/" + question.getId();
     }
 
     @GetMapping("/question/{questionId}")
     public String viewQuestion(@PathVariable("questionId") Long questionId,
-                               Model model){
+                               Model model) {
         Question question = questionService.findById(questionId);
         List<Answer> answers = answerService.findByQuestionId(questionId);
         Answer answer = new Answer();
@@ -107,7 +114,7 @@ public class QuestionController {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
-            User user= userService.findByUsername(authentication.getName());
+            User user = userService.findByUsername(authentication.getName());
             Vote existingVote = questionService.findVoteByUserAndQuestion(user, question);
             if (existingVote != null) {
                 model.addAttribute("voteType", existingVote.getVoteType());
@@ -118,7 +125,7 @@ public class QuestionController {
         model.addAttribute("user", question.getUser());
         model.addAttribute("answers", answers);
         model.addAttribute("answer", answer);
-        model.addAttribute("question",question);
+        model.addAttribute("question", question);
         return "question/view-question";
     }
 
@@ -140,7 +147,7 @@ public class QuestionController {
     @PostMapping("/question/delete/{deleteId}")
     public String delete(@PathVariable("deleteId") Long deleteId) {
         questionService.deleteById(deleteId);
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
     @GetMapping("/search")
@@ -153,25 +160,24 @@ public class QuestionController {
 
         String[] searchArray = q.split("[,\\s]+");
 
-        List<Question> questions=new ArrayList<>();
-        if(searchArray.length>1) {
-            if(searchArray[0].startsWith("user:")){
+        List<Question> questions = new ArrayList<>();
+        if (searchArray.length > 1) {
+            if (searchArray[0].startsWith("user:")) {
                 Long userId = Long.parseLong(searchArray[0].substring(5, searchArray[0].length()));
 
                 String tagName = searchArray[1].startsWith("[")
                         ? searchArray[1].substring(1, searchArray[1].length() - 1)
                         : searchArray[1].substring(0, searchArray[1].length() - 1);
-                questions = questionService.findQuestionsByUserAndTag(userId,tagName);
+                questions = questionService.findQuestionsByUserAndTag(userId, tagName);
                 model.addAttribute("questions", questions);
-                model.addAttribute("q",q);
+                model.addAttribute("q", q);
                 return "all-question";
             }
             for (String search : searchArray) {
                 if (tagService.tagExists(search)) {
                     List<Question> tagQuestions = tagService.findQuestionsByTagName(search);
                     questions.addAll(tagQuestions);
-                }
-                else {
+                } else {
                     List<Question> keywordQuestions = questionService.findQuestionsBySearch(search);
                     questions.addAll(keywordQuestions);
                 }
@@ -203,31 +209,31 @@ public class QuestionController {
                 model.addAttribute("questions", questions);
                 model.addAttribute("tagName", tagName);
                 model.addAttribute("q", searchArray[0]);
-            } else if(searchArray[0].startsWith("user:")) {
-                if(searchArray[0].length()>5) {
+            } else if (searchArray[0].startsWith("user:")) {
+                if (searchArray[0].length() > 5) {
                     int userId = Integer.parseInt(searchArray[0].substring(5, searchArray[0].length()));
-                    User user=userService.findById(userId);
+                    User user = userService.findById(userId);
                     questions = questionService.findByUser(user);
                     model.addAttribute("questions", questions);
                     model.addAttribute("q", searchArray[0]);
                 } else {
-                    questions=questionService.findAll();
-                    questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
+                    questions = questionService.findAll();
+                    questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions, tab, pageable);
                     model.addAttribute("questions", questions);
                     model.addAttribute("q", searchArray[0]);
                 }
 
             }
         }
-        questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions,tab,pageable);
+        questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions, tab, pageable);
 
-        for (Question question : questionPage){
+        for (Question question : questionPage) {
             question.setVerifiedCount(questionService.findQuestionWithVerifiedAnswerCount(question));
         }
         model.addAttribute("tab", tab);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", questionPage.getTotalPages());
-        model.addAttribute("questions",questionPage);
+        model.addAttribute("questions", questionPage);
         model.addAttribute("questionsSize", questions.size());
 
         return "all-question";
@@ -236,11 +242,11 @@ public class QuestionController {
     @GetMapping("/questions/user/{userId}/tagged/{tagName}")
     public String userWithTagged(@PathVariable("userId") Long id,
                                  @PathVariable("tagName") String tagName,
-                                 Model model){
+                                 Model model) {
 
-        List<Question> questions = questionService.findQuestionsByUserAndTag(id,tagName);
+        List<Question> questions = questionService.findQuestionsByUserAndTag(id, tagName);
 
-        model.addAttribute("q", "user:"+id+" ["+tagName+"]");
+        model.addAttribute("q", "user:" + id + " [" + tagName + "]");
         model.addAttribute("questions", questions);
         return "all-question";
     }
@@ -263,21 +269,19 @@ public class QuestionController {
 
                 question.setVoteCount(voteCount + 1);
 
-            } else if (existingVote.getVoteType() == voteType.DOWNVOTE){
+            } else if (existingVote.getVoteType() == voteType.DOWNVOTE) {
 
 
                 existingVote.setVoteType(voteType.UPVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount + 2);
 
-            }
-            else {
+            } else {
                 existingVote.setVoteType(voteType.NOVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount - 1);
             }
-        }
-        else {
+        } else {
 
             Vote vote = new Vote();
             vote.setQuestion(question);
@@ -311,14 +315,12 @@ public class QuestionController {
                 int voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount - 1);
 
-            }
-            else if (existingVote.getVoteType() == voteType.UPVOTE){
+            } else if (existingVote.getVoteType() == voteType.UPVOTE) {
                 existingVote.setVoteType(voteType.DOWNVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount - 2);
 
-            }
-            else{
+            } else {
                 existingVote.setVoteType(voteType.NOVOTE);
                 Integer voteCount = question.getVoteCount();
                 question.setVoteCount(voteCount + 1);
@@ -332,7 +334,7 @@ public class QuestionController {
             questionService.createVote(vote);
 
             int voteCount = question.getVoteCount();
-            question.setVoteCount(voteCount -1);
+            question.setVoteCount(voteCount - 1);
 
         }
         model.addAttribute("voteType", voteType);
