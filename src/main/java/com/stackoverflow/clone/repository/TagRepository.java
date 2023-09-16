@@ -34,4 +34,12 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Tag t WHERE t.name = :search")
     boolean searchIfExists(@Param("search") String search);
 
+    @Query("SELECT t, COUNT(qt) " +
+            "FROM Tag t " +
+            "LEFT JOIN t.questions qt " +
+            "GROUP BY t " +
+            "ORDER BY COUNT(qt) DESC")
+    Page<Object[]> findTagsWithQuestionCountsOrderByCountDesc(Pageable pageable);
+
+
 }

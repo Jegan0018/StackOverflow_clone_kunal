@@ -297,7 +297,14 @@
                     </div>
                 </div>
             </div>
-            <h1><span th:text="${user.name}"></span></h1>
+            <h1>
+                <span th:text="${user.name}"></span>
+                <a th:href="@{'/search?q=user%3A' + ${user.id}}" style="">
+                    <span th:style="'font-weight: normal; font-size: smaller;'" th:text="'[user:' + ${user.id} + ']'"></span>
+
+                </a>
+            </h1>
+            <br>
             <span th:if="${memberSince}">
                     <h4> Member since:</h4>
                     <span th:text="${memberSince}"></span>

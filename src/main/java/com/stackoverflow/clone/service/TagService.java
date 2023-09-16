@@ -26,4 +26,5 @@ public interface TagService {
     Page<Tag> search(String search, String tab, Pageable pageable);
 
     boolean tagExists(String search);
+    Page<Object[]> findTagsWithQuestionCountsOrderByCountDesc(Pageable pageable);
 }

@@ -212,10 +212,17 @@ public class QuestionController {
             } else if (searchArray[0].startsWith("user:")) {
                 if (searchArray[0].length() > 5) {
                     int userId = Integer.parseInt(searchArray[0].substring(5, searchArray[0].length()));
-                    User user = userService.findById(userId);
-                    questions = questionService.findByUser(user);
-                    model.addAttribute("questions", questions);
-                    model.addAttribute("q", searchArray[0]);
+                    User user = userService.findByUserId(userId);
+                    if (user != null) {
+                        questions = questionService.findByUser(user);
+                        model.addAttribute("questions", questions);
+                        model.addAttribute("q", searchArray[0]);
+                    } else {
+                        questions = questionService.findAll();
+                        questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions, tab, pageable);
+                        model.addAttribute("questions", questions);
+                        model.addAttribute("q", searchArray[0]);
+                    }
                 } else {
                     questions = questionService.findAll();
                     questionPage = questionService.searchAndSortByNewOrUnansweredOrScore(questions, tab, pageable);

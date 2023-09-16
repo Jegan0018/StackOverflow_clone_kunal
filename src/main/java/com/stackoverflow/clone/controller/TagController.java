@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 public class TagController {
@@ -54,28 +53,30 @@ public class TagController {
             questionsCountByTag.put(tag, count);
         }
 
+        Map<Tag, String> formattedCreatedAt = new HashMap<>();
 
         if (tab != null && tab.equals("popular")) {
 
-            List<Map.Entry<Tag, Integer>> entryList = new ArrayList<>(questionsCountByTag.entrySet());
-            entryList.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
-            questionsCountByTag = entryList.stream()
-                    .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            Map.Entry::getValue,
-                            (e1, e2) -> e1,
-                            LinkedHashMap::new
-                    ));
+            Page<Object[]> popularTags = tagService.findTagsWithQuestionCountsOrderByCountDesc(pageable);
+            for (Object[] tagWithCount : popularTags) {
+
+                Tag tag = (Tag) tagWithCount[0];
+                Date createdAt = tag.getCreatedAt();
+                String formattedTimeElapsed = TimeElapsedFormatter.formatTimeElapsed(createdAt);
+                formattedCreatedAt.put(tag, formattedTimeElapsed);
+            }
+
+            model.addAttribute("popularTags", popularTags);
         }
 
+        else {
 
-        Map<Tag, String> formattedCreatedAt = new HashMap<>();
-        for (Tag tag : questionsCountByTag.keySet()) {
-            Date createdAt = tag.getCreatedAt();
-            String formattedTimeElapsed = TimeElapsedFormatter.formatTimeElapsed(createdAt);
-            formattedCreatedAt.put(tag, formattedTimeElapsed);
+            for (Tag tag : questionsCountByTag.keySet()) {
+                Date createdAt = tag.getCreatedAt();
+                String formattedTimeElapsed = TimeElapsedFormatter.formatTimeElapsed(createdAt);
+                formattedCreatedAt.put(tag, formattedTimeElapsed);
+            }
         }
-
 
         if (tagSearch != null && !tagSearch.equals("")) {
             model.addAttribute("tagSearch", tagSearch);

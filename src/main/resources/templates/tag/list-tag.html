@@ -408,48 +408,47 @@ margin-right: 15%;
         </form>
     </div>
 </div>
-<div class="tag-con">
 
+<span th:if="${tab == 'popular'}">
+    <div class="tag-con">
+     <div class="tag-boxes">
+    <span th:each="tagWithCount, status : ${popularTags}">
+
+            <div class="tag-box">
+                <a th:href="@{'questions/tagged/' + ${tagWithCount[0].name}}">
+                    <span th:text="${tagWithCount[0].name}"></span><br>
+                    <span th:if="${tagWithCount[1] != 0}">
+                    <span th:text="${tagWithCount[1]}"></span><br>
+                    </span>
+                    <span th:text="${formattedCreatedAt[tagWithCount[0]]}"></span>
+                </a>
+            </div>
+        <!-- Add clearfix for every 8th element to start a new row -->
+            <div th:if="${status.index % 3 == 2}" class="clearfix"></div>
+        </span>
+</div>
+    </div>
+    </div>
+    </span>
+<span th:unless="${tab == 'popular'}">
+    <div class="tag-con">
 <div class="tag-boxes">
     <span th:each="entry, status : ${questionsCountByTag}">
-        <span th:if="${entry.value != 0}">
             <div class="tag-box">
                 <a th:href="@{'questions/tagged/' + ${entry.key.name}}">
                     <span th:text="${entry.key.name}"></span><br>
+                    <span th:if="${entry.value != 0}">
                     <span th:text="${entry.value}"></span><br>
+                    </span>
                     <span th:text="${formattedCreatedAt[entry.key]}"></span>
                 </a>
             </div>
             <!-- Add clearfix for every 8th element to start a new row -->
             <div th:if="${status.index % 3 == 2}" class="clearfix"></div>
         </span>
-    </span>
 </div>
-</div>
-<!--<span class="page-item" th:if="${currentPage > 1}">-->
-<!--<form th:action="@{/tags}">-->
-<!--    <span th:if="${tab}">-->
-<!--        <input type="hidden" name="tab" th:value="${tab}">-->
-<!--    </span>-->
-<!--    <span th:if="${tagSearch}">-->
-<!--        <input type="hidden" name="tagSearch" th:value="${tagSearch}">-->
-<!--    </span>-->
-<!--    <input type="hidden" name="page" th:value="${currentPage - 1}">-->
-<!--    <input type="submit" value="Previous" class="pg-btn" id="pre">-->
-<!--</form>-->
-<!--</span>-->
-<!--<span class="page-item" th:if="${currentPage < totalPages}">-->
-<!--<form th:action="@{/tags}">-->
-<!--    <span th:if="${tab}">-->
-<!--        <input type="hidden" name="tab" th:value="${tab}">-->
-<!--    </span>-->
-<!--    <span th:if="${tagSearch}">-->
-<!--        <input type="hidden" name="tagSearch" th:value="${tagSearch}">-->
-<!--    </span>-->
-<!--    <input type="hidden" name="page" th:value="${currentPage + 1}">-->
-<!--    <input type="submit" value="Next" class="pg-btn" id="nxt">-->
-<!--</form>-->
-<!--</span>-->
+    </div>
+</span>
 
 <div class="page-navigation">
     <span class="page-item" th:if="${currentPage > 1}">

@@ -16,13 +16,13 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", length = 1500)
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @Column(name = "problem", length = 1500)
+    @Column(name = "problem", columnDefinition = "TEXT")
     private String problem;
 
-    @Column(name = "excepted_solution", length = 1500)
+    @Column(name = "excepted_solution", columnDefinition = "TEXT")
     private String exceptedSolution;
 
     @Column(name = "vote_count")

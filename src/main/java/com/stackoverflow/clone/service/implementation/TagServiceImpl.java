@@ -91,4 +91,9 @@ public class TagServiceImpl implements TagService {
         return tagRepository.searchIfExists(search);
     }
 
+    @Override
+    public Page<Object[]> findTagsWithQuestionCountsOrderByCountDesc(Pageable pageable) {
+        return tagRepository.findTagsWithQuestionCountsOrderByCountDesc(pageable);
+    }
+
 }

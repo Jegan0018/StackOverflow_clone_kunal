@@ -70,6 +70,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public User findByUserId(int userId) {
+        Optional<User> userOptional = userRepository.findById(Long.valueOf(userId));
+        return userOptional.orElse(null);
+    }
+
+    @Override
     public void save(User user) {
         userRepository.save(user);
     }

@@ -24,6 +24,8 @@ public interface UserService {
 
     Optional<User> findById(Long id);
 
+    User findByUserId(int userId);
+
     List<User> search(String searchTerm);
 
     Page<User> searchAndSortByUsernameOrName(String searchTerm, String tab, Pageable pageable);
