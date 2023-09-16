@@ -7,6 +7,7 @@ import com.stackoverflow.clone.entity.Vote;
 import com.stackoverflow.clone.repository.AnswerRepository;
 import com.stackoverflow.clone.repository.VoteRepository;
 import com.stackoverflow.clone.service.AnswerService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,11 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        answerRepository.deleteById(id);
+        if(answerRepository.existsById(id)){
+            answerRepository.deleteById(id);
+        }
     }
 
     @Override

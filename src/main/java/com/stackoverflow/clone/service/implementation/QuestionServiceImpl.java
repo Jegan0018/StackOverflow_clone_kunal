@@ -7,6 +7,7 @@ import com.stackoverflow.clone.entity.Vote;
 import com.stackoverflow.clone.repository.QuestionRepository;
 import com.stackoverflow.clone.repository.VoteRepository;
 import com.stackoverflow.clone.service.QuestionService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +46,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional
     public Question deleteById(Long deleteId) {
         Question question = questionRepository.findById(deleteId).orElse(null);
         if (question != null) {
